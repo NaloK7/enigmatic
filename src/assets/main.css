@@ -8,11 +8,19 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Roboto", "Audiowide", sans-serif;
-  --main-green: #17ae9f;
-  --main-pink: rgba(255, 66, 129, 0.88);
+  /* font-family: "Roboto", "Audiowide", sans-serif; */
 }
+.dark-glass {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.7) 40%,
+    rgba(0, 0, 0, 0.7) 60%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
 
+  backdrop-filter: blur(10px);
+}
 a {
   text-decoration: none;
   color: white;
