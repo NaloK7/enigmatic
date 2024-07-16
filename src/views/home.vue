@@ -1,6 +1,4 @@
 <template>
-  <headerp></headerp>
+  <h1>HOME</h1>
 </template>
-<script setup>
-import headerp from "@/components/header.vue";
-</script>
+<script setup></script>

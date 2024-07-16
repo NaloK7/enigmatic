@@ -21,6 +21,18 @@
 
   backdrop-filter: blur(10px);
 }
+.text-shadow-pink {
+  text-shadow: 0px 2px 8px #ff4281c9;
+} 
+
+body {
+  
+    min-height: 100vh;
+    background-image: url("bkg_dark.svg");
+    background-repeat: no-repeat;
+    background-position: center top;
+  
+}
 a {
   text-decoration: none;
   color: white;

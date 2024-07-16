@@ -1,19 +1,10 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import home from "@/views/home.vue";
+import headerp from "@/components/header.vue";
 </script>
 
 <template>
-  <div id="bkg">
-    <home></home>
-  </div>
+    <headerp></headerp>
+    <RouterView />
 </template>
 
-<style scoped>
-#bkg {
-  min-height: 100vh;
-  background-image: url("bkg_dark.svg");
-  background-repeat: no-repeat;
-  background-position: center top;
-}
-</style>
