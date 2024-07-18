@@ -22,28 +22,20 @@
     </div>
 
     <nav
-      class="dark-glass border-b border-primaryGreen  mx-auto w-3/5 flex items-center justify-evenly mb-5 rounded-b-xl relative backdrop-blur-md">
-      <a href="/riddle">Livre I</a>
-      <a href="#">Livre II</a>
-      <a href="#">Livre III</a>
-      <a href="#">Livre IV</a>
+      class="dark-glass border-b border-primaryGreen  px-2 mx-auto w-1/2 flex items-center justify-evenly mb-5 rounded-b-xl relative backdrop-blur-md">
+      <navBtn href="/riddle" text="Livre I"></navBtn>
+      <navBtn href="/riddle" text="Livre II"></navBtn>
+      <navBtn href="/riddle" text="Livre III"></navBtn>
+      <navBtn href="/riddle" text="Livre IV"></navBtn>
     </nav>
   </header>
 </template>
+<script  setup>
+import navBtn from "@/components/navBtn.vue";
+</script>
+
 
 <style scoped>
-nav a {
-  margin: 22px;
-  height: 28px;
-  width: 92px;
-  border: 2px solid #17ae9f;
-  border-radius: 5px;
-  background: #18544e;
-  color: white;
-  font-family: "Audiowide";
-  text-align: center;
-  line-height: 1.4em;
-}
 #icon-account {
   width: 26px;
 }

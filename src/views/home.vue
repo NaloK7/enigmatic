@@ -1,4 +1,6 @@
 <template>
-  <h1>HOME</h1>
+  <banner></banner>
 </template>
-<script setup></script>
+<script setup>
+import banner from "@/components/loginBanner.vue"
+</script>
