@@ -4,12 +4,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   /* font-family: "Roboto", "Audiowide", sans-serif; */
 }
+
 .dark-glass {
   background: linear-gradient(
     90deg,
@@ -21,6 +23,7 @@
 
   backdrop-filter: blur(10px);
 }
+
 .text-shadow-pink {
   text-shadow: 0px 2px 8px #ff4281c9;
 } 
@@ -32,6 +35,11 @@ body {
     background-repeat: no-repeat;
     background-position: center top;
   
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 1.5rem;
 }
 a {
   text-decoration: none;

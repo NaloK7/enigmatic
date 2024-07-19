@@ -12,6 +12,7 @@ defineProps({
 </script>
 <style  scoped>
 a {
+  display: block;
   margin: 17px;
   height: 28px;
   width: 92px;

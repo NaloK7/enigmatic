@@ -1,5 +1,5 @@
 <template>
-  <div class="dark-glass p-4 flex justify-center items-center shadow-pinkBox">
+  <div class="dark-glass p-4 mb-5 flex justify-center items-center shadow-pinkBox">
 
     <cta text="connexion" link="#"></cta>
     <cta text="inscription" link="#"></cta>
