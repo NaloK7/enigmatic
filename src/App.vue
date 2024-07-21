@@ -4,7 +4,6 @@ import headerp from "@/components/header.vue";
 </script>
 
 <template>
-    <headerp></headerp>
-    <RouterView />
+  <headerp></headerp>
+  <RouterView :key="$route.fullPath" />
 </template>
-

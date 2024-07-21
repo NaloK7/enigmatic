@@ -1,16 +1,13 @@
 <template>
-    <a :href="link" >
-        {{ text }}
-    </a>
+  <RouterLink :to="link"> {{ text }}</RouterLink>
 </template>
-<script  setup>
-
+<script setup>
 defineProps({
   link: String,
   text: String,
-})
+});
 </script>
-<style  scoped>
+<style scoped>
 a {
   display: block;
   margin: 17px;
@@ -30,5 +27,3 @@ a:hover {
   color: black;
 }
 </style>
-
-

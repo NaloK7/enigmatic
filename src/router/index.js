@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/home.vue";
-import Riddle from "../views/riddle.vue";
+import Home from "@/views/index.vue";
+import Book from "@/views/book/[book_id]/view/[id].vue";
+import Riddle from "@/views/book/[book_id]/riddle/view/[id].vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,11 +12,16 @@ const router = createRouter({
       component: Home,
     },
     {
-      path: "/riddle",
+      path: "/book/:book_id/view/:id",
+      name: "book",
+      component: Book,
+    },
+    {
+      path: "/book/:book_id/riddle/view/:id",
       name: "riddle",
       component: Riddle,
     },
-    
+
     // {
     //   path: "/about",
     //   name: "about",
