@@ -1,12 +1,12 @@
 <template>
   <banner></banner>
-  <div class="dark-glass w-full py-6">
+  <div class="dark-glass glass-border w-full py-6">
     <section class="w-2/5 mx-auto space-y-4 text-gray-200">
-      <h1 class="text-center">Bienvenue sur Enigmatic Journey</h1>
+      <h1 class="text-center underline font-audiowide mb-8">Bienvenue sur Enigmatic Journey</h1>
       <div>
         <span><li class="font-bold">Comment ça fonctionne ?</li></span>
-        <span>- les énigmes sont rangés dans quatre livre.</span>
-        <span>- la difficulté augmente au fur et a mesure.</span>
+        <span>- les énigmes sont rangés dans quatre livres.</span>
+        <span>- la difficulté augmente au fûr et a mesure.</span>
       </div>
 
       <div>
