@@ -4,6 +4,7 @@
       <div class="mx-auto flex flex-col justify-center items-center space-y-2">
         <h1 class="text-2xl font-medium text-gray-200">connexion</h1>
       </div>
+      <!-- todo connect the form to PHP -->
       <form class="w-full mt-6 space-y-6">
         <div>
           <input
@@ -53,6 +54,21 @@
           >
         </div>
       </form>
+      <button @click="phptest">php test</button>
     </div>
   </div>
 </template>
+<script setup>
+async function phptest() {
+  try {
+    const response = await fetch("../backend/user.php?param=example");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response;
+    console.log("🚀 ~ phptest ~ data:", data);
+  } catch (error) {
+    console.error("Error calling PHP function:", error);
+  }
+}
+</script>
