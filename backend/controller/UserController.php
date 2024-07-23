@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('./backend/model/UserModel.php');
+require_once('./model/UserModel.php');
 require_once('Controller.php');
 
 class UserController extends Controller
@@ -10,8 +10,9 @@ class UserController extends Controller
         // check input 
         // sanitize
         // hash password
+
         $query = new UserModel();
-        $response = $query->queryInscription($email, $password);
+        return $query->queryInscription($email, $password);
     }
     /**
      * checks for errors in email and password inputs, sanitizes

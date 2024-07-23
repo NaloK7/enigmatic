@@ -5,6 +5,7 @@ class UserModel extends DB
 {
     function queryInscription($email, $password)
     {
+        $msg = "failure";
         $con = $this->connectTo();
 
         $check = $con->prepare("SELECT id FROM user WHERE email = :email");
@@ -12,19 +13,16 @@ class UserModel extends DB
         $check->execute();
         $response = $check->fetch(PDO::FETCH_ASSOC);
         $count = $check->rowCount();
-        if ($count > 0) {
-            echo 'mail deja utiliser';
-        } else {
+
+        if ($count == 0) {
             $query = $con->prepare("INSERT INTO user (`email`, `password`)
-                                    VALUES (:email, :password, 0)");
+                                    VALUES (:email, :password)");
             $query->bindParam(':email', $email);
             $query->bindParam(':password', $password);
             $query->execute();
             $countAdd = $query->rowCount();
             if ($countAdd > 0) {
                 $msg = "succes";
-            } else {
-                $msg = "failure";
             }
         }
         $con = null;

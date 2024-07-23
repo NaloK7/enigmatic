@@ -1,18 +1,19 @@
 <?php
-
+header("Access-Control-Allow-Origin: *");
 require_once('./controller/UserController.php');
-
 try {
     // route
     if (isset($_GET['action'])) {
         $action = new UserController();
         // connection
         if ($_GET['action'] == 'connection') {
+            echo "connection";
             $action->queryCheckConnection($_POST['email'], $_POST['password']);
         }
         // inscription
         elseif ($_GET['action'] == "inscription") {
-            $action->inscription($_POST['email'], $_POST['password']);
+            $data = json_decode(file_get_contents('php://input'), true);
+            echo $action->inscription($data['email'], $data['password']);
         }
     }
 } catch (\Throwable $th) {

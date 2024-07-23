@@ -62,13 +62,19 @@ async function inscription() {
     password.value != "" &&
     password.value === confirmPass.value
   ) {
-    const response = await fetch("../backend/index.php?action=inscription", {
-      method: "POST",
-      body: {
-        email: email.value,
-        password: password.value,
-      },
-    });
+    const response = await fetch(
+      "http://enigmatic.test/index.php?action=inscription",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email: email.value,
+          password: password.value,
+        }),
+      }
+    );
+
+    const data = await response;
+    console.log(data);
   }
   // else password not the same feedback
 }
