@@ -8,7 +8,7 @@ class DB
     private $password;
     private $dbname;
 
-    function __construct($serv = "localhost", $user = "SUPER_ADMIN", $pass = "vDCTGM@anD.asVVo", $db = "enigmatic")
+    function __construct($serv = "localhost", $user = "root", $pass = "", $db = "enigmatic")
     {
         $this->servername = $serv;
         $this->username = $user;

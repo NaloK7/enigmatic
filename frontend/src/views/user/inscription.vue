@@ -8,24 +8,24 @@
         <div>
           <input
             class="outline-none border-2 rounded-lg px-2 py-1 text-slate-500 w-full focus:border-blue-300"
+            v-model="email"
             placeholder="email"
-            id="email"
             name="email"
             type="text" />
         </div>
         <div>
           <input
             class="outline-none border-2 rounded-lg px-2 py-1 text-slate-500 w-full focus:border-blue-300"
+            v-model="password"
             placeholder="Mot de passe"
-            id="password"
             name="password"
             type="password" />
         </div>
         <div>
           <input
             class="outline-none border-2 rounded-lg px-2 py-1 text-slate-500 w-full focus:border-blue-300"
+            v-model="confirmPass"
             placeholder="Confirmation"
-            id="confirmPass"
             name="confirmPass"
             type="password" />
         </div>
@@ -35,7 +35,8 @@
           class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-darkPink hover:border-darkPink hover:bg-primaryPink hover:text-black active:text-white active:bg-darkPink rounded-lg"
           id="login"
           name="login"
-          type="submit">
+          type="submit"
+          @click.prevent="inscription()">
           valider
         </button>
         <div class="flex justify-center space-x-1">
@@ -48,4 +49,27 @@
     </div>
   </div>
 </template>
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+
+const email = ref("test");
+const password = ref("test");
+const confirmPass = ref("test");
+
+async function inscription() {
+  if (
+    email.value != "" &&
+    password.value != "" &&
+    password.value === confirmPass.value
+  ) {
+    const response = await fetch("../backend/index.php?action=inscription", {
+      method: "POST",
+      body: {
+        email: email.value,
+        password: password.value,
+      },
+    });
+  }
+  // else password not the same feedback
+}
+</script>
