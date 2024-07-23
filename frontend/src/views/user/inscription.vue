@@ -73,7 +73,7 @@ async function inscription() {
       }
     );
 
-    const data = await response;
+    const data = await response.json();
     console.log(data);
   }
   // else password not the same feedback

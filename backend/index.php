@@ -13,7 +13,7 @@ try {
         // inscription
         elseif ($_GET['action'] == "inscription") {
             $data = json_decode(file_get_contents('php://input'), true);
-            echo $action->inscription($data['email'], $data['password']);
+            echo json_encode($action->inscription($data['email'], $data['password']));
         }
     }
 } catch (\Throwable $th) {
