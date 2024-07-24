@@ -4,10 +4,12 @@
       <div class="mx-auto flex flex-col justify-center items-center space-y-2">
         <h1 class="text-2xl font-medium text-gray-200">connexion</h1>
       </div>
+      <!-- todo connect the form to PHP -->
       <form class="w-full mt-6 space-y-6">
         <div>
           <input
             class="outline-none border-2 rounded-lg px-2 py-1 text-slate-500 w-full focus:border-blue-300"
+            v-model="email"
             placeholder="email"
             id="email"
             name="email"
@@ -16,6 +18,7 @@
         <div>
           <input
             class="outline-none border-2 rounded-lg px-2 py-1 text-slate-500 w-full focus:border-blue-300"
+            v-model="password"
             placeholder="Mot de passe"
             id="password"
             name="password"
@@ -26,7 +29,7 @@
             <!-- todo see how remember work in detail -->
             <input
               class="mr-2 w-4 h-4"
-              id="remember"
+              v-model="remember"
               name="remember"
               type="checkbox" />
             <span class="text-slate-500">se souvenir de moi</span>
@@ -35,9 +38,9 @@
         <!-- todo prevent submit with rules: regex email & password -->
         <button
           class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-darkPink hover:border-darkPink hover:bg-primaryPink hover:text-black active:text-white active:bg-darkPink rounded-lg"
-          id="login"
           name="login"
-          type="submit">
+          type="submit"
+          @click.prevent="connect()">
           valider
         </button>
         <div class="flex justify-between space-x-1">
@@ -56,3 +59,30 @@
     </div>
   </div>
 </template>
+<script setup>
+import { ref } from "vue";
+
+const email = ref("");
+const password = ref("");
+const remember = ref(false);
+
+async function connect() {
+  try {
+    // todo make a function/composable to fetch: url method params
+    const response = await fetch("../backend/index.php?action=connection", {
+      method: "POST",
+      body: new URLSearchParams({
+        email: email.value,
+        password: password.value,
+        remember: remember.value,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response;
+  } catch (error) {
+    console.error("Error calling PHP function:", error);
+  }
+}
+</script>
