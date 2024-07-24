@@ -5,26 +5,22 @@ require_once('Controller.php');
 
 class UserController extends Controller
 {
-    function inscription($email, $password)
+    function inscription($email, $password, $confirmPass)
     {
-        // check input 
-        // sanitize
-        // hash password
+        if ($this->rulesData($email, $password, $confirmPass)) {
+            // password hash
+            $password = password_hash($password, PASSWORD_DEFAULT);
 
-        $query = new UserModel();
-        return $query->queryInscription($email, $password);
+            $query = new UserModel();
+            return $query->queryInscription($email, $password);
+        };
     }
-    /**
-     * checks for errors in email and password inputs, sanitizes
-     * the inputs, and then checks the connection using a UserModel before loading the connection view.
-     */
-    function queryCheckConnection($email, $password)
-    {
-        $result = false;
 
+    function rulesData($email, $password, $confirmPass)
+    {
         $emailError =  false;
         $passwordError = false;
-        $requiredField = '*champ requis';
+        $confirmPassError = false;
 
         if (!empty($email)) {
             if (preg_match("/^[a-zA-Z]+[0-9a-zA-Z]*[.]*[0-9a-zA-Z]*(@)[a-z0-9A-Z.-]+[.]+([a-zA-Z]{2,})$/", $email)) {
@@ -40,13 +36,10 @@ class UserController extends Controller
         } else {
             $passwordError = true;
         }
-
-
-        if (!$emailError & !$passwordError) {
-            $query = new UserModel();
-            $result = $query->connection($email, $password);
+        if ($password != $confirmPass) {
+            $confirmPassError = true;
         }
 
-        return $result;
+        return !$emailError & !$passwordError & !$confirmPassError;
     }
 }

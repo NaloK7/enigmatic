@@ -8,12 +8,13 @@ try {
         // connection
         if ($_GET['action'] == 'connection') {
             echo "connection";
-            $action->queryCheckConnection($_POST['email'], $_POST['password']);
+            // $action->queryCheckConnection($_POST['email'], $_POST['password']);
         }
         // inscription
         elseif ($_GET['action'] == "inscription") {
+
             $data = json_decode(file_get_contents('php://input'), true);
-            echo json_encode($action->inscription($data['email'], $data['password']));
+            echo json_encode($action->inscription($data['email'], $data['password'], $data['confirmPass']));
         }
     }
 } catch (\Throwable $th) {

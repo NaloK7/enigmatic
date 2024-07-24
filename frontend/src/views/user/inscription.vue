@@ -5,24 +5,46 @@
         <h1 class="text-2xl font-medium text-gray-200">inscription</h1>
       </div>
       <form class="w-full mt-6 space-y-6">
+        <!-- EMAIL FIELD -->
         <div>
+          <!-- feedback wrong email format -->
+          <div v-if="!emailValid" class="text-red-500 text-center">
+            email@exemple.com
+          </div>
           <input
+            :class="{ 'border-red-500': !emailValid }"
             class="outline-none border-2 rounded-lg px-2 py-1 text-slate-500 w-full focus:border-blue-300"
             v-model="email"
+            @focus="emailValid = true"
             placeholder="email"
             name="email"
             type="text" />
         </div>
+        <!-- PASSWORD FIELD -->
         <div>
+          <!-- feedback wrong password format -->
+          <div v-if="!passwordValid" class="text-red-500 text-center">
+            12 caractères minimum, majuscules, minuscules, chiffres et
+            caractères spéciaux
+          </div>
           <input
+            :class="{ 'border-red-500': !passwordValid }"
+            @focus="passwordValid = true"
             class="outline-none border-2 rounded-lg px-2 py-1 text-slate-500 w-full focus:border-blue-300"
             v-model="password"
             placeholder="Mot de passe"
             name="password"
             type="password" />
         </div>
+        <!-- CONFIRMATION PASSWORD -->
         <div>
+          <!-- feedback confirmation password -->
+          <div v-if="!confirmPassValid" class="text-red-500 text-center">
+            mot de passe différent
+          </div>
           <input
+            :class="{ 'border-red-500': !confirmPassValid }"
+            @focus="confirmPassValid = true"
             class="outline-none border-2 rounded-lg px-2 py-1 text-slate-500 w-full focus:border-blue-300"
             v-model="confirmPass"
             placeholder="Confirmation"
@@ -30,7 +52,7 @@
             type="password" />
         </div>
         <div class="flex items-center justify-between"></div>
-        <!-- todo prevent submit with rules: regex email & password -->
+        <!-- SUBMIT BUTTON -->
         <button
           class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-darkPink hover:border-darkPink hover:bg-primaryPink hover:text-black active:text-white active:bg-darkPink rounded-lg"
           id="login"
@@ -51,17 +73,19 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import { useEmailRule, usePasswordRule } from "../../composables/rules.js";
 
-const email = ref("test");
-const password = ref("test");
-const confirmPass = ref("test");
+const email = ref("email@test.fr");
+const emailValid = ref(true);
+
+const password = ref("P@ssw0rd!2024");
+const passwordValid = ref(true);
+
+const confirmPass = ref("P@ssw0rd!2024");
+const confirmPassValid = ref(true);
 
 async function inscription() {
-  if (
-    email.value != "" &&
-    password.value != "" &&
-    password.value === confirmPass.value
-  ) {
+  if (formRules()) {
     const response = await fetch(
       "http://localhost/enigmatic/backend/index.php?action=inscription",
       {
@@ -69,6 +93,7 @@ async function inscription() {
         body: JSON.stringify({
           email: email.value,
           password: password.value,
+          confirmPass: confirmPass.value,
         }),
       }
     );
@@ -76,6 +101,12 @@ async function inscription() {
     const data = await response.json();
     console.log(data);
   }
-  // else password not the same feedback
+}
+
+function formRules() {
+  emailValid.value = useEmailRule(email.value);
+  passwordValid.value = usePasswordRule(password.value);
+  confirmPassValid.value = password.value == confirmPass.value;
+  return emailValid.value && passwordValid.value && confirmPassValid.value;
 }
 </script>
