@@ -5,13 +5,12 @@ class UserModel extends DB
 {
     function queryInscription($email, $password)
     {
-        $msg = "failure";
         $con = $this->connectTo();
 
         $check = $con->prepare("SELECT id FROM user WHERE email = :email");
         $check->bindParam(':email', $email);
         $check->execute();
-        $response = $check->fetch(PDO::FETCH_ASSOC);
+        // $response = $check->fetch(PDO::FETCH_ASSOC);
         $count = $check->rowCount();
 
         if ($count == 0) {
@@ -21,12 +20,27 @@ class UserModel extends DB
             $query->bindParam(':password', $password);
             $query->execute();
             $countAdd = $query->rowCount();
+            // user add
             if ($countAdd > 0) {
-                $msg = "succes";
+                $userId = $con->lastInsertId();
+                $response = [
+                    "status" => 200,
+                    "user_id" => $userId
+                ];
+                // invalid input
+            } else {
+                $response = [
+                    "status" => 400
+                ];
             }
+            // mail already used
+        } else {
+            $response = [
+                "status" => 401
+            ];
         }
         $con = null;
-        return $msg;
+        return $response;
     }
 
 

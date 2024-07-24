@@ -5,41 +5,39 @@ require_once('Controller.php');
 
 class UserController extends Controller
 {
-    function inscription($email, $password, $confirmPass)
+    function inscription($email, $password)
     {
-        if ($this->rulesData($email, $password, $confirmPass)) {
+        if ($this->rulesData($email, $password)) {
             // password hash
             $password = password_hash($password, PASSWORD_DEFAULT);
 
             $query = new UserModel();
-            return $query->queryInscription($email, $password);
-        };
+            $response = $query->queryInscription($email, $password);
+        } else {
+            $response = ["status" => 400];
+        }
+        echo json_encode($response);
     }
 
-    function rulesData($email, $password, $confirmPass)
+    function rulesData($email, $password)
     {
-        $emailError =  false;
-        $passwordError = false;
-        $confirmPassError = false;
+        $valid =  true;
 
         if (!empty($email)) {
             if (preg_match("/^[a-zA-Z]+[0-9a-zA-Z]*[.]*[0-9a-zA-Z]*(@)[a-z0-9A-Z.-]+[.]+([a-zA-Z]{2,})$/", $email)) {
                 $email = $this->sanitize($email);
             }
         } else {
-            $emailError = true;
+            $valid = false;
         }
         if (!empty($password)) {
             if (preg_match("/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[@&#{([-|_\\)\]=}%?\/]).{12,}$/", $password)) {
                 $password = $this->sanitize($password);
             }
         } else {
-            $passwordError = true;
-        }
-        if ($password != $confirmPass) {
-            $confirmPassError = true;
+            $valid = false;
         }
 
-        return !$emailError & !$passwordError & !$confirmPassError;
+        return $valid;
     }
 }

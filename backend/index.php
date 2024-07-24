@@ -6,7 +6,7 @@ try {
     if (isset($_GET['action'])) {
         $action = new UserController();
         // connection
-        if ($_GET['action'] == 'connection') {
+        if ($_GET['action'] == 'login') {
             echo "connection";
             // $action->queryCheckConnection($_POST['email'], $_POST['password']);
         }
@@ -14,7 +14,7 @@ try {
         elseif ($_GET['action'] == "inscription") {
 
             $data = json_decode(file_get_contents('php://input'), true);
-            echo json_encode($action->inscription($data['email'], $data['password'], $data['confirmPass']));
+            $action->inscription($data['email'], $data['password']);
         }
     }
 } catch (\Throwable $th) {

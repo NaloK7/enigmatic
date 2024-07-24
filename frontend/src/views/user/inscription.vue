@@ -5,6 +5,12 @@
         <h1 class="text-2xl font-medium text-gray-200">inscription</h1>
       </div>
       <form class="w-full mt-6 space-y-6">
+        <!-- feedback failed query -->
+        <span
+          v-if="failed"
+          class="block text-red-500 text-center text-xl font-semibold"
+          >! un problème est survenue veuillez réessayé !</span
+        >
         <!-- EMAIL FIELD -->
         <div>
           <!-- feedback wrong email format -->
@@ -84,22 +90,34 @@ const passwordValid = ref(true);
 const confirmPass = ref("P@ssw0rd!2024");
 const confirmPassValid = ref(true);
 
+const failed = ref(false);
+
 async function inscription() {
   if (formRules()) {
-    const response = await fetch(
-      "http://localhost/enigmatic/backend/index.php?action=inscription",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email: email.value,
-          password: password.value,
-          confirmPass: confirmPass.value,
-        }),
-      }
-    );
+    try {
+      const response = await fetch(
+        "http://localhost/enigmatic/backend/index.php?action=inscription",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            email: email.value,
+            password: password.value,
+          }),
+        }
+      );
 
-    const data = await response.json();
-    console.log(data);
+      const data = await response.json();
+      console.log(data);
+      if (data["status"] == 200) {
+        // connect the user
+        // fetch action=login
+        // set JWT token in cookies
+      } else if (data["status"] >= 400) {
+        failed.value = true;
+      }
+    } catch (error) {
+      console.log("inscription ~ error:", error);
+    }
   }
 }
 
