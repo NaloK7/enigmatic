@@ -63,7 +63,7 @@ async function inscription() {
     password.value === confirmPass.value
   ) {
     const response = await fetch(
-      "http://enigmatic.test/index.php?action=inscription",
+      "http://localhost/enigmatic/backend/index.php?action=inscription",
       {
         method: "POST",
         body: JSON.stringify({
