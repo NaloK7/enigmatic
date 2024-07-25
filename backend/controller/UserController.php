@@ -43,8 +43,9 @@ class UserController extends Controller
 
     function checkConnection($email, $password)
     {
-        // check email password in DB
-        // return id if ok
+        // parse JWT
+        // quey with jwt data
+
     }
 
     function connection($idUser)

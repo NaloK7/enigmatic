@@ -105,11 +105,11 @@ async function inscription() {
       );
 
       const response = await xhr.data;
-      console.log(response);
+      // console.log(response);
       if (response["status"] == 200) {
-        // connect the user
-        // fetch action=login
-        // set JWT token in cookies
+        failed.value = false;
+        localStorage.setItem("token", response["token"]);
+        // redirect to home
       } else if (response["status"] >= 400) {
         failed.value = true;
       }

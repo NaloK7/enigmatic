@@ -1,6 +1,10 @@
 <?php
 
 require_once("db.php");
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 class UserModel extends DB
 {
     function queryInscription($email, $password)
@@ -25,7 +29,7 @@ class UserModel extends DB
                 $userId = $con->lastInsertId();
                 $response = [
                     "status" => 200,
-                    "user_id" => $userId
+                    "token" => $this->generateJWT($userId, $email)
                 ];
                 // invalid input
             } else {
@@ -40,7 +44,7 @@ class UserModel extends DB
             ];
         }
         $con = null;
-        // return JWT
+        // JWT 
         return $response;
     }
 
@@ -66,5 +70,18 @@ class UserModel extends DB
         $con = null;
 
         return $status;
+    }
+
+    private function generateJWT($userId, $email)
+    {
+        $key = $_ENV['JWT_KEY'];
+        $payload = [
+            'iat' => time(),
+            'exp' => time() + 3600, // Token expires in 1 hour
+            "user_id" => $userId,
+            "email" => $email
+
+        ];
+        return JWT::encode($payload, $key, 'HS256');
     }
 }
