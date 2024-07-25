@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { jwtDecode } from "jwt-decode";
 import Home from "@/views/index.vue";
 import Book from "@/views/book/[book_id]/view/[id].vue";
 import Riddle from "@/views/book/[book_id]/riddle/view/[id].vue";
 import Login from "@/views/user/login.vue";
-import Inscription from "@/views/user/inscription.vue"
+import Inscription from "@/views/user/inscription.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,16 +34,27 @@ const router = createRouter({
       name: "inscription",
       component: Inscription,
     },
-
-    // {
-    //   path: "/about",
-    //   name: "about",
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import("../views/AboutView.vue"),
-    // },
   ],
+});
+
+// MIDDLEWARE
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    const decoded = jwtDecode(token);
+    const expiration = new Date(decoded.exp * 1000);
+
+    if (expiration > new Date()) {
+      next();
+      return;
+    }
+  }
+  if (to.name !== "login") {
+    next({ name: "login" });
+  } else {
+    next();
+  }
 });
 
 export default router;
