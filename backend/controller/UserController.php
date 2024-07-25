@@ -40,4 +40,16 @@ class UserController extends Controller
 
         return $valid;
     }
+
+    function checkConnection($email, $password)
+    {
+        // check email password in DB
+        // return id if ok
+    }
+
+    function connection($idUser)
+    {
+        // take id
+        // return JWT token
+    }
 }
