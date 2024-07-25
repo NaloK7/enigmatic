@@ -84,13 +84,13 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 const router = useRouter();
 
-const email = ref("email@test.fr");
+const email = ref("");
 const emailValid = ref(true);
 
-const password = ref("P@ssw0rd!2024");
+const password = ref("");
 const passwordValid = ref(true);
 
-const confirmPass = ref("P@ssw0rd!2024");
+const confirmPass = ref("");
 const confirmPassValid = ref(true);
 
 const failed = ref(false);

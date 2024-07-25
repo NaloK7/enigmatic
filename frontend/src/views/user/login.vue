@@ -71,7 +71,7 @@ const remember = ref(false);
 async function connect() {
   try {
     // todo make a function/composable to fetch: base_url / params
-    const response = await axios.get(
+    const xhr = await axios.post(
       "http://localhost/enigmatic/backend/index.php?action=login",
       {
         email: email.value,
@@ -80,9 +80,8 @@ async function connect() {
       }
     );
 
-    const data = await response;
+    const response = await xhr.data;
     if (response["status"] == 200) {
-      console.log("connected");
       // failed.value = false;
       localStorage.setItem("token", response["token"]);
       router.push({ name: "home" });

@@ -35,14 +35,14 @@ class UserModel extends DB
                 // query error
             } else {
                 $response = [
-                    "status" => 400
+                    "status" => 401
                 ];
             }
             // todo set proper code
             // mail already used
         } else {
             $response = [
-                "status" => 400
+                "status" => 402
             ];
         }
         $con = null;
@@ -65,20 +65,20 @@ class UserModel extends DB
             if (password_verify($password, $data['password'])) {
                 $response = [
                     "status" => 200,
-                    "token" => $this->generateJWT($data['id'], $data['email'], $remember)
+                    "token" => $this->generateJWT($data['id'], $email, $remember)
                 ];
                 // todo set proper code
                 // wrong password
             } else {
                 $response = [
-                    "status" => 400
+                    "status" => 402
                 ];
             }
             // todo set proper code
             // email not register
         } else {
             $response = [
-                "status" => 400
+                "status" => 403
             ];
         }
         $con = null;

@@ -40,8 +40,7 @@ const router = createRouter({
 // MIDDLEWARE
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token");
-  console.log("middleware");
-  if (token.value !== undefined) {
+  if (token) {
     const decoded = jwtDecode(token);
     const expiration = new Date(decoded.exp * 1000);
 
