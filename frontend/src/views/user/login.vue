@@ -4,7 +4,6 @@
       <div class="mx-auto flex flex-col justify-center items-center space-y-2">
         <h1 class="text-2xl font-medium text-gray-200">connexion</h1>
       </div>
-      <!-- todo connect the form to PHP -->
       <form class="w-full mt-6 space-y-6">
         <div>
           <input
@@ -35,7 +34,7 @@
             <span class="text-slate-500">se souvenir de moi</span>
           </div>
         </div>
-        <!-- todo prevent submit with rules: regex email & password -->
+
         <button
           class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-darkPink hover:border-darkPink hover:bg-primaryPink hover:text-black active:text-white active:bg-darkPink rounded-lg"
           name="login"
@@ -61,6 +60,9 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
+const router = useRouter();
 
 const email = ref("");
 const password = ref("");
@@ -68,19 +70,26 @@ const remember = ref(false);
 
 async function connect() {
   try {
-    // todo make a function/composable to fetch: url method params
-    const response = await fetch("../backend/index.php?action=connection", {
-      method: "POST",
-      body: new URLSearchParams({
+    // todo make a function/composable to fetch: base_url / params
+    const response = await axios.get(
+      "http://localhost/enigmatic/backend/index.php?action=login",
+      {
         email: email.value,
         password: password.value,
         remember: remember.value,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+      }
+    );
+
     const data = await response;
+    if (response["status"] == 200) {
+      console.log("connected");
+      // failed.value = false;
+      localStorage.setItem("token", response["token"]);
+      router.push({ name: "home" });
+    } else if (response["status"] >= 400) {
+      console.log("NOT connected");
+      // failed.value = true;
+    }
   } catch (error) {
     console.error("Error calling PHP function:", error);
   }

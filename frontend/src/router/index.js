@@ -40,8 +40,8 @@ const router = createRouter({
 // MIDDLEWARE
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token");
-
-  if (token) {
+  console.log("middleware");
+  if (token.value !== undefined) {
     const decoded = jwtDecode(token);
     const expiration = new Date(decoded.exp * 1000);
 
@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
       return;
     }
   }
-  if (to.name !== "login") {
+  if (to.name !== "login" && to.name !== "inscription") {
     next({ name: "login" });
   } else {
     next();

@@ -80,7 +80,9 @@
 <script setup>
 import { ref } from "vue";
 import { useEmailRule, usePasswordRule } from "../../composables/rules.js";
+import { useRouter } from "vue-router";
 import axios from "axios";
+const router = useRouter();
 
 const email = ref("email@test.fr");
 const emailValid = ref(true);
@@ -105,11 +107,10 @@ async function inscription() {
       );
 
       const response = await xhr.data;
-      // console.log(response);
       if (response["status"] == 200) {
         failed.value = false;
         localStorage.setItem("token", response["token"]);
-        // redirect to home
+        router.push({ name: "home" });
       } else if (response["status"] >= 400) {
         failed.value = true;
       }

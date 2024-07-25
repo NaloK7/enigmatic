@@ -31,25 +31,26 @@ class UserModel extends DB
                     "status" => 200,
                     "token" => $this->generateJWT($userId, $email)
                 ];
-                // invalid input
+                // todo set proper code
+                // query error
             } else {
                 $response = [
                     "status" => 400
                 ];
             }
+            // todo set proper code
             // mail already used
         } else {
             $response = [
-                "status" => 401
+                "status" => 400
             ];
         }
         $con = null;
-        // JWT 
         return $response;
     }
 
 
-    function connection($email, $password)
+    function queryLogin($email, $password, $remember)
     {
 
         $status = false;
@@ -60,24 +61,42 @@ class UserModel extends DB
         $state->execute();
         $count = $state->rowCount();
         if ($count > 0) {
-            $result = $state->fetch(PDO::FETCH_ASSOC);
-            if (password_verify($password, $result['password'])) {
-                $_SESSION['name'] = "user";
-                $_SESSION['idUser'] = $result['id'];
-                $status = true;
+            $data = $state->fetch(PDO::FETCH_ASSOC);
+            if (password_verify($password, $data['password'])) {
+                $response = [
+                    "status" => 200,
+                    "token" => $this->generateJWT($data['id'], $data['email'], $remember)
+                ];
+                // todo set proper code
+                // wrong password
+            } else {
+                $response = [
+                    "status" => 400
+                ];
             }
+            // todo set proper code
+            // email not register
+        } else {
+            $response = [
+                "status" => 400
+            ];
         }
         $con = null;
 
-        return $status;
+        return $response;
     }
 
-    private function generateJWT($userId, $email)
+    private function generateJWT($userId, $email, $remember = false)
     {
+        // todo setup time properly
+        $time = 3600 * 5; // 5 hours validity
+        if ($remember) {
+            $time = 3600 * 24 * 7; // 7 days validity
+        }
         $key = $_ENV['JWT_KEY'];
         $payload = [
             'iat' => time(),
-            'exp' => time() + 3600, // Token expires in 1 hour
+            'exp' => time() + $time,
             "user_id" => $userId,
             "email" => $email
 
