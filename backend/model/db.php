@@ -6,18 +6,20 @@ class DB
     private $password;
     private $dbname;
 
-    function __construct($serv = "localhost", $user = "SUPER_ADMIN", $pass = "vDCTGM@anD.asVVo", $db = "enigmatic")
+    public function __construct()
     {
-        $this->servername = $serv;
-        $this->username = $user;
-        $this->password = $pass;
-        $this->dbname = $db;
+        $this->servername = $_ENV['DB_SERVER_NAME'];
+        $this->username = $_ENV['DB_USER'];
+        $this->password = $_ENV['DB_PASSWORD'];
+        $this->dbname = $_ENV['DB_NAME'];
     }
 
     protected function connectTo()
     {
-        $connect = new PDO("mysql:host=$this->servername; dbname=$this->dbname", $this->username, $this->password);
-
-        return $connect;
+        return new PDO(
+            "mysql:host={$this->servername};dbname={$this->dbname}",
+            $this->username,
+            $this->password
+        );
     }
 }

@@ -40,6 +40,7 @@ class UserModel extends DB
             ];
         }
         $con = null;
+        // return JWT
         return $response;
     }
 
