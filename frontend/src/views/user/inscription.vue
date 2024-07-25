@@ -103,16 +103,6 @@ async function inscription() {
           password: password.value,
         }
       );
-      // const response = await fetch(
-      //   "http://localhost/enigmatic/backend/index.php?action=inscription",
-      //   {
-      //     method: "POST",
-      //     body: JSON.stringify({
-      //       email: email.value,
-      //       password: password.value,
-      //     }),
-      //   }
-      // );
 
       const response = await xhr.data;
       console.log(response);
