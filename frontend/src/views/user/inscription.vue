@@ -80,6 +80,7 @@
 <script setup>
 import { ref } from "vue";
 import { useEmailRule, usePasswordRule } from "../../composables/rules.js";
+import axios from "axios";
 
 const email = ref("email@test.fr");
 const emailValid = ref(true);
@@ -95,24 +96,21 @@ const failed = ref(false);
 async function inscription() {
   if (formRules()) {
     try {
-      const response = await fetch(
+      const xhr = await axios.post(
         "http://localhost/enigmatic/backend/index.php?action=inscription",
         {
-          method: "POST",
-          body: JSON.stringify({
-            email: email.value,
-            password: password.value,
-          }),
+          email: email.value,
+          password: password.value,
         }
       );
 
-      const data = await response.json();
-      console.log(data);
-      if (data["status"] == 200) {
-        // connect the user
-        // fetch action=login
-        // set JWT token in cookies
-      } else if (data["status"] >= 400) {
+      const response = await xhr.data;
+      // console.log(response);
+      if (response["status"] == 200) {
+        failed.value = false;
+        localStorage.setItem("token", response["token"]);
+        // redirect to home
+      } else if (response["status"] >= 400) {
         failed.value = true;
       }
     } catch (error) {

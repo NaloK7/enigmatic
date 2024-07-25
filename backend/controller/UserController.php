@@ -40,4 +40,17 @@ class UserController extends Controller
 
         return $valid;
     }
+
+    function checkConnection($email, $password)
+    {
+        // parse JWT
+        // quey with jwt data
+
+    }
+
+    function connection($idUser)
+    {
+        // take id
+        // return JWT token
+    }
 }

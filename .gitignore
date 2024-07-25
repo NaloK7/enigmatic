@@ -1,3 +1,5 @@
 node_modules
 /.vscode/settings.json
 /.env
+/backend/vendor
+/backend/.env
