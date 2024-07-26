@@ -18,13 +18,13 @@ const authMiddleware = (to, from, next) => {
       next();
     } else {
       console.log("3");
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
       next({ name: "login" });
     }
   }
   if (to.name !== "login" && to.name !== "inscription" && to.name !== "home") {
     console.log("4");
-    localStorage.removeItem("token");
+    // localStorage.removeItem("token");
     next({ name: "home" });
   } else {
     next();
