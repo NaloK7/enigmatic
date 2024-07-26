@@ -65,17 +65,15 @@ async function connect() {
       password: password.value,
     });
 
-    const response = await xhr.data;
-    if (response["status"] == 200) {
+    const response = await xhr;
+
+    if (response.status == 200) {
       // failed.value = false;
-      localStorage.setItem("token", response["token"]);
+      localStorage.setItem("token", response.data["token"]);
       router.push({ name: "home" });
-    } else if (response["status"] >= 400) {
-      console.log("NOT connected");
-      // failed.value = true;
     }
   } catch (error) {
-    console.error("Error calling PHP function:", error);
+    console.log("An error as occurred:", error.response.status);
   }
 }
 </script>

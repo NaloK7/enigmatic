@@ -62,6 +62,7 @@ class UserModel extends DB
         if ($count > 0) {
             $data = $state->fetch(PDO::FETCH_ASSOC);
             if (password_verify($password, $data['password'])) {
+                http_response_code(200);
                 $response = [
                     "status" => 200,
                     "token" => $this->generateJWT($data['id'], $email)
@@ -76,12 +77,14 @@ class UserModel extends DB
             // todo set proper code
             // email not register
         } else {
+            http_response_code(403);
+
             $response = [
                 "status" => 403
             ];
         }
         $con = null;
-
+        header('Content-Type: application/json');
         return $response;
     }
 

@@ -1,5 +1,5 @@
 <template>
-  <banner></banner>
+  <!-- <banner></banner> -->
   <div class="dark-glass glass-border w-full py-6">
     <section class="w-2/5 mx-auto space-y-4 text-gray-200">
       <h1 class="text-center underline font-audiowide mb-8">
@@ -41,7 +41,7 @@
   </div>
 </template>
 <script setup>
-import banner from "@/components/loginBanner.vue";
+// import banner from "@/components/loginBanner.vue";
 import navBtn from "@/components/navBtn.vue";
 </script>
 <style scoped>

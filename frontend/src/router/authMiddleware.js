@@ -12,7 +12,11 @@ const authMiddleware = (to, from, next) => {
       return;
     }
   }
-  if (to.name !== "login" && to.name !== "inscription" && to.name !== "home") {
+  if (
+    to.name !== "login" &&
+    to.name !== "inscription" &&
+    to.name !== "inscription"
+  ) {
     next({ name: "login" });
   } else {
     next();

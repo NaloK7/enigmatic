@@ -1,9 +1,20 @@
+<template>
+  <headerp></headerp>
+  <banner v-if="!token"></banner>
+  <RouterView :key="$route.fullPath" />
+</template>
+
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import headerp from "@/components/header.vue";
-</script>
+import banner from "@/components/loginBanner.vue";
+import { ref, onUpdated } from "vue";
 
-<template>
-  <headerp></headerp>
-  <RouterView :key="$route.fullPath" />
-</template>
+const token = ref(null);
+onUpdated(async () => {
+  token.value = await localStorage.getItem("token");
+});
+onUpdated(async () => {
+  token.value = await localStorage.getItem("token");
+});
+</script>
