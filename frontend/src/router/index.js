@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { jwtDecode } from "jwt-decode";
+import authMiddleware from "./authMiddleware";
 import Home from "@/views/index.vue";
 import Book from "@/views/book/[book_id]/view/[id].vue";
 import Riddle from "@/views/book/[book_id]/riddle/view/[id].vue";
@@ -37,23 +37,6 @@ const router = createRouter({
   ],
 });
 
-// MIDDLEWARE
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    const decoded = jwtDecode(token);
-    const expiration = new Date(decoded.exp * 1000);
-
-    if (expiration > new Date()) {
-      next();
-      return;
-    }
-  }
-  if (to.name !== "login" && to.name !== "inscription") {
-    next({ name: "login" });
-  } else {
-    next();
-  }
-});
+router.beforeEach(authMiddleware);
 
 export default router;
