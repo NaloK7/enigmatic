@@ -64,7 +64,6 @@ class UserModel extends DB
             if (password_verify($password, $data['password'])) {
                 http_response_code(200);
                 $response = [
-                    "status" => 200,
                     "token" => $this->generateJWT($data['id'], $email)
                 ];
                 // todo set proper code

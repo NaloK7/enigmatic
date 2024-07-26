@@ -7,7 +7,7 @@ const apiEnigm = axios.create({
 apiEnigm.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token !== null && token !== undefined && token !== "") {
-    config.headers["Authorization"] = `Bearer ${token.value}`;
+    config.headers["Authorization"] = `Bearer ${token}`;
   }
   return config;
 });

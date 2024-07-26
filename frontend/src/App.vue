@@ -1,6 +1,7 @@
 <template>
   <headerp></headerp>
-  <banner v-if="!token"></banner>
+  <!-- <banner v-if="!token"></banner> -->
+  <banner></banner>
   <RouterView :key="$route.fullPath" />
 </template>
 
