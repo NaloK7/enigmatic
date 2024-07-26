@@ -81,7 +81,7 @@
 import { ref } from "vue";
 import { useEmailRule, usePasswordRule } from "../../composables/rules.js";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import apiEnigm from "@/router/interceptor";
 const router = useRouter();
 
 const email = ref("");
@@ -98,13 +98,10 @@ const failed = ref(false);
 async function inscription() {
   if (formRules()) {
     try {
-      const xhr = await axios.post(
-        "http://localhost/enigmatic/backend/index.php?action=inscription",
-        {
-          email: email.value,
-          password: password.value,
-        }
-      );
+      const xhr = await apiEnigm.post(`?action=inscription`, {
+        email: email.value,
+        password: password.value,
+      });
 
       const response = await xhr.data;
       if (response["status"] == 200) {

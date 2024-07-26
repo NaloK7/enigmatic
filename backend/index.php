@@ -9,11 +9,14 @@ require_once('./controller/UserController.php');
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
+// start session 
+
 try {
     // route
     if (isset($_GET['action'])) {
         $action = new UserController();
         $data = json_decode(file_get_contents('php://input'), true);
+        // var_dump($data);
         // connection
         if ($_GET['action'] == 'login') {
             $action->login($data['email'], $data['password']);

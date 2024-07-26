@@ -50,17 +50,15 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import apiEnigm from "@/router/interceptor";
 const router = useRouter();
 
 const email = ref("");
 const password = ref("");
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
 async function connect() {
   try {
-    const xhr = await axios.post(`${baseUrl}login`, {
+    const xhr = await apiEnigm.post(`?action=login`, {
       email: email.value,
       password: password.value,
     });

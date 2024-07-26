@@ -8,10 +8,10 @@
 import { RouterLink, RouterView } from "vue-router";
 import headerp from "@/components/header.vue";
 import banner from "@/components/loginBanner.vue";
-import { ref, onUpdated } from "vue";
+import { ref, onUnmounted, onUpdated } from "vue";
 
 const token = ref(null);
-onUpdated(async () => {
+onUnmounted(async () => {
   token.value = await localStorage.getItem("token");
 });
 onUpdated(async () => {

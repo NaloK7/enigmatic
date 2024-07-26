@@ -12,12 +12,9 @@ const authMiddleware = (to, from, next) => {
       return;
     }
   }
-  if (
-    to.name !== "login" &&
-    to.name !== "inscription" &&
-    to.name !== "inscription"
-  ) {
-    next({ name: "login" });
+  if (to.name !== "login" && to.name !== "inscription" && to.name !== "home") {
+    localStorage.removeItem("token");
+    next({ name: "home" });
   } else {
     next();
   }
