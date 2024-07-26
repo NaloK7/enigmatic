@@ -16,7 +16,7 @@ try {
         $data = json_decode(file_get_contents('php://input'), true);
         // connection
         if ($_GET['action'] == 'login') {
-            $action->login($data['email'], $data['password'], $data['remember']);
+            $action->login($data['email'], $data['password']);
         }
         // inscription
         elseif ($_GET['action'] == "inscription") {

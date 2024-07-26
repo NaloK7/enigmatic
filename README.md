@@ -10,9 +10,10 @@ This template should help get you started developing with Vue 3 in Vite.
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## Project Setup
+## 1. Frontend Project Setup
 
 ```sh
+cd frontend/
 npm install
 ```
 
@@ -49,4 +50,3 @@ npm run test:e2e -- tests/e2e/example.js
 # Runs the tests in debug mode
 npm run test:e2e -- --debug
 ```
-    

@@ -23,17 +23,6 @@
             name="password"
             type="password" />
         </div>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <!-- todo see how remember work in detail -->
-            <input
-              class="mr-2 w-4 h-4"
-              v-model="remember"
-              name="remember"
-              type="checkbox" />
-            <span class="text-slate-500">se souvenir de moi</span>
-          </div>
-        </div>
 
         <button
           class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-darkPink hover:border-darkPink hover:bg-primaryPink hover:text-black active:text-white active:bg-darkPink rounded-lg"
@@ -66,19 +55,15 @@ const router = useRouter();
 
 const email = ref("");
 const password = ref("");
-const remember = ref(false);
+
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 async function connect() {
   try {
-    // todo make a function/composable to fetch: base_url / params
-    const xhr = await axios.post(
-      "http://localhost/enigmatic/backend/index.php?action=login",
-      {
-        email: email.value,
-        password: password.value,
-        remember: remember.value,
-      }
-    );
+    const xhr = await axios.post(`${baseUrl}login`, {
+      email: email.value,
+      password: password.value,
+    });
 
     const response = await xhr.data;
     if (response["status"] == 200) {

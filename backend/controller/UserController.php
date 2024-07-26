@@ -42,14 +42,12 @@ class UserController extends Controller
         return $valid;
     }
 
-    function login($email, $password, $remember)
+    function login($email, $password)
     {
         if ($this->rulesData($email, $password)) {
-            // // password hash
-            // $password = password_hash($password, PASSWORD_DEFAULT);
 
             $query = new UserModel();
-            $response = $query->queryLogin($email, $password, $remember);
+            $response = $query->queryLogin($email, $password);
         } else {
             // todo set proper code
             $response = ["status" => 401];

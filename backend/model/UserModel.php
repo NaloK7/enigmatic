@@ -50,10 +50,9 @@ class UserModel extends DB
     }
 
 
-    function queryLogin($email, $password, $remember)
+    function queryLogin($email, $password)
     {
 
-        $status = false;
         $con = $this->connectTo();
 
         $state = $con->prepare("SELECT id, password FROM user WHERE email = :email");
@@ -65,7 +64,7 @@ class UserModel extends DB
             if (password_verify($password, $data['password'])) {
                 $response = [
                     "status" => 200,
-                    "token" => $this->generateJWT($data['id'], $email, $remember)
+                    "token" => $this->generateJWT($data['id'], $email)
                 ];
                 // todo set proper code
                 // wrong password
@@ -86,17 +85,12 @@ class UserModel extends DB
         return $response;
     }
 
-    private function generateJWT($userId, $email, $remember = false)
+    private function generateJWT($userId, $email)
     {
-        // todo setup time properly
-        $time = 3600 * 5; // 5 hours validity
-        if ($remember) {
-            $time = 3600 * 24 * 7; // 7 days validity
-        }
         $key = $_ENV['JWT_KEY'];
         $payload = [
             'iat' => time(),
-            'exp' => time() + $time,
+            'exp' => time() + 3600 * 24,
             "user_id" => $userId,
             "email" => $email
 
