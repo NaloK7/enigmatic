@@ -14,6 +14,7 @@ class UserController extends Controller
             $query = new UserModel();
             $response = $query->queryInscription($email, $password);
         } else {
+            // todo set proper code
             $response = ["status" => 400];
         }
         echo json_encode($response);
@@ -41,16 +42,18 @@ class UserController extends Controller
         return $valid;
     }
 
-    function checkConnection($email, $password)
+    function login($email, $password, $remember)
     {
-        // parse JWT
-        // quey with jwt data
+        if ($this->rulesData($email, $password)) {
+            // // password hash
+            // $password = password_hash($password, PASSWORD_DEFAULT);
 
-    }
-
-    function connection($idUser)
-    {
-        // take id
-        // return JWT token
+            $query = new UserModel();
+            $response = $query->queryLogin($email, $password, $remember);
+        } else {
+            // todo set proper code
+            $response = ["status" => 401];
+        }
+        echo json_encode($response);
     }
 }

@@ -13,15 +13,15 @@ try {
     // route
     if (isset($_GET['action'])) {
         $action = new UserController();
+        $data = json_decode(file_get_contents('php://input'), true);
         // connection
         if ($_GET['action'] == 'login') {
-            echo "connection";
-            // $action->queryCheckConnection($_POST['email'], $_POST['password']);
+            $action->login($data['email'], $data['password'], $data['remember']);
         }
         // inscription
         elseif ($_GET['action'] == "inscription") {
 
-            $data = json_decode(file_get_contents('php://input'), true);
+
             $action->inscription($data['email'], $data['password']);
         }
     }
