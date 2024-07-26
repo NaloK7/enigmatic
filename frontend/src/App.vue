@@ -1,21 +1,24 @@
 <template>
   <headerp></headerp>
-  <!-- <banner v-if="!token"></banner> -->
-  <banner></banner>
+  <banner v-if="!isTokenAvailable"></banner>
   <RouterView :key="$route.fullPath" />
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import headerp from "@/components/header.vue";
 import banner from "@/components/loginBanner.vue";
-import { ref, onUnmounted, onUpdated } from "vue";
 
 const token = ref(null);
-onUnmounted(async () => {
-  token.value = await localStorage.getItem("token");
+
+onMounted(() => {
+  token.value = localStorage.getItem("token");
 });
-onUpdated(async () => {
-  token.value = await localStorage.getItem("token");
+
+const isTokenAvailable = computed(() => {
+  return (
+    token.value !== null && token.value !== undefined && token.value !== ""
+  );
 });
 </script>
