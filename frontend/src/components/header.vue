@@ -27,7 +27,7 @@
             :path="booksIco"></svg-icon>
         </RouterLink>
         <!-- ACCOUNT -->
-        <button @click="toogleDropDown()" @blur="() => (visible = false)">
+        <button @click="toogleDropDown()">
           <svg-icon
             width="30"
             height="30"
@@ -44,7 +44,9 @@
             <button class="h-8 w-full hover:text-primaryPink">Profile</button>
           </li>
           <li class="border-t border-gray-500">
-            <button class="h-8 w-full hover:text-primaryPink" @click="logout()">
+            <button
+              class="h-8 w-full hover:text-primaryPink"
+              @click="removeToken()">
               Déconnexion
             </button>
           </li>
@@ -59,15 +61,18 @@
       <navBtn to="/book/3/view/3" text="Livre III"></navBtn>
       <navBtn to="/book/4/view/4" text="Livre IV"></navBtn>
     </nav>
-    <banner v-if="!isTokenAvailable"></banner>
+    <banner v-if="tokenAvailable"></banner>
   </header>
 </template>
 <script setup>
 import navBtn from "@/components/navBtn.vue";
 import banner from "@/components/loginBanner.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, nextTick } from "vue";
 import { mdiAccount, mdiBookshelf } from "@mdi/js";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const accountIco = ref(mdiAccount);
 const booksIco = ref(mdiBookshelf);
 const visible = ref(false);
@@ -77,9 +82,11 @@ function toogleDropDown() {
 }
 
 const token = ref(null);
+const tokenAvailable = ref(false);
 
 onMounted(() => {
   token.value = localStorage.getItem("token");
+  tokenAvailable.value = isTokenAvailable;
 });
 
 const isTokenAvailable = computed(() => {
@@ -87,9 +94,11 @@ const isTokenAvailable = computed(() => {
     token.value !== null && token.value !== undefined && token.value !== ""
   );
 });
+
 function removeToken() {
   localStorage.removeItem("token");
-  token.value = null;
+  tokenAvailable.value = false;
+  router.push({ name: "home" });
 }
 </script>
 

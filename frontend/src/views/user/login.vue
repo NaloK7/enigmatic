@@ -76,6 +76,7 @@ async function connect() {
     if (response.status == 200) {
       // failed.value = false;
       localStorage.setItem("token", response.data["token"]);
+      //
       router.push({ name: "home" });
     }
   } catch (error) {
