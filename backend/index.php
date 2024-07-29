@@ -6,6 +6,12 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require_once('./vendor/autoload.php');
 require_once('./controller/UserController.php');
 
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 $headers = getallheaders();

@@ -58,10 +58,18 @@ const password = ref("");
 
 async function connect() {
   try {
-    const xhr = await apiEnigm.post(`?action=login`, {
-      email: email.value,
-      password: password.value,
-    });
+    const xhr = await apiEnigm.post(
+      `?action=login`,
+      {
+        email: email.value,
+        password: password.value,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const response = await xhr;
 
