@@ -1,5 +1,6 @@
 <template>
-  <h1 class="dark-glass glass-border text-center text-gray-200 mb-6 py-4">
+  <h1
+    class="dark-glass border-y border-primaryPink text-center text-gray-200 mb-6 py-4">
     Progression
   </h1>
   <div class="grid grid-cols-4 gap-4 text-center">

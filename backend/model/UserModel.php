@@ -14,7 +14,6 @@ class UserModel extends DB
         $check = $con->prepare("SELECT id FROM user WHERE email = :email");
         $check->bindParam(':email', $email);
         $check->execute();
-        // $response = $check->fetch(PDO::FETCH_ASSOC);
         $count = $check->rowCount();
 
         if ($count == 0) {
@@ -24,26 +23,19 @@ class UserModel extends DB
             $query->bindParam(':password', $password);
             $query->execute();
             $countAdd = $query->rowCount();
-            // user add
             if ($countAdd > 0) {
+                http_response_code(200);
                 $userId = $con->lastInsertId();
                 $response = [
-                    "status" => 200,
                     "token" => $this->generateJWT($userId, $email)
                 ];
-                // todo set proper code
-                // query error
             } else {
-                $response = [
-                    "status" => 401
-                ];
+                // No Content
+                http_response_code(204);
             }
-            // todo set proper code
-            // mail already used
         } else {
-            $response = [
-                "status" => 402
-            ];
+            // Unauthorized
+            http_response_code(401);
         }
         $con = null;
         return $response;
@@ -66,21 +58,13 @@ class UserModel extends DB
                 $response = [
                     "token" => $this->generateJWT($data['id'], $email)
                 ];
-                // todo set proper code
-                // wrong password
             } else {
-                $response = [
-                    "status" => 402
-                ];
+                // No Content
+                http_response_code(204);
             }
-            // todo set proper code
-            // email not register
         } else {
-            http_response_code(403);
-
-            $response = [
-                "status" => 403
-            ];
+            // Unauthorized
+            http_response_code(401);
         }
         $con = null;
         header('Content-Type: application/json');
@@ -111,13 +95,12 @@ class UserModel extends DB
             $query->execute();
             $count = $query->rowCount();
             if ($count > 0) {
-                // todo set proper code
                 http_response_code(200);
                 $data = $query->fetchAll(PDO::FETCH_ASSOC);
                 $datas[] = $data;
             } else {
-                // todo set proper code
-                http_response_code(400);
+                // No Content
+                http_response_code(204);
             }
         }
         return $datas;

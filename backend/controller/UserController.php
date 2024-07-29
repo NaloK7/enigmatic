@@ -14,8 +14,7 @@ class UserController extends Controller
             $query = new UserModel();
             $response = $query->queryInscription($email, $password);
         } else {
-            // todo set proper code
-            $response = ["status" => 400];
+            http_response_code(400);
         }
         echo json_encode($response);
     }
@@ -49,8 +48,7 @@ class UserController extends Controller
             $query = new UserModel();
             $response = $query->queryLogin($email, $password);
         } else {
-            // todo set proper code
-            $response = ["status" => 401];
+            http_response_code(400);
         }
         echo json_encode($response);
     }
