@@ -29,11 +29,24 @@
         <!-- ACCOUNT -->
         <RouterLink to="/">
           <svg-icon
+            @click="toogleDropDown()"
             width="30"
             height="30"
             type="mdi"
             :path="accountIco"></svg-icon>
         </RouterLink>
+        <ul
+          v-if="visible"
+          class="absolute top-[102px] right-0 w-32 dark-glass rounded-b-md border border-primaryGreen text-center text-gray-200 font-audiowide">
+          <li>
+            <button class="h-8 w-full hover:text-primaryPink">Profile</button>
+          </li>
+          <li class="border-t border-gray-500">
+            <button class="h-8 w-full hover:text-primaryPink" @click="logout()">
+              Déconnexion
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -49,10 +62,19 @@
 <script setup>
 import navBtn from "@/components/navBtn.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 import { mdiAccount, mdiBookshelf } from "@mdi/js";
 const accountIco = ref(mdiAccount);
 const booksIco = ref(mdiBookshelf);
+const visible = ref(false);
+const emit = defineEmits();
+function toogleDropDown() {
+  visible.value = !visible.value;
+}
+
+function logout() {
+  emit("removeToken");
+}
 </script>
 
 <style scoped>

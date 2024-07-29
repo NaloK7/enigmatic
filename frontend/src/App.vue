@@ -21,4 +21,7 @@ const isTokenAvailable = computed(() => {
     token.value !== null && token.value !== undefined && token.value !== ""
   );
 });
+function removeToken() {
+  localStorage.removeItem("token");
+}
 </script>
