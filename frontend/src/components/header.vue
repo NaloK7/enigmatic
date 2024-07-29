@@ -27,14 +27,16 @@
             :path="booksIco"></svg-icon>
         </RouterLink>
         <!-- ACCOUNT -->
-        <RouterLink to="/">
+        <button @click="toogleDropDown()" @blur="() => (visible = false)">
           <svg-icon
-            @click="toogleDropDown()"
             width="30"
             height="30"
             type="mdi"
-            :path="accountIco"></svg-icon>
-        </RouterLink>
+            :path="accountIco"
+            style="color: white">
+          </svg-icon>
+        </button>
+
         <ul
           v-if="visible"
           class="absolute top-[102px] right-0 w-32 dark-glass rounded-b-md border border-primaryGreen text-center text-gray-200 font-audiowide">
@@ -57,27 +59,44 @@
       <navBtn to="/book/3/view/3" text="Livre III"></navBtn>
       <navBtn to="/book/4/view/4" text="Livre IV"></navBtn>
     </nav>
+    <banner v-if="!isTokenAvailable"></banner>
   </header>
 </template>
 <script setup>
 import navBtn from "@/components/navBtn.vue";
+import banner from "@/components/loginBanner.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
-import { ref, defineEmits } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { mdiAccount, mdiBookshelf } from "@mdi/js";
 const accountIco = ref(mdiAccount);
 const booksIco = ref(mdiBookshelf);
 const visible = ref(false);
-const emit = defineEmits();
+
 function toogleDropDown() {
   visible.value = !visible.value;
 }
 
-function logout() {
-  emit("removeToken");
+const token = ref(null);
+
+onMounted(() => {
+  token.value = localStorage.getItem("token");
+});
+
+const isTokenAvailable = computed(() => {
+  return (
+    token.value !== null && token.value !== undefined && token.value !== ""
+  );
+});
+function removeToken() {
+  localStorage.removeItem("token");
+  token.value = null;
 }
 </script>
 
 <style scoped>
+.svg-icon {
+  fill: white;
+}
 #icon-account {
   width: 26px;
 }

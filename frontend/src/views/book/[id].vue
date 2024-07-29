@@ -22,7 +22,11 @@ const router = useRouter();
 const books = ref([]);
 
 async function getAllRiddles() {
-  const xhr = await apiEnigm.post("?action=books");
+  const xhr = await apiEnigm.post("?action=books", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   const response = await xhr;
   if (response.status == 200) {
     books.value = response.data;
