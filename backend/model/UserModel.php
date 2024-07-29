@@ -103,20 +103,23 @@ class UserModel extends DB
     function queryAllRiddles()
     {
         $con = $this->connectTo();
-
-        $query = $con->prepare("SELECT id, section_id, position, title FROM riddle");
-        $query->execute();
-        $count = $query->rowCount();
-        if ($count > 0) {
-            // todo set proper code
-            http_response_code(200);
-            $data = $query->fetchAll(PDO::FETCH_ASSOC);
-            error_log("Data fetched: " . print_r($data, true));
-            return $data;
-        } else {
-            // todo set proper code
-            http_response_code(400);
-            error_log("No data found"); // Log if no data found
+        $bookNumber = 4;
+        $datas = [];
+        for ($i = 1; $i <= $bookNumber; $i++) {
+            $query = $con->prepare("SELECT id, section_id, position, title FROM riddle WHERE section_id = :bookNumber ORDER BY position");
+            $query->bindParam(":bookNumber", $i);
+            $query->execute();
+            $count = $query->rowCount();
+            if ($count > 0) {
+                // todo set proper code
+                http_response_code(200);
+                $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                $datas[] = $data;
+            } else {
+                // todo set proper code
+                http_response_code(400);
+            }
         }
+        return $datas;
     }
 }
