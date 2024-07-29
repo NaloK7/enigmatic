@@ -54,4 +54,11 @@ class UserController extends Controller
         }
         echo json_encode($response);
     }
+
+    function getAllRiddles()
+    {
+        $query = new UserModel();
+        $response = $query->queryAllRiddles();
+        echo json_encode($response);
+    }
 }

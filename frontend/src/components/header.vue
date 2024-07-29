@@ -17,8 +17,23 @@
 
       <div class="w-1/5 h-px bg-primaryGreen"></div>
 
-      <div class="w-1/5 flex justify-end">
-        <img src="./img/account-icon.svg" alt="menu icon" id="icon-account" />
+      <div class="w-1/5 flex justify-end space-x-2">
+        <!-- BOOKS -->
+        <RouterLink to="/book/all">
+          <svg-icon
+            width="30"
+            height="30"
+            type="mdi"
+            :path="booksIco"></svg-icon>
+        </RouterLink>
+        <!-- ACCOUNT -->
+        <RouterLink to="/">
+          <svg-icon
+            width="30"
+            height="30"
+            type="mdi"
+            :path="accountIco"></svg-icon>
+        </RouterLink>
       </div>
     </div>
 
@@ -33,6 +48,11 @@
 </template>
 <script setup>
 import navBtn from "@/components/navBtn.vue";
+import SvgIcon from "@jamescoyle/vue-icon";
+import { ref } from "vue";
+import { mdiAccount, mdiBookshelf } from "@mdi/js";
+const accountIco = ref(mdiAccount);
+const booksIco = ref(mdiBookshelf);
 </script>
 
 <style scoped>

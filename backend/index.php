@@ -28,6 +28,8 @@ try {
         // inscription
         elseif ($_GET['action'] == "inscription") {
             $action->inscription($data['email'], $data['password']);
+        } else if ($_GET['action'] == "books") {
+            $action->getAllRiddles();
         }
     }
 } catch (\Throwable $th) {

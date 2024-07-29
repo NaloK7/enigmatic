@@ -35,7 +35,7 @@
 
 body {
   min-height: 100vh;
-  background-image: url("bkg_dark.svg");
+  background-image: url("/bkg_dark.svg");
   background-repeat: no-repeat;
   background-position: center top;
 }

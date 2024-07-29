@@ -10,18 +10,15 @@ const authMiddleware = (to, from, next) => {
     token !== "" &&
     token !== "undefined"
   ) {
-    console.log("token");
     const decoded = jwtDecode(token);
     const expiration = new Date(decoded.exp * 1000);
 
     if (expiration > new Date()) {
       // TOKEN VALID
-      console.log("token valid");
       next();
       return;
     } else {
       // TOKEN INVALID
-      console.log("token expired");
       localStorage.removeItem("token");
       next({ name: "login" });
       return;
@@ -33,12 +30,10 @@ const authMiddleware = (to, from, next) => {
       to.name !== "inscription" &&
       to.name !== "home"
     ) {
-      console.log("no token");
       localStorage.removeItem("token");
       next({ name: "home" });
       return;
     } else {
-      console.log("no token: to login/inscription/home");
       next();
       return;
     }
