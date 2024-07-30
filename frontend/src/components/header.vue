@@ -27,7 +27,10 @@
             :path="booksIco"></svg-icon>
         </RouterLink>
         <!-- ACCOUNT -->
-        <button v-if="tokenAvailable" @click="toogleDropDown()">
+        <button
+          v-if="tokenAvailable"
+          @click="toogleDropDown()"
+          @blur="() => (visible = false)">
           <svg-icon
             width="30"
             height="30"
@@ -46,7 +49,7 @@
           <li class="border-t border-gray-500">
             <button
               class="h-8 w-full hover:text-primaryPink"
-              @click="removeToken()">
+              @mousedown="removeToken()">
               Déconnexion
             </button>
           </li>
@@ -95,6 +98,8 @@ watch(
 
 function removeToken() {
   clearToken();
+  visible.value = false;
+  router.push({ name: "home" });
 }
 </script>
 
