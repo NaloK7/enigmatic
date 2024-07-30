@@ -59,10 +59,10 @@
     <div class="nav-toggle relative">
       <nav
         class="dark-glass border-b border-primaryGreen px-2 mx-auto w-1/2 flex items-center justify-evenly rounded-b-xl backdrop-blur-md">
-        <navBtn to="/book/1/view/1" text="Livre I"></navBtn>
-        <navBtn to="/book/2/view/2" text="Livre II"></navBtn>
-        <navBtn to="/book/3/view/3" text="Livre III"></navBtn>
-        <navBtn to="/book/4/view/4" text="Livre IV"></navBtn>
+        <navBtn to="/book/1/riddle/view/all" text="Livre I"></navBtn>
+        <navBtn to="/book/2/riddle/view/all" text="Livre II"></navBtn>
+        <navBtn to="/book/3/riddle/view/all" text="Livre III"></navBtn>
+        <navBtn to="/book/4/riddle/view/all" text="Livre IV"></navBtn>
       </nav>
       <div class="h-4"></div>
     </div>

@@ -1,7 +1,7 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 require_once('./vendor/autoload.php');
 require_once('./controller/UserController.php');
@@ -26,16 +26,25 @@ try {
     if (isset($_GET['action'])) {
         $action = new UserController();
         $data = json_decode(file_get_contents('php://input'), true);
-        // var_dump($data);
-        // connection
+        // login
         if ($_GET['action'] == 'login') {
             $action->login($data['email'], $data['password']);
         }
         // inscription
-        elseif ($_GET['action'] == "inscription") {
+        elseif ($_GET['action'] == 'inscription') {
             $action->inscription($data['email'], $data['password']);
-        } else if ($_GET['action'] == "books") {
+        }
+        // all riddles
+        else if ($_GET['action'] == 'books') {
             $action->getAllRiddles();
+        }
+        // last unsolved
+        elseif ($_GET['action'] == 'last') {
+            # code...
+        }
+        // isBlocked
+        elseif ($_GET['action'] == 'isBlocked') {
+            # code...
         }
     }
 } catch (\Throwable $th) {

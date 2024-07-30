@@ -14,10 +14,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import apiEnigm from "@/router/interceptor";
-import { useRouter } from "vue-router";
 import bookSection from "@/components/bookSection.vue";
-
-const router = useRouter();
 
 const books = ref([]);
 

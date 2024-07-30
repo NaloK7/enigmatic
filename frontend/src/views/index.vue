@@ -1,5 +1,4 @@
 <template>
-  <!-- <banner></banner> -->
   <div class="dark-glass glass-border w-full py-6">
     <section class="w-2/5 mx-auto space-y-4 text-gray-200">
       <h1 class="text-center underline font-audiowide mb-8">
@@ -35,13 +34,13 @@
       </div>
       <span class="font-bold text-lg text-center">C'est partit ?</span>
       <div class="flex justify-center">
-        <navBtn class="" to="/book/1/riddle/view/1" text="Livre I"></navBtn>
+        <navBtn class="" to="/book/1/riddle/view/all" text="Livre I"></navBtn>
       </div>
     </section>
   </div>
 </template>
+
 <script setup>
-// import banner from "@/components/loginBanner.vue";
 import navBtn from "@/components/navBtn.vue";
 </script>
 <style scoped>
