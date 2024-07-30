@@ -56,14 +56,16 @@
         </ul>
       </div>
     </div>
-
-    <nav
-      class="dark-glass border-b border-primaryGreen px-2 mx-auto w-1/2 flex items-center justify-evenly mb-5 rounded-b-xl relative backdrop-blur-md">
-      <navBtn to="/book/1/view/1" text="Livre I"></navBtn>
-      <navBtn to="/book/2/view/2" text="Livre II"></navBtn>
-      <navBtn to="/book/3/view/3" text="Livre III"></navBtn>
-      <navBtn to="/book/4/view/4" text="Livre IV"></navBtn>
-    </nav>
+    <div class="nav-toggle relative">
+      <nav
+        class="dark-glass border-b border-primaryGreen px-2 mx-auto w-1/2 flex items-center justify-evenly rounded-b-xl backdrop-blur-md">
+        <navBtn to="/book/1/view/1" text="Livre I"></navBtn>
+        <navBtn to="/book/2/view/2" text="Livre II"></navBtn>
+        <navBtn to="/book/3/view/3" text="Livre III"></navBtn>
+        <navBtn to="/book/4/view/4" text="Livre IV"></navBtn>
+      </nav>
+      <div class="h-4"></div>
+    </div>
     <banner v-if="!tokenAvailable"></banner>
   </header>
 </template>
@@ -110,13 +112,13 @@ function removeToken() {
 #icon-account {
   width: 26px;
 }
-nav {
+.nav-toggle {
   top: -50px;
   transition: 0.5s;
   transition-delay: 1000ms;
 }
-nav:hover {
-  transition: 0.5s;
+.nav-toggle:hover {
   top: 0px;
+  transition: 0.5s;
 }
 </style>
