@@ -27,7 +27,7 @@
             :path="booksIco"></svg-icon>
         </RouterLink>
         <!-- ACCOUNT -->
-        <button @click="toogleDropDown()">
+        <button v-if="tokenAvailable" @click="toogleDropDown()">
           <svg-icon
             width="30"
             height="30"
@@ -61,16 +61,17 @@
       <navBtn to="/book/3/view/3" text="Livre III"></navBtn>
       <navBtn to="/book/4/view/4" text="Livre IV"></navBtn>
     </nav>
-    <banner v-if="tokenAvailable"></banner>
+    <banner v-if="!tokenAvailable"></banner>
   </header>
 </template>
 <script setup>
 import navBtn from "@/components/navBtn.vue";
 import banner from "@/components/loginBanner.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
-import { ref, onMounted, computed, nextTick } from "vue";
+import { ref, watch } from "vue";
 import { mdiAccount, mdiBookshelf } from "@mdi/js";
 import { useRouter } from "vue-router";
+import { token, clearToken } from "@/stores/tokenStore";
 
 const router = useRouter();
 const accountIco = ref(mdiAccount);
@@ -81,24 +82,19 @@ function toogleDropDown() {
   visible.value = !visible.value;
 }
 
-const token = ref(null);
 const tokenAvailable = ref(false);
 
-onMounted(() => {
-  token.value = localStorage.getItem("token");
-  tokenAvailable.value = isTokenAvailable;
-});
-
-const isTokenAvailable = computed(() => {
-  return (
-    token.value !== null && token.value !== undefined && token.value !== ""
-  );
-});
+watch(
+  token,
+  () => {
+    tokenAvailable.value =
+      token.value !== null && token.value !== undefined && token.value !== "";
+  },
+  { immediate: true }
+);
 
 function removeToken() {
-  localStorage.removeItem("token");
-  tokenAvailable.value = false;
-  router.push({ name: "home" });
+  clearToken();
 }
 </script>
 

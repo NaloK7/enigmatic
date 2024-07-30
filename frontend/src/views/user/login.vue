@@ -51,6 +51,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import apiEnigm from "@/router/interceptor";
+import { setToken } from "@/stores/tokenStore";
 const router = useRouter();
 
 const email = ref("");
@@ -75,8 +76,7 @@ async function connect() {
 
     if (response.status == 200) {
       // failed.value = false;
-      localStorage.setItem("token", response.data["token"]);
-      //
+      setToken(response.data["token"]);
       router.push({ name: "home" });
     }
   } catch (error) {
