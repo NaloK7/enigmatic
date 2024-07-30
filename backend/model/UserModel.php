@@ -105,4 +105,22 @@ class UserModel extends DB
         }
         return $datas;
     }
+
+    function queryIsBlocked($bookId, $userId)
+    {
+        $con = $this->connectTo();
+        $query = $con->prepare("SELECT expiration FROM blocked WHERE user_id = :userId AND section_id = :bookId ");
+        $query->bindParam(':userId', $userId);
+        $query->bindParam(':bookId', $bookId);
+        $query->execute();
+        $count = $query->rowCount();
+        if ($count == 0) {
+            http_response_code(200);
+        } else {
+            // Blocked
+            http_response_code(202);
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        }
+    }
 }

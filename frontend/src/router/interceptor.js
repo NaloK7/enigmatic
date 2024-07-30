@@ -9,6 +9,7 @@ apiEnigm.interceptors.request.use((config) => {
   if (token !== null && token !== undefined && token !== "") {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
+  config.headers["Content-Type"] = "application/json";
   return config;
 });
 export default apiEnigm;

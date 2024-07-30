@@ -43,8 +43,9 @@ try {
             # code...
         }
         // isBlocked
-        elseif ($_GET['action'] == 'isBlocked') {
-            # code...
+        elseif ($_GET['action'] == 'blocked') {
+
+            $action->isBlocked($data['bookId'], $token);
         }
     }
 } catch (\Throwable $th) {

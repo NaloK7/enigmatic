@@ -32,7 +32,7 @@
           que l’on ne prend plus le temps d’apprecier à sa juste valeur.</span
         >
       </div>
-      <span class="font-bold text-lg text-center">C'est partit ?</span>
+      <span class="font-bold text-lg text-center">C'est parti ?</span>
       <div class="flex justify-center">
         <navBtn class="" to="/book/1/riddle/view/all" text="Livre I"></navBtn>
       </div>

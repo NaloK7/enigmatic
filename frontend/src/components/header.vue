@@ -58,7 +58,7 @@
     </div>
     <div class="nav-toggle relative">
       <nav
-        class="dark-glass border-b border-primaryGreen px-2 mx-auto w-1/2 flex items-center justify-evenly rounded-b-xl backdrop-blur-md">
+        class="dark-glass border-b border-primaryGreen px-2 mx-auto w-1/2 flex items-center justify-evenly rounded-b-xl">
         <navBtn to="/book/1/riddle/view/all" text="Livre I"></navBtn>
         <navBtn to="/book/2/riddle/view/all" text="Livre II"></navBtn>
         <navBtn to="/book/3/riddle/view/all" text="Livre III"></navBtn>

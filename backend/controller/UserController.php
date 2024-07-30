@@ -3,16 +3,27 @@ session_start();
 require_once('./model/UserModel.php');
 require_once('Controller.php');
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 class UserController extends Controller
 {
+    // new UserModel()
+    public $query;
+
+    public function __construct()
+    {
+        $this->query = new UserModel();
+    }
+
     function inscription($email, $password)
     {
         if ($this->rulesData($email, $password)) {
             // password hash
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            $query = new UserModel();
-            $response = $query->queryInscription($email, $password);
+            // $query = new UserModel();
+            $response = $this->query->queryInscription($email, $password);
         } else {
             http_response_code(400);
         }
@@ -45,8 +56,8 @@ class UserController extends Controller
     {
         if ($this->rulesData($email, $password)) {
 
-            $query = new UserModel();
-            $response = $query->queryLogin($email, $password);
+            // $query = new UserModel();
+            $response = $this->query->queryLogin($email, $password);
         } else {
             http_response_code(400);
         }
@@ -57,6 +68,19 @@ class UserController extends Controller
     {
         $query = new UserModel();
         $response = $query->queryAllRiddles();
+        echo json_encode($response);
+    }
+    function isBlocked($bookId, $token)
+    {
+        $key = $_ENV['JWT_KEY'];
+        $decoded = JWT::decode($token, new Key($key, 'HS256'));
+        $userId = $decoded->user_id;
+
+        if ($userId) {
+            $response = $this->query->queryIsBlocked($bookId, $userId);
+        } else {
+            http_response_code(400);
+        }
         echo json_encode($response);
     }
 }
