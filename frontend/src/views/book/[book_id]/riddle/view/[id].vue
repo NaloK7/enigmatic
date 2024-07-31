@@ -9,9 +9,7 @@
         {{ position }}. {{ title }}
       </h2>
 
-      <p class="riddle-txt">
-        {{ wording }}
-      </p>
+      <p class="riddle-txt text-gray-200" v-html="wording"></p>
     </div>
 
     <!-- BLOCKED FEEDBACK -->
@@ -78,6 +76,11 @@ async function getLastRiddle() {
   const response = await xhr;
   if (response.status == 200) {
     console.log(response.data);
+    //   response.data =  {
+    //   "position": 3,
+    //   "title": "Le nénuphar géant",
+    //   "wording": "Un nénuphar se trouvant dans un lac double de taille chaque jour.</br>Au bout de 10 jours, il couvre la moitié du lac.</br></br>Combien de jours lui aura-t-il fallu en tout pour le recouvrir entièrement ?"
+    // }
     title.value = response.data["title"];
     wording.value = response.data["wording"];
     position.value = response.data["position"];
