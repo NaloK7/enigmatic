@@ -1,22 +1,20 @@
 <template>
   <section class="dark-glass border-y border-primaryGreen my-10">
+    <!-- RIDDLE -->
     <div
       v-if="!blocked"
       class="flex flex-col justify-start items-center w-3/5 px-10 py-0 mx-auto h-[367px]">
       <h2
         class="font-audiowide text-xl p-0 py-10 text-primaryPink text-shadow-pink">
-        L'énigme d'Einstein
+        {{ position }}. {{ title }}
       </h2>
 
       <p class="riddle-txt">
-        Cette énigme fut posée aux étudiants de l'université de Stanford lors
-        d'une épreuve de réflexion.<br /><br />- C'est mieux que Dieu.<br />-
-        C'est pire que le Diable.<br />- Les pauvres en ont.<br />- Les riches
-        en ont besoin.<br />- Et si on en mange, on meurt.<br /><br /><b
-          >Qu'est ce que c'est ?</b
-        >
+        {{ wording }}
       </p>
     </div>
+
+    <!-- BLOCKED FEEDBACK -->
     <div v-else class="mx-auto w-3/5 my-4 space-y-4">
       <span class="block text-primaryPink text-shadow-pink text-center text-xl"
         >Bloqué</span
@@ -49,8 +47,10 @@ const blocked = ref(false);
 const expirationDate = ref();
 const dayDifference = ref();
 
-const riddle = ref([]);
-// check if section is blocked
+const title = ref("");
+const wording = ref("");
+const position = ref(0);
+
 async function isBlocked() {
   const xhr = await apiEnigm.post("?action=blocked", {
     bookId: bookId,
@@ -58,7 +58,7 @@ async function isBlocked() {
 
   const response = await xhr;
   if (response.status == 200) {
-    // query last riddle
+    getLastRiddle();
   } else if (response.status == 202) {
     blocked.value = true;
     expirationDate.value = new Date(response.data["expiration"]);
@@ -70,19 +70,22 @@ async function isBlocked() {
     expirationDate.value = expirationDate.value.toLocaleDateString("fr-FR");
   }
 }
+
+async function getLastRiddle() {
+  const xhr = await apiEnigm.post("?action=last", {
+    bookId: bookId,
+  });
+  const response = await xhr;
+  if (response.status == 200) {
+    console.log(response.data);
+    title.value = response.data["title"];
+    wording.value = response.data["wording"];
+    position.value = response.data["position"];
+  } else {
+    console.log(response.status);
+  }
+}
 onMounted(async () => {
   await isBlocked();
 });
-// params.id = last
-//      get last position unsolved
-// params.id = int
-//      get riddle with this position
-
-// SELECT r.position, r.title, r.wording
-// FROM riddle r
-// LEFT JOIN solve s ON r.id = s.riddle_id AND s.user_id = 16
-// WHERE s.riddle_id IS NULL
-// AND r.section_id = 1
-// ORDER BY r.position ASC
-// LIMIT 1;
 </script>

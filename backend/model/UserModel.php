@@ -123,4 +123,22 @@ class UserModel extends DB
             return $data;
         }
     }
+
+    function queryGetLastRiddle($bookId, $userId)
+    {
+        $con = $this->connectTo();
+        $query = $con->prepare("SELECT r.position, r.title, r.wording FROM riddle as r LEFT JOIN solve as s ON r.id = s.riddle_id AND s.user_id = :userId WHERE s.riddle_id IS NULL AND r.section_id = :bookId ORDER BY r.position ASC LIMIT 1");
+        $query->bindParam(':userId', $userId);
+        $query->bindParam(':bookId', $bookId);
+        $query->execute();
+        $count = $query->rowCount();
+        if ($count == 1) {
+            http_response_code(200);
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        } else {
+            // No Content
+            http_response_code(204);
+        }
+    }
 }

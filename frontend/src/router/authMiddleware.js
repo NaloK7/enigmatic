@@ -1,4 +1,5 @@
 import { jwtDecode } from "jwt-decode";
+import { token, clearToken } from "@/stores/tokenStore";
 
 // MIDDLEWARE
 const authMiddleware = (to, from, next) => {
@@ -19,7 +20,7 @@ const authMiddleware = (to, from, next) => {
       return;
     } else {
       // TOKEN INVALID
-      localStorage.removeItem("token");
+      clearToken();
       next({ name: "login" });
       return;
     }
@@ -30,7 +31,7 @@ const authMiddleware = (to, from, next) => {
       to.name !== "inscription" &&
       to.name !== "home"
     ) {
-      localStorage.removeItem("token");
+      clearToken();
       next({ name: "home" });
       return;
     } else {

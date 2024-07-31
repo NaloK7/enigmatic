@@ -25,6 +25,7 @@ class UserController extends Controller
             // $query = new UserModel();
             $response = $this->query->queryInscription($email, $password);
         } else {
+            // Bad Request
             http_response_code(400);
         }
         echo json_encode($response);
@@ -55,10 +56,9 @@ class UserController extends Controller
     function login($email, $password)
     {
         if ($this->rulesData($email, $password)) {
-
-            // $query = new UserModel();
             $response = $this->query->queryLogin($email, $password);
         } else {
+            // Bad Request
             http_response_code(400);
         }
         echo json_encode($response);
@@ -66,8 +66,7 @@ class UserController extends Controller
 
     function getAllRiddles()
     {
-        $query = new UserModel();
-        $response = $query->queryAllRiddles();
+        $response = $this->query->queryAllRiddles();
         echo json_encode($response);
     }
     function isBlocked($bookId, $token)
@@ -79,6 +78,22 @@ class UserController extends Controller
         if ($userId) {
             $response = $this->query->queryIsBlocked($bookId, $userId);
         } else {
+            // Bad Request
+            http_response_code(400);
+        }
+        echo json_encode($response);
+    }
+
+    function getLastRiddle($bookId, $token)
+    {
+        $key = $_ENV['JWT_KEY'];
+        $decoded = JWT::decode($token, new Key($key, 'HS256'));
+        $userId = $decoded->user_id;
+
+        if ($userId) {
+            $response = $this->query->queryGetLastRiddle($bookId, $userId);
+        } else {
+            // Bad Request
             http_response_code(400);
         }
         echo json_encode($response);

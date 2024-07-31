@@ -40,7 +40,7 @@ try {
         }
         // last unsolved
         elseif ($_GET['action'] == 'last') {
-            # code...
+            $action->getLastRiddle($data['bookId'], $token);
         }
         // isBlocked
         elseif ($_GET['action'] == 'blocked') {
