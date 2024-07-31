@@ -128,7 +128,7 @@ class UserModel extends DB
     {
         $con = $this->connectTo();
 
-        $query = $con->prepare("SELECT r.id, r.position, r.title, r.wording FROM riddle as r LEFT JOIN solve as s ON r.id = s.riddle_id AND s.user_id = :userId WHERE s.riddle_id IS NULL AND r.section_id = :bookId ORDER BY r.position ASC LIMIT 1");
+        $query = $con->prepare("SELECT r.id, r.position, r.title, r.wording, r.explanation FROM riddle as r LEFT JOIN solve as s ON r.id = s.riddle_id AND s.user_id = :userId WHERE s.riddle_id IS NULL AND r.section_id = :bookId ORDER BY r.position ASC LIMIT 1");
 
         $query->bindParam(':userId', $userId);
         $query->bindParam(':bookId', $bookId);

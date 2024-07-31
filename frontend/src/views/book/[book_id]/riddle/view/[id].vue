@@ -43,6 +43,7 @@
         <navBtn to="/book/4/riddle/view/all" text="Livre IV"></navBtn>
       </div>
     </div>
+    <overlay></overlay>
   </section>
 </template>
 
@@ -51,6 +52,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import apiEnigm from "@/router/interceptor";
 import navBtn from "@/components/navBtn.vue";
+import overlay from "@/components/ExplanationOverlay.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -61,9 +63,10 @@ const blocked = ref(false);
 const expirationDate = ref();
 const dayDifference = ref();
 
+const position = ref(0);
 const title = ref("");
 const wording = ref("");
-const position = ref(0);
+const explanation = ref("");
 
 const answer = ref("");
 
@@ -97,6 +100,7 @@ async function getLastRiddle() {
     title.value = response.data["title"];
     wording.value = response.data["wording"];
     position.value = response.data["position"];
+    explanation.value = response.data["explanation"];
   } else {
     console.log(response.status);
   }
