@@ -10,17 +10,18 @@
       <p class="riddle-txt text-gray-200" v-html="wording"></p>
       <!-- separator -->
       <div></div>
-      <div class="mt-auto">
+      <div class="mt-auto h-7">
         <input
           type="text"
           v-model="answer"
           name="answer"
           id="answer"
-          placeholder="   réponse"
-          class="rounded-l-lg w-96 border border-gray-500" />
+          placeholder="réponse"
+          class="rounded-l-lg w-96 h-full pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
         <button
-          class="rounded-r-lg w-10 font-bold border bg-white border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white">
-          OK
+          class="rounded-r-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+          @click="checkAnswer()">
+          Valider
         </button>
       </div>
     </div>
@@ -47,12 +48,14 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import apiEnigm from "@/router/interceptor";
 import navBtn from "@/components/navBtn.vue";
 
 const route = useRoute();
+const router = useRouter();
 const bookId = route.params.book_id;
+const riddleId = route.params.id;
 
 const blocked = ref(false);
 const expirationDate = ref();
@@ -71,7 +74,8 @@ async function isBlocked() {
 
   const response = await xhr;
   if (response.status == 200) {
-    getLastRiddle();
+    await getLastRiddle();
+    router.push(`/book/${bookId}/riddle/view/${position.value}`);
   } else if (response.status == 202) {
     blocked.value = true;
     expirationDate.value = new Date(response.data["expiration"]);
@@ -97,7 +101,31 @@ async function getLastRiddle() {
     console.log(response.status);
   }
 }
+
+async function checkAnswer() {
+  if (answer.value != "") {
+    console.log(answer.value); // 10
+    const xhr = await apiEnigm.post("?action=checkAnswer", {
+      riddleId: riddleId,
+      answer: answer.value,
+    });
+    const response = await xhr;
+    if (response.status == 200) {
+      // popup explanation + push next riddle
+    } else if (response.status == 204) {
+      // feedback bad anwser
+      console.log("bad answer");
+    } else {
+      // feedback an error ocurred (no response found)
+    }
+  }
+}
+
 onMounted(async () => {
-  await isBlocked();
+  if (riddleId == "all") {
+    await isBlocked();
+  } else {
+    await getLastRiddle();
+  }
 });
 </script>

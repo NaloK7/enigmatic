@@ -98,4 +98,24 @@ class UserController extends Controller
         }
         echo json_encode($response);
     }
+
+    function checkAnswer($riddleId, $answerToCheck)
+    {
+        if (is_string($answerToCheck) && $answerToCheck != "") {
+            $answerToCheck = strtolower($this->sanitize($answerToCheck));
+        }
+
+        $response = $this->query->getAnswer($riddleId);
+        if ($response == "") {
+            // Bad Request
+            http_response_code(208);
+        } else {
+            if ($response == $answerToCheck) {
+                http_response_code(200);
+            } else {
+                // No Content
+                http_response_code(204);
+            }
+        }
+    }
 }

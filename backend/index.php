@@ -44,8 +44,11 @@ try {
         }
         // isBlocked
         elseif ($_GET['action'] == 'blocked') {
-
             $action->isBlocked($data['bookId'], $token);
+        }
+        // check answer
+        else if ($_GET['action'] == 'checkAnswer') {
+            $action->checkAnswer($data['riddleId'], $data['answer']);
         }
     }
 } catch (\Throwable $th) {

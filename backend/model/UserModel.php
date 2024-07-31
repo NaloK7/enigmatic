@@ -127,10 +127,13 @@ class UserModel extends DB
     function queryGetLastRiddle($bookId, $userId)
     {
         $con = $this->connectTo();
-        $query = $con->prepare("SELECT r.position, r.title, r.wording FROM riddle as r LEFT JOIN solve as s ON r.id = s.riddle_id AND s.user_id = :userId WHERE s.riddle_id IS NULL AND r.section_id = :bookId ORDER BY r.position ASC LIMIT 1");
+
+        $query = $con->prepare("SELECT r.id, r.position, r.title, r.wording FROM riddle as r LEFT JOIN solve as s ON r.id = s.riddle_id AND s.user_id = :userId WHERE s.riddle_id IS NULL AND r.section_id = :bookId ORDER BY r.position ASC LIMIT 1");
+
         $query->bindParam(':userId', $userId);
         $query->bindParam(':bookId', $bookId);
         $query->execute();
+
         $count = $query->rowCount();
         if ($count == 1) {
             http_response_code(200);
@@ -140,5 +143,19 @@ class UserModel extends DB
             // No Content
             http_response_code(204);
         }
+    }
+
+    function getAnswer($riddleId)
+    {
+        $con = $this->connectTo();
+
+        $query = $con->prepare("SELECT s.solution FROM solution AS s LEFT JOIN have_solution AS h ON s.id = h.solution_id WHERE h.riddle_id = :riddleId");
+
+        $query->bindParam(':riddleId', $riddleId);
+        $query->execute();
+
+        $data = $query->fetch(PDO::FETCH_ASSOC);
+        $answer = $data['solution'];
+        return $answer;
     }
 }
