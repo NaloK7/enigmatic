@@ -3,13 +3,26 @@
     <!-- RIDDLE -->
     <div
       v-if="!blocked"
-      class="flex flex-col justify-start items-center w-3/5 px-10 py-0 mx-auto h-[367px]">
-      <h2
-        class="font-audiowide text-xl p-0 py-10 text-primaryPink text-shadow-pink">
-        {{ position }}. {{ title }}
+      class="flex flex-col justify-start items-center w-1/2 px-10 py-6 space-y-4 mx-auto">
+      <h2 class="pb-4 font-audiowide text-xl text-primaryPink text-shadow-pink">
+        {{ bookId }}-{{ position }}. {{ title }}
       </h2>
-
       <p class="riddle-txt text-gray-200" v-html="wording"></p>
+      <!-- separator -->
+      <div></div>
+      <div class="mt-auto">
+        <input
+          type="text"
+          v-model="answer"
+          name="answer"
+          id="answer"
+          placeholder="   réponse"
+          class="rounded-l-lg w-96 border border-gray-500" />
+        <button
+          class="rounded-r-lg w-10 font-bold border bg-white border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white">
+          OK
+        </button>
+      </div>
     </div>
 
     <!-- BLOCKED FEEDBACK -->
@@ -49,6 +62,8 @@ const title = ref("");
 const wording = ref("");
 const position = ref(0);
 
+const answer = ref("");
+
 async function isBlocked() {
   const xhr = await apiEnigm.post("?action=blocked", {
     bookId: bookId,
@@ -75,12 +90,6 @@ async function getLastRiddle() {
   });
   const response = await xhr;
   if (response.status == 200) {
-    console.log(response.data);
-    //   response.data =  {
-    //   "position": 3,
-    //   "title": "Le nénuphar géant",
-    //   "wording": "Un nénuphar se trouvant dans un lac double de taille chaque jour.</br>Au bout de 10 jours, il couvre la moitié du lac.</br></br>Combien de jours lui aura-t-il fallu en tout pour le recouvrir entièrement ?"
-    // }
     title.value = response.data["title"];
     wording.value = response.data["wording"];
     position.value = response.data["position"];
