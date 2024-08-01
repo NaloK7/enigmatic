@@ -118,4 +118,18 @@ class UserController extends Controller
             }
         }
     }
+
+    function validRiddle($riddleId, $token)
+    {
+        $key = $_ENV['JWT_KEY'];
+        $decoded = JWT::decode($token, new Key($key, 'HS256'));
+        $userId = $decoded->user_id;
+
+        if ($userId) {
+            $response = $this->query->queryValidRiddle($riddleId, $userId);
+        } else {
+            // Bad Request
+            http_response_code(400);
+        }
+    }
 }

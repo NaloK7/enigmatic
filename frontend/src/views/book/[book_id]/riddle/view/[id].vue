@@ -71,7 +71,7 @@ const position = ref(0);
 const title = ref("");
 const wording = ref("");
 const explanation = ref("");
-const display = ref(true);
+const display = ref(false);
 
 const answer = ref("");
 
@@ -139,6 +139,12 @@ function closeOverlay() {
 }
 
 async function refresh() {
+  closeOverlay();
+  const xhr = await apiEnigm.post("?action=solve", {
+    riddleId: riddleId,
+  });
+  const response = await xhr;
+  console.log(response.status);
   // query post id riddle to valid user riddle
   await isBlocked();
 }

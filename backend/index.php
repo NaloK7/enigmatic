@@ -50,6 +50,10 @@ try {
         else if ($_GET['action'] == 'checkAnswer') {
             $action->checkAnswer($data['riddleId'], $data['answer']);
         }
+        // post riddle solve
+        else if ($_GET['action'] == 'solve') {
+            $action->validRiddle($data['riddleId'], $token);
+        }
     }
 } catch (\Throwable $th) {
     //throw $th;

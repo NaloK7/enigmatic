@@ -158,4 +158,23 @@ class UserModel extends DB
         $answer = $data['solution'];
         return $answer;
     }
+
+    function queryValidRiddle($riddleId, $userId)
+    {
+        $con = $this->connectTo();
+
+        $query = $con->prepare("INSERT INTO solve(user_id, riddle_id) VALUES (:userId, :bookId)");
+        $query->bindParam(':userId', $userId);
+        $query->bindParam(':bookId', $bookId);
+        $query->execute();
+        $count = $query->rowCount();
+        if ($count == 1) {
+            http_response_code(200);
+        } else {
+            // Blocked
+            http_response_code(202);
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        }
+    }
 }
