@@ -131,5 +131,6 @@ class UserController extends Controller
             // Bad Request
             http_response_code(400);
         }
+        echo json_encode($response);
     }
 }

@@ -163,9 +163,9 @@ class UserModel extends DB
     {
         $con = $this->connectTo();
 
-        $query = $con->prepare("INSERT INTO solve(user_id, riddle_id) VALUES (:userId, :bookId)");
+        $query = $con->prepare("INSERT INTO solve(user_id, riddle_id) VALUES (:userId, :riddleId)");
         $query->bindParam(':userId', $userId);
-        $query->bindParam(':bookId', $bookId);
+        $query->bindParam(':riddleId', $riddleId);
         $query->execute();
         $count = $query->rowCount();
         if ($count == 1) {

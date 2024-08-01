@@ -10,18 +10,27 @@
       <p class="riddle-txt text-gray-200" v-html="wording"></p>
       <!-- separator -->
       <div></div>
-      <div class="mt-auto h-7">
-        <input
-          type="text"
-          v-model="answer"
-          name="answer"
-          id="answer"
-          placeholder="réponse"
-          class="rounded-l-lg w-96 h-full pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
+      <div
+        class="mt-auto h-7 w-full grid"
+        style="grid-template-columns: 1fr 2fr 1fr">
+        <div class="col-start-2 flex">
+          <input
+            type="text"
+            v-model="answer"
+            name="answer"
+            id="answer"
+            placeholder="réponse"
+            class="rounded-l-lg w-96 h-full pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
+          <button
+            class="rounded-r-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+            @click="checkAnswer()">
+            Valider
+          </button>
+        </div>
         <button
-          class="rounded-r-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
-          @click="checkAnswer()">
-          Valider
+          class="col-start-3 ml-auto rounded-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+          @click="test()">
+          Passer
         </button>
       </div>
     </div>
@@ -83,6 +92,7 @@ async function isBlocked() {
   const response = await xhr;
   if (response.status == 200) {
     await getLastRiddle();
+    // console.log("position.value:", position.value);
     router.push(`/book/${bookId}/riddle/view/${position.value}`);
   } else if (response.status == 202) {
     blocked.value = true;
@@ -144,9 +154,11 @@ async function refresh() {
     riddleId: riddleId,
   });
   const response = await xhr;
-  console.log(response.status);
-  // query post id riddle to valid user riddle
-  await isBlocked();
+  if (response.status == 200) {
+    await isBlocked();
+  } else {
+    console.log(response.status);
+  }
 }
 onMounted(async () => {
   if (riddleId == "all") {
