@@ -43,7 +43,11 @@
         <navBtn to="/book/4/riddle/view/all" text="Livre IV"></navBtn>
       </div>
     </div>
-    <overlay></overlay>
+    <overlay
+      :text="explanation"
+      :display="display"
+      @closeOverlay="closeOverlay()"
+      @next="refresh()"></overlay>
   </section>
 </template>
 
@@ -67,6 +71,7 @@ const position = ref(0);
 const title = ref("");
 const wording = ref("");
 const explanation = ref("");
+const display = ref(true);
 
 const answer = ref("");
 
@@ -108,7 +113,6 @@ async function getLastRiddle() {
 
 async function checkAnswer() {
   if (answer.value != "") {
-    console.log(answer.value); // 10
     const xhr = await apiEnigm.post("?action=checkAnswer", {
       riddleId: riddleId,
       answer: answer.value,
@@ -116,6 +120,7 @@ async function checkAnswer() {
     const response = await xhr;
     if (response.status == 200) {
       // popup explanation + push next riddle
+      showOverlay();
     } else if (response.status == 204) {
       // feedback bad anwser
       console.log("bad answer");
@@ -125,6 +130,18 @@ async function checkAnswer() {
   }
 }
 
+function showOverlay() {
+  display.value = true;
+}
+
+function closeOverlay() {
+  display.value = false;
+}
+
+async function refresh() {
+  // query post id riddle to valid user riddle
+  await isBlocked();
+}
 onMounted(async () => {
   if (riddleId == "all") {
     await isBlocked();
