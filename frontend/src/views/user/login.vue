@@ -59,7 +59,7 @@ const password = ref("");
 
 async function connect() {
   try {
-    const xhr = await api.post(`?action=login`, {
+    const xhr = await api.getUser(`login`, {
       email: email.value,
       password: password.value,
     });

@@ -22,6 +22,11 @@ const api = {
     return response;
   },
 
+  async getUser(url, criteria) {
+    const response = await apiEnigm.post(url, { ...criteria });
+    return response;
+  },
+
   async getAll(url) {
     const response = await apiEnigm.post(url);
     return response;
