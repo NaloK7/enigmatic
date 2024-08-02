@@ -36,7 +36,7 @@ try {
         }
         // all riddles
         else if ($_GET['action'] == 'books') {
-            $action->getAllRiddles();
+            $action->getAllRiddles($token);
         }
         // last unsolved
         elseif ($_GET['action'] == 'last') {

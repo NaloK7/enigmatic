@@ -64,9 +64,17 @@ class UserController extends Controller
         echo json_encode($response);
     }
 
-    function getAllRiddles()
+    function getAllRiddles($token)
     {
-        $response = $this->query->queryAllRiddles();
+        $key = $_ENV['JWT_KEY'];
+        $decoded = JWT::decode($token, new Key($key, 'HS256'));
+        $userId = $decoded->user_id;
+        if ($userId) {
+            $response = $this->query->queryAllRiddles($userId);
+        } else {
+            // Bad Request
+            http_response_code(400);
+        }
         echo json_encode($response);
     }
     function isBlocked($bookId, $token)

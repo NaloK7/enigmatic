@@ -84,13 +84,14 @@ class UserModel extends DB
         return JWT::encode($payload, $key, 'HS256');
     }
 
-    function queryAllRiddles()
+    function queryAllRiddles($userId)
     {
         $con = $this->connectTo();
         $bookNumber = 4;
         $datas = [];
         for ($i = 1; $i <= $bookNumber; $i++) {
-            $query = $con->prepare("SELECT id, section_id, position, title FROM riddle WHERE section_id = :bookNumber ORDER BY position");
+            $query = $con->prepare("SELECT r.id, r.section_id, r.position, r.title, s.riddle_id, s.user_id FROM riddle AS r LEFT JOIN solve AS s ON r.id = s.riddle_id AND s.user_id = $userId WHERE section_id = :bookNumber ORDER BY position");
+            // $query = $con->prepare("SELECT id, section_id, position, title FROM riddle WHERE section_id = :bookNumber ORDER BY position");
             $query->bindParam(":bookNumber", $i);
             $query->execute();
             $count = $query->rowCount();

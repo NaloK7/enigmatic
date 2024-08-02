@@ -9,12 +9,19 @@
       <div class="my-2 mx-auto w-3/5 border-b border-primaryGreen"></div>
       <tr v-for="element in bookData" :key="element.id">
         <td class="text-gray-200">
+          <!-- finish white -->
+          <!-- last green -->
+          <!-- next grey (not a link) -->
           <RouterLink
-            :class="[
-              isSolved(element.id),
-              'block hover:text-primaryPink font-medium text-lg',
-            ]"
+            v-if="element.user_id != null"
+            class="block hover:text-primaryPink font-medium text-lg text-primaryGreen"
             :to="`/book/${element.section_id}/riddle/view/${element.position}`">
+            {{ element.title }}
+          </RouterLink>
+          <RouterLink
+            v-else
+            class="block hover:text-gray-300 font-medium text-lg text-gray-300"
+            :to="`/book/${element.section_id}/riddle/view/all`">
             {{ element.title }}
           </RouterLink>
         </td>
@@ -30,13 +37,4 @@ const props = defineProps({
   bookTitle: String,
   bookData: Array,
 });
-
-function isSolved(id) {
-  // todo query to check riddle solved by user
-  if (id == 1) {
-    return "text-primaryGreen";
-  } else {
-    return "";
-  }
-}
 </script>
