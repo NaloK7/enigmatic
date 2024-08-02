@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiCloseBox } from "@mdi/js";
 
