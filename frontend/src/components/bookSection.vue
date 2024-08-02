@@ -20,7 +20,7 @@
           </RouterLink>
           <RouterLink
             v-else
-            class="block hover:text-gray-300 font-medium text-lg text-gray-300"
+            class="block font-medium text-lg text-gray-400"
             :to="`/book/${element.section_id}/riddle/view/all`">
             {{ element.title }}
           </RouterLink>

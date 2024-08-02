@@ -50,7 +50,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import apiEnigm from "@/router/interceptor";
+import api from "@/composables/api";
 import { setToken } from "@/stores/tokenStore";
 const router = useRouter();
 
@@ -59,7 +59,7 @@ const password = ref("");
 
 async function connect() {
   try {
-    const xhr = await apiEnigm.post(`?action=login`, {
+    const xhr = await api.post(`?action=login`, {
       email: email.value,
       password: password.value,
     });

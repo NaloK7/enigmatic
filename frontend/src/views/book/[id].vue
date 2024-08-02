@@ -13,18 +13,17 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import apiEnigm from "@/router/interceptor";
+import api from "@/composables/api";
 import bookSection from "@/components/bookSection.vue";
 
 const books = ref([]);
 
 async function getAllRiddles() {
-  const xhr = await apiEnigm.post("?action=books", {});
-  const response = await xhr;
-  if (response.status == 200) {
-    books.value = response.data;
+  const xhr = await api.getAll("books");
+  if (xhr.status == 200) {
+    books.value = xhr.data;
   } else {
-    console.log(response.status);
+    console.log(xhr.status);
   }
 }
 onMounted(async () => {

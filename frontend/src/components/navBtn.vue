@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import apiEnigm from "@/router/interceptor";
+import api from "@/composables/api";
 
 import { useRouter } from "vue-router";
 import { ref } from "vue";
@@ -22,7 +22,7 @@ async function redirectToRiddle() {
   router.push(`/book/${props.section}/riddle/view/${position.value}`);
 }
 async function getLastRiddle() {
-  const xhr = await apiEnigm.post("?action=last", {
+  const xhr = await api.post("?action=last", {
     bookId: props.section,
   });
   const response = await xhr;

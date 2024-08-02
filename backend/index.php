@@ -12,6 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+$url = explode("/", $_SERVER['REQUEST_URI']);
+$iri = end($url);
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 $headers = getallheaders();
@@ -22,37 +25,39 @@ if (isset($headers['Authorization'])) {
 
 
 try {
-    // route
-    if (isset($_GET['action'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = new UserController();
         $data = json_decode(file_get_contents('php://input'), true);
+
         // login
-        if ($_GET['action'] == 'login') {
+        if ($iri == 'login') {
             $action->login($data['email'], $data['password']);
         }
         // inscription
-        elseif ($_GET['action'] == 'inscription') {
+        elseif ($iri == 'inscription') {
             $action->inscription($data['email'], $data['password']);
         }
-        // all riddles
-        else if ($_GET['action'] == 'books') {
-            $action->getAllRiddles($token);
-        }
-        // last unsolved
-        elseif ($_GET['action'] == 'last') {
-            $action->getLastRiddle($data['bookId'], $token);
-        }
-        // isBlocked
-        elseif ($_GET['action'] == 'blocked') {
-            $action->isBlocked($data['bookId'], $token);
-        }
-        // check answer
-        else if ($_GET['action'] == 'checkAnswer') {
-            $action->checkAnswer($data['riddleId'], $data['answer']);
-        }
-        // post riddle solve
-        else if ($_GET['action'] == 'solve') {
-            $action->validRiddle($data['riddleId'], $token);
+        if (isset($token)) {
+            // all riddles
+            if ($iri == 'books') {
+                $action->getAllRiddles($token);
+            }
+            // last unsolved
+            elseif ($iri == 'last') {
+                $action->getLastRiddle($data['bookId'], $token);
+            }
+            // isBlocked
+            elseif ($iri == 'blocked') {
+                $action->isBlocked($data['bookId'], $token);
+            }
+            // check answer
+            else if ($iri == 'checkAnswer') {
+                $action->checkAnswer($data['riddleId'], $data['answer']);
+            }
+            // post riddle solve
+            else if ($iri == 'solve') {
+                $action->validRiddle($data['riddleId'], $token);
+            }
         }
     }
 } catch (\Throwable $th) {

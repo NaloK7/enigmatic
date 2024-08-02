@@ -63,7 +63,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import apiEnigm from "@/router/interceptor";
+import api from "@/composables/api";
 import navBtn from "@/components/navBtn.vue";
 import overlay from "@/components/ExplanationOverlay.vue";
 
@@ -85,7 +85,7 @@ const display = ref(false);
 const answer = ref("");
 
 async function isBlocked() {
-  const xhr = await apiEnigm.post("?action=blocked", {
+  const xhr = await api.post("?action=blocked", {
     bookId: bookId,
   });
 
@@ -107,9 +107,7 @@ async function isBlocked() {
 }
 
 async function getLastRiddle() {
-  const xhr = await apiEnigm.post("?action=last", {
-    bookId: bookId,
-  });
+  const xhr = await api.getLast("last", bookId);
   const response = await xhr;
   if (response.status == 200) {
     title.value = response.data["title"];
@@ -123,7 +121,7 @@ async function getLastRiddle() {
 
 async function checkAnswer() {
   if (answer.value != "") {
-    const xhr = await apiEnigm.post("?action=checkAnswer", {
+    const xhr = await api.post("?action=checkAnswer", {
       riddleId: riddleId,
       answer: answer.value,
     });
@@ -150,7 +148,7 @@ function closeOverlay() {
 
 async function refresh() {
   closeOverlay();
-  const xhr = await apiEnigm.post("?action=solve", {
+  const xhr = await api.post("?action=solve", {
     riddleId: riddleId,
   });
   const response = await xhr;

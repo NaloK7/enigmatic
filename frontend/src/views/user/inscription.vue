@@ -80,8 +80,9 @@
 <script setup>
 import { ref } from "vue";
 import { useEmailRule, usePasswordRule } from "../../composables/rules.js";
+import { setToken } from "@/stores/tokenStore";
 import { useRouter } from "vue-router";
-import apiEnigm from "@/router/interceptor";
+import api from "@/composables/api";
 const router = useRouter();
 
 const email = ref("");
@@ -98,15 +99,15 @@ const failed = ref(false);
 async function inscription() {
   if (formRules()) {
     try {
-      const xhr = await apiEnigm.post(`?action=inscription`, {
+      const xhr = await api.postUser(`inscription`, {
         email: email.value,
         password: password.value,
       });
 
-      const response = await xhr.data;
+      const response = await xhr;
       if (response["status"] == 200) {
         failed.value = false;
-        localStorage.setItem("token", response["token"]);
+        setToken(response.data["token"]);
         router.push({ name: "home" });
       } else if (response["status"] >= 400) {
         failed.value = true;
