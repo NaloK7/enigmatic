@@ -46,10 +46,10 @@
       >
       <div
         class="px-2 mx-auto w-2/3 flex items-center justify-evenly rounded-b-xl">
-        <navBtn to="/book/1/riddle/view/all" text="Livre I"></navBtn>
-        <navBtn to="/book/2/riddle/view/all" text="Livre II"></navBtn>
-        <navBtn to="/book/3/riddle/view/all" text="Livre III"></navBtn>
-        <navBtn to="/book/4/riddle/view/all" text="Livre IV"></navBtn>
+        <navBtn section="1" text="Livre I"></navBtn>
+        <navBtn section="2" text="Livre II"></navBtn>
+        <navBtn section="3" text="Livre III"></navBtn>
+        <navBtn section="4" text="Livre IV"></navBtn>
       </div>
     </div>
     <overlay

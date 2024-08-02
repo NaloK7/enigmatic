@@ -16,12 +16,12 @@
   background: linear-gradient(
     90deg,
     rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.7) 40%,
-    rgba(0, 0, 0, 0.7) 60%,
+    rgba(0, 0, 0, 0.8) 40%,
+    rgba(0, 0, 0, 0.8) 60%,
     rgba(0, 0, 0, 0.1) 100%
   );
 
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(6px);
 }
 .glass-border {
   border-top-width: 1px;

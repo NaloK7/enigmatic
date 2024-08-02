@@ -34,7 +34,7 @@
       </div>
       <span class="font-bold text-lg text-center">C'est parti ?</span>
       <div class="flex justify-center">
-        <navBtn class="" to="/book/1/riddle/view/all" text="Livre I"></navBtn>
+        <navBtn section="1" text="Livre I"></navBtn>
       </div>
     </section>
   </div>
