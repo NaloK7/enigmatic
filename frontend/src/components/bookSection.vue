@@ -21,7 +21,7 @@
           <RouterLink
             v-else
             class="block font-medium text-lg text-gray-400"
-            :to="`/book/${element.section_id}/riddle/view/all`">
+            :to="`/book/${element.section_id}/riddle/view/${element.position}`">
             {{ element.title }}
           </RouterLink>
         </td>
@@ -31,6 +31,7 @@
 </template>
 
 <script setup>
+//
 import { RouterLink } from "vue-router";
 
 const props = defineProps({

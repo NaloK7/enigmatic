@@ -22,6 +22,7 @@ async function getAllRiddles() {
   const xhr = await api.getAll("books");
   if (xhr.status == 200) {
     books.value = xhr.data;
+    console.log("🚀 ~ getAllRiddles ~ books.value:", books.value);
   } else {
     console.log(xhr.status);
   }

@@ -61,6 +61,11 @@
 </template>
 
 <script setup>
+// check section blocked
+// not blocked
+// quey riddle by position + section
+// blocker query first unsolved
+
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import api from "@/composables/api";
