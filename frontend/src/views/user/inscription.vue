@@ -99,10 +99,11 @@ const failed = ref(false);
 async function inscription() {
   if (formRules()) {
     try {
-      const xhr = await api.postUser(`inscription`, {
-        email: email.value,
-        password: password.value,
-      });
+      const xhr = await api.postUser(
+        `inscription`,
+        email.value,
+        password.value
+      );
 
       const response = await xhr;
       if (response["status"] == 200) {

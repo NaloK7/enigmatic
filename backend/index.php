@@ -5,6 +5,7 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 require_once('./vendor/autoload.php');
 require_once('./controller/UserController.php');
+require_once('./controller/RiddleController.php');
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -26,38 +27,38 @@ if (isset($headers['Authorization'])) {
 
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $action = new UserController();
+        $user = new UserController();
         $data = json_decode(file_get_contents('php://input'), true);
 
         // login
         if ($iri == 'login') {
-            $action->login($data['email'], $data['password']);
+            $user->login($data['email'], $data['password']);
         }
         // inscription
         elseif ($iri == 'inscription') {
-            $action->inscription($data['email'], $data['password']);
+            $user->inscription($data['email'], $data['password']);
         }
         if (isset($token)) {
+            $riddle = new RiddleController();
             // all riddles
             if ($iri == 'books') {
-                $action->getAllRiddles($token);
+                $riddle->getAllRiddles($token);
             }
-            // last unsolved
+            // last riddle ID
             elseif ($iri == 'last') {
-                $action->getLastRiddle($data['bookId'], $token);
+                $riddle->getLastRiddlePos($data['bookId'], $token);
+            }
+            // get riddle
+            elseif ($iri == 'riddle') {
+                $riddle->checkRiddle($data['bookId'], $data['riddlePos'], $token);
             }
             // isBlocked
-            elseif ($iri == 'blocked') {
-                $action->isBlocked($data['bookId'], $token);
+            elseif ($iri == 'locked') {
+                $riddle->bookUnlocked($data['bookId'], $token);
             }
-            // check answer
-            else if ($iri == 'checkAnswer') {
-                $action->checkAnswer($data['riddleId'], $data['answer']);
-            }
-            // post riddle solve
-            else if ($iri == 'solve') {
-                $action->validRiddle($data['riddleId'], $token);
-            }
+        } else {
+            // Unauthorized
+            http_response_code(401);
         }
     }
 } catch (\Throwable $th) {

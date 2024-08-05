@@ -9,21 +9,20 @@
       <div class="my-2 mx-auto w-3/5 border-b border-primaryGreen"></div>
       <tr v-for="element in bookData" :key="element.id">
         <td class="text-gray-200">
-          <!-- finish white -->
-          <!-- last green -->
-          <!-- next grey (not a link) -->
+          <!-- todo review style -->
+          <!-- if riddle solved → user_id != null  -->
           <RouterLink
             v-if="element.user_id != null"
             class="block hover:text-primaryPink font-medium text-lg text-primaryGreen"
             :to="`/book/${element.section_id}/riddle/view/${element.position}`">
             {{ element.title }}
           </RouterLink>
-          <RouterLink
+          <button
             v-else
-            class="block font-medium text-lg text-gray-400"
-            :to="`/book/${element.section_id}/riddle/view/${element.position}`">
+            class="font-medium text-lg text-gray-400"
+            @click="getLastRiddlePos(element.section_id)">
             {{ element.title }}
-          </RouterLink>
+          </button>
         </td>
       </tr>
     </table>
@@ -31,11 +30,24 @@
 </template>
 
 <script setup>
-//
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
+import api from "@/composables/api";
 
+const router = useRouter();
 const props = defineProps({
   bookTitle: String,
   bookData: Array,
 });
+
+async function getLastRiddlePos(bookId) {
+  const response = await api.getLast("last", bookId);
+
+  if (response.status == 200) {
+    // failed.value = false;
+    let lastId = response.data.position;
+    router.push(`/book/${bookId}/riddle/view/${lastId}`);
+  } else {
+    console.log(response.status);
+  }
+}
 </script>

@@ -75,7 +75,7 @@ import overlay from "@/components/ExplanationOverlay.vue";
 const route = useRoute();
 const router = useRouter();
 const bookId = route.params.book_id;
-const riddleId = route.params.id;
+const riddlePos = route.params.id;
 
 const blocked = ref(false);
 const expirationDate = ref();
@@ -89,16 +89,10 @@ const display = ref(false);
 
 const answer = ref("");
 
-async function isBlocked() {
-  const xhr = await api.post("?action=blocked", {
-    bookId: bookId,
-  });
-
-  const response = await xhr;
+async function isBookLocked() {
+  const response = await api.isLocked("locked", bookId);
   if (response.status == 200) {
-    await getLastRiddle();
-    // console.log("position.value:", position.value);
-    router.push(`/book/${bookId}/riddle/view/${position.value}`);
+    getOneRiddle();
   } else if (response.status == 202) {
     blocked.value = true;
     expirationDate.value = new Date(response.data["expiration"]);
@@ -111,9 +105,9 @@ async function isBlocked() {
   }
 }
 
-async function getLastRiddle() {
-  const xhr = await api.getLast("last", bookId);
-  const response = await xhr;
+async function getOneRiddle() {
+  const response = await api.getOne("riddle", bookId, riddlePos);
+  console.log("🚀 ~ getOneRiddle ~ response:", response.data);
   if (response.status == 200) {
     title.value = response.data["title"];
     wording.value = response.data["wording"];
@@ -124,24 +118,24 @@ async function getLastRiddle() {
   }
 }
 
-async function checkAnswer() {
-  if (answer.value != "") {
-    const xhr = await api.post("?action=checkAnswer", {
-      riddleId: riddleId,
-      answer: answer.value,
-    });
-    const response = await xhr;
-    if (response.status == 200) {
-      // popup explanation + push next riddle
-      showOverlay();
-    } else if (response.status == 204) {
-      // feedback bad anwser
-      console.log("bad answer");
-    } else {
-      // feedback an error ocurred (no response found)
-    }
-  }
-}
+// async function checkAnswer() {
+//   if (answer.value != "") {
+//     const xhr = await api.post("?action=checkAnswer", {
+//       riddleId: riddleId,
+//       answer: answer.value,
+//     });
+//     const response = await xhr;
+//     if (response.status == 200) {
+//       // popup explanation + push next riddle
+//       showOverlay();
+//     } else if (response.status == 204) {
+//       // feedback bad anwser
+//       console.log("bad answer");
+//     } else {
+//       // feedback an error ocurred (no response found)
+//     }
+//   }
+// }
 
 function showOverlay() {
   display.value = true;
@@ -153,21 +147,16 @@ function closeOverlay() {
 
 async function refresh() {
   closeOverlay();
-  const xhr = await api.post("?action=solve", {
+  const response = await api.post("?action=solve", {
     riddleId: riddleId,
   });
-  const response = await xhr;
   if (response.status == 200) {
-    await isBlocked();
+    await isLocked();
   } else {
     console.log(response.status);
   }
 }
-onMounted(async () => {
-  if (riddleId == "all") {
-    await isBlocked();
-  } else {
-    await getLastRiddle();
-  }
+onMounted(() => {
+  isBookLocked();
 });
 </script>

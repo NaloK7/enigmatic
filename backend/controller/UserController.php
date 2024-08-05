@@ -1,10 +1,7 @@
 <?php
-session_start();
+// session_start();
 require_once('./model/UserModel.php');
 require_once('Controller.php');
-
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 class UserController extends Controller
 {
@@ -22,7 +19,6 @@ class UserController extends Controller
             // password hash
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            // $query = new UserModel();
             $response = $this->query->queryInscription($email, $password);
         } else {
             // Bad Request
@@ -57,84 +53,6 @@ class UserController extends Controller
     {
         if ($this->rulesData($email, $password)) {
             $response = $this->query->queryLogin($email, $password);
-        } else {
-            // Bad Request
-            http_response_code(400);
-        }
-        echo json_encode($response);
-    }
-
-    function getAllRiddles($token)
-    {
-        $key = $_ENV['JWT_KEY'];
-        $decoded = JWT::decode($token, new Key($key, 'HS256'));
-        $userId = $decoded->user_id;
-        if ($userId) {
-            $response = $this->query->queryAllRiddles($userId);
-        } else {
-            // Bad Request
-            http_response_code(400);
-        }
-        echo json_encode($response);
-    }
-    function isBlocked($bookId, $token)
-    {
-        $key = $_ENV['JWT_KEY'];
-        $decoded = JWT::decode($token, new Key($key, 'HS256'));
-        $userId = $decoded->user_id;
-
-        if ($userId) {
-            $response = $this->query->queryIsBlocked($bookId, $userId);
-        } else {
-            // Bad Request
-            http_response_code(400);
-        }
-        echo json_encode($response);
-    }
-
-    function getLastRiddle($bookId, $token)
-    {
-        $key = $_ENV['JWT_KEY'];
-        $decoded = JWT::decode($token, new Key($key, 'HS256'));
-        $userId = $decoded->user_id;
-
-        if ($userId) {
-            $response = $this->query->queryGetLastRiddle($bookId, $userId);
-        } else {
-            // Bad Request
-            http_response_code(400);
-        }
-        echo json_encode($response);
-    }
-
-    function checkAnswer($riddleId, $answerToCheck)
-    {
-        if (is_string($answerToCheck) && $answerToCheck != "") {
-            $answerToCheck = strtolower($this->sanitize($answerToCheck));
-        }
-
-        $response = $this->query->getAnswer($riddleId);
-        if ($response == "") {
-            // Bad Request
-            http_response_code(208);
-        } else {
-            if ($response == $answerToCheck) {
-                http_response_code(200);
-            } else {
-                // No Content
-                http_response_code(204);
-            }
-        }
-    }
-
-    function validRiddle($riddleId, $token)
-    {
-        $key = $_ENV['JWT_KEY'];
-        $decoded = JWT::decode($token, new Key($key, 'HS256'));
-        $userId = $decoded->user_id;
-
-        if ($userId) {
-            $response = $this->query->queryValidRiddle($riddleId, $userId);
         } else {
             // Bad Request
             http_response_code(400);

@@ -17,26 +17,34 @@ apiEnigm.interceptors.request.use((config) => {
 });
 
 const api = {
-  async postUser(url, criteria) {
-    const response = await apiEnigm.post(url, { ...criteria });
+  // OK
+  async postUser(url, email, password) {
+    const response = await apiEnigm.post(url, { email, password });
     return response;
   },
-
-  async getUser(url, criteria) {
-    const response = await apiEnigm.post(url, { ...criteria });
+  // OK
+  async getUser(url, email, password) {
+    const response = await apiEnigm.post(url, { email, password });
     return response;
   },
-
+  // OK
   async getAll(url) {
     const response = await apiEnigm.post(url);
     return response;
   },
 
+  async getOne(url, bookId, riddlePos) {
+    const response = await apiEnigm.post(url, { bookId, riddlePos });
+    return response;
+  },
+
   async getLast(url, bookId) {
-    const response = await apiEnigm.post(url, {
-      body: { bookId },
-    });
-    return response.data;
+    const response = await apiEnigm.post(url, { bookId });
+    return response;
+  },
+  async isLocked(url, bookId) {
+    const response = await apiEnigm.post(url, { bookId });
+    return response;
   },
 };
 
