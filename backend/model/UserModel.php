@@ -14,7 +14,6 @@ class UserModel extends DB
         $check = $con->prepare("SELECT id FROM user WHERE email = :email");
         $check->bindParam(':email', $email);
         $check->execute();
-        // $response = $check->fetch(PDO::FETCH_ASSOC);
         $count = $check->rowCount();
 
         if ($count == 0) {
@@ -24,26 +23,19 @@ class UserModel extends DB
             $query->bindParam(':password', $password);
             $query->execute();
             $countAdd = $query->rowCount();
-            // user add
             if ($countAdd > 0) {
+                http_response_code(200);
                 $userId = $con->lastInsertId();
                 $response = [
-                    "status" => 200,
                     "token" => $this->generateJWT($userId, $email)
                 ];
-                // todo set proper code
-                // query error
             } else {
-                $response = [
-                    "status" => 401
-                ];
+                // No Content
+                http_response_code(204);
             }
-            // todo set proper code
-            // mail already used
         } else {
-            $response = [
-                "status" => 402
-            ];
+            // Unauthorized
+            http_response_code(401);
         }
         $con = null;
         return $response;
@@ -62,26 +54,20 @@ class UserModel extends DB
         if ($count > 0) {
             $data = $state->fetch(PDO::FETCH_ASSOC);
             if (password_verify($password, $data['password'])) {
+                http_response_code(200);
                 $response = [
-                    "status" => 200,
                     "token" => $this->generateJWT($data['id'], $email)
                 ];
-                // todo set proper code
-                // wrong password
             } else {
-                $response = [
-                    "status" => 402
-                ];
+                // No Content
+                http_response_code(204);
             }
-            // todo set proper code
-            // email not register
         } else {
-            $response = [
-                "status" => 403
-            ];
+            // Unauthorized
+            http_response_code(401);
         }
         $con = null;
-
+        header('Content-Type: application/json');
         return $response;
     }
 
@@ -96,5 +82,24 @@ class UserModel extends DB
 
         ];
         return JWT::encode($payload, $key, 'HS256');
+    }
+
+    function querySolvedBy($riddleId, $userId)
+    {
+        $con = $this->connectTo();
+        // query if already solved
+        $query = $con->prepare("INSERT INTO solve(user_id, riddle_id) VALUES (:userId, :riddleId)");
+        $query->bindParam(':userId', $userId);
+        $query->bindParam(':riddleId', $riddleId);
+        $query->execute();
+        $count = $query->rowCount();
+        if ($count == 1) {
+            http_response_code(200);
+        } else {
+            // Blocked
+            http_response_code(202);
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        }
     }
 }

@@ -50,3 +50,12 @@ npm run test:e2e -- tests/e2e/example.js
 # Runs the tests in debug mode
 npm run test:e2e -- --debug
 ```
+
+## 2. Backend Project Setup
+
+- install [Composer](https://getcomposer.org/download/)
+
+```sh
+cd backend/
+composer install
+```

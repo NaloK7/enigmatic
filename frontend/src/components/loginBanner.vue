@@ -8,5 +8,3 @@
 <script setup>
 import cta from "@/components/ctaBtn.vue";
 </script>
-
-<style scoped></style>

@@ -80,8 +80,9 @@
 <script setup>
 import { ref } from "vue";
 import { useEmailRule, usePasswordRule } from "../../composables/rules.js";
+import { setToken } from "@/stores/tokenStore";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import api from "@/composables/api";
 const router = useRouter();
 
 const email = ref("");
@@ -98,18 +99,12 @@ const failed = ref(false);
 async function inscription() {
   if (formRules()) {
     try {
-      const xhr = await axios.post(
-        "http://localhost/enigmatic/backend/index.php?action=inscription",
-        {
-          email: email.value,
-          password: password.value,
-        }
-      );
+      const xhr = await api.postUser(email.value, password.value);
 
-      const response = await xhr.data;
+      const response = await xhr;
       if (response["status"] == 200) {
         failed.value = false;
-        localStorage.setItem("token", response["token"]);
+        setToken(response.data["token"]);
         router.push({ name: "home" });
       } else if (response["status"] >= 400) {
         failed.value = true;

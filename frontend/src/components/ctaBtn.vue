@@ -2,7 +2,7 @@
   <RouterLink
     :to="link"
     :class="[width]"
-    class="flex justify-center items-center font-audiowide mx-4 w-44 h-10 rounded-xl bg-darkPink border-2 border-primaryPink hover:border-darkPink hover:bg-primaryPink text-lg hover:text-black">
+    class="flex justify-center items-center font-audiowide mx-4 w-40 h-8 rounded-lg bg-darkPink border-2 border-primaryPink hover:border-darkPink hover:bg-primaryPink text-lg hover:text-black">
     {{ text }}</RouterLink
   >
 </template>
