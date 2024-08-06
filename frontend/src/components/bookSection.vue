@@ -40,7 +40,7 @@ const props = defineProps({
 });
 
 async function getLastRiddlePos(bookId) {
-  const response = await api.getLast("last", bookId);
+  const response = await api.getLast(bookId);
   // console.log("🚀 ~ getLastRiddlePos ~ response:", response);
 
   if (response.status == 200) {

@@ -17,33 +17,44 @@ apiEnigm.interceptors.request.use((config) => {
 });
 
 const api = {
-  // OK
-  async postUser(url, email, password) {
-    const response = await apiEnigm.post(url, { email, password });
-    return response;
-  },
-  // OK
-  async getUser(url, email, password) {
-    const response = await apiEnigm.post(url, { email, password });
-    return response;
-  },
-  // OK
-  async getAll(url) {
-    const response = await apiEnigm.post(url);
+  async postUser(email, password) {
+    const response = await apiEnigm.post(`inscription`, { email, password });
     return response;
   },
 
-  async getOne(url, bookId, riddlePos) {
-    const response = await apiEnigm.post(url, { bookId, riddlePos });
+  async getUser(email, password) {
+    const response = await apiEnigm.post(`login`, { email, password });
     return response;
   },
 
-  async getLast(url, bookId) {
-    const response = await apiEnigm.post(url, { bookId });
+  async getAll() {
+    const response = await apiEnigm.post("books");
     return response;
   },
-  async isLocked(url, bookId) {
-    const response = await apiEnigm.post(url, { bookId });
+
+  async getOne(bookId, riddlePos) {
+    const response = await apiEnigm.post("riddle", { bookId, riddlePos });
+    return response;
+  },
+
+  async getLast(bookId) {
+    const response = await apiEnigm.post("last", { bookId });
+    return response;
+  },
+  async isLocked(bookId) {
+    const response = await apiEnigm.post("locked", { bookId });
+    return response;
+  },
+  async getAnswer(riddleId, answer) {
+    const response = await apiEnigm.post("checkAnswer", { riddleId, answer });
+    return response;
+  },
+  async getExplanation(riddleId) {
+    const response = await apiEnigm.post("explanation", { riddleId });
+    return response;
+  },
+  async postSolved(riddleId) {
+    const response = await apiEnigm.post("solve", { riddleId });
     return response;
   },
 };

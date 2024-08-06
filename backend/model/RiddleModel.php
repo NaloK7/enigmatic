@@ -92,7 +92,7 @@ class RiddleModel extends DB
     {
         $con = $this->connectTo();
 
-        $query = $con->prepare("SELECT r.id AS riddleId, r.section_id, r.position, r.title, r.wording, r.explanation, s.solution FROM riddle AS r LEFT JOIN have_solution AS hs ON r.id = hs.riddle_id LEFT JOIN solution AS s ON hs.solution_id = s.id WHERE r.section_id = :bookId AND r.position = :riddlePos");
+        $query = $con->prepare("SELECT r.id AS riddleId, r.section_id, r.position, r.title, r.wording FROM riddle AS r WHERE r.section_id = :bookId AND r.position = :riddlePos");
 
         $query->bindParam(':riddlePos', $riddlePos);
         $query->bindParam(':bookId', $bookId);
@@ -109,22 +109,37 @@ class RiddleModel extends DB
         }
     }
 
-    function queryValidRiddle($riddleId, $userId)
+    function getAnswer($riddleId)
     {
         $con = $this->connectTo();
-
-        $query = $con->prepare("INSERT INTO solve(user_id, riddle_id) VALUES (:userId, :riddleId)");
-        $query->bindParam(':userId', $userId);
+        $query = $con->prepare("SELECT solution FROM solution AS s LEFT JOIN have_solution AS hs ON s.id = hs.riddle_id WHERE hs.riddle_id = :riddleId");
         $query->bindParam(':riddleId', $riddleId);
         $query->execute();
         $count = $query->rowCount();
         if ($count == 1) {
             http_response_code(200);
-        } else {
-            // Blocked
-            http_response_code(202);
             $data = $query->fetch(PDO::FETCH_ASSOC);
             return $data;
+        } else {
+            // No Content
+            http_response_code(200);
+        }
+    }
+
+    function queryGetExplanation($riddleId)
+    {
+        $con = $this->connectTo();
+        $query = $con->prepare("SELECT explanation FROM riddle WHERE id = :riddleId");
+        $query->bindParam(':riddleId', $riddleId);
+        $query->execute();
+        $count = $query->rowCount();
+        if ($count == 1) {
+            http_response_code(200);
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        } else {
+            // No Content
+            http_response_code(200);
         }
     }
 }

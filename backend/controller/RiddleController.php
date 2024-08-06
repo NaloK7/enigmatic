@@ -31,9 +31,12 @@ class RiddleController extends Controller
 
     function checkRiddle($bookId, $riddlePos, $token)
     {
+
         $key = $_ENV['JWT_KEY'];
+
         $decoded = JWT::decode($token, new Key($key, 'HS256'));
         $userId = $decoded->user_id;
+
         $locked = $this->bookUnlocked($bookId, $token);
         // book UNLOCKED
         if (!$locked) {
@@ -82,38 +85,31 @@ class RiddleController extends Controller
         echo json_encode($response);
     }
 
-    // function checkAnswer($riddleId, $answerToCheck)
-    // {
-    //     if (is_string($answerToCheck) && $answerToCheck != "") {
-    //         $answerToCheck = strtolower($this->sanitize($answerToCheck));
-    //     }
-
-    //     $response = $this->query->getAnswer($riddleId);
-    //     if ($response == "") {
-    //         // Bad Request
-    //         http_response_code(208);
-    //     } else {
-    //         if ($response == $answerToCheck) {
-    //             http_response_code(200);
-    //         } else {
-    //             // No Content
-    //             http_response_code(204);
-    //         }
-    //     }
-    // }
-
-    function validRiddle($riddleId, $token)
+    function checkAnswer($riddleId, $answerToCheck)
     {
-        $key = $_ENV['JWT_KEY'];
-        $decoded = JWT::decode($token, new Key($key, 'HS256'));
-        $userId = $decoded->user_id;
 
-        if ($userId) {
-            $response = $this->query->queryValidRiddle($riddleId, $userId);
-        } else {
-            // Bad Request
-            http_response_code(400);
+        if (is_string($answerToCheck) && $answerToCheck != "") {
+            $answerToCheck = strtolower($this->sanitize($answerToCheck));
         }
+
+        $response = $this->query->getAnswer($riddleId);
+        $answer = $response['solution'];
+        if ($answer == "") {
+            // Bad Request
+            http_response_code(208);
+        } else {
+            if ($answer == $answerToCheck) {
+                http_response_code(200);
+            } else {
+                // No Content
+                http_response_code(204);
+            }
+        }
+    }
+
+    function getExplanation($riddleId)
+    {
+        $response = $this->query->queryGetExplanation($riddleId);
         echo json_encode($response);
     }
 }

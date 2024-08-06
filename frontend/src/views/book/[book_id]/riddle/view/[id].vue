@@ -5,9 +5,9 @@
       v-if="!blocked"
       class="flex flex-col justify-start items-center w-1/2 px-10 py-6 space-y-4 mx-auto">
       <h2 class="pb-4 font-audiowide text-xl text-primaryPink text-shadow-pink">
-        {{ bookId }}-{{ position }}. {{ title }}
+        {{ riddle.section_id }}-{{ riddle.position }}. {{ riddle.title }}
       </h2>
-      <p class="riddle-txt text-gray-200" v-html="wording"></p>
+      <p class="riddle-txt text-gray-200" v-html="riddle.wording"></p>
       <!-- separator -->
       <div></div>
       <div
@@ -54,18 +54,13 @@
     </div>
     <overlay
       :text="explanation"
-      :display="display"
+      :display="displayOverlay"
       @closeOverlay="closeOverlay()"
       @next="refresh()"></overlay>
   </section>
 </template>
 
 <script setup>
-// check section blocked
-// not blocked
-// quey riddle by position + section
-// blocker query first unsolved
-
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import api from "@/composables/api";
@@ -81,16 +76,14 @@ const blocked = ref(false);
 const expirationDate = ref();
 const dayDifference = ref();
 
-const position = ref(0);
-const title = ref("");
-const wording = ref("");
+const riddle = ref({});
+const displayOverlay = ref(false);
 const explanation = ref("");
-const display = ref(false);
 
 const answer = ref("");
 
 async function isBookLocked() {
-  const response = await api.isLocked("locked", bookId);
+  const response = await api.isLocked(bookId);
   if (response.status == 200) {
     getOneRiddle();
   } else if (response.status == 202) {
@@ -106,51 +99,46 @@ async function isBookLocked() {
 }
 
 async function getOneRiddle() {
-  const response = await api.getOne("riddle", bookId, riddlePos);
+  const response = await api.getOne(bookId, riddlePos);
+
   if (response.status == 200) {
-    title.value = response.data["title"];
-    wording.value = response.data["wording"];
-    position.value = response.data["position"];
-    explanation.value = response.data["explanation"];
+    riddle.value = response.data;
   } else {
     console.log(response.status);
   }
 }
 
-// async function checkAnswer() {
-//   if (answer.value != "") {
-//     const xhr = await api.post("?action=checkAnswer", {
-//       riddleId: riddleId,
-//       answer: answer.value,
-//     });
-//     const response = await xhr;
-//     if (response.status == 200) {
-//       // popup explanation + push next riddle
-//       showOverlay();
-//     } else if (response.status == 204) {
-//       // feedback bad anwser
-//       console.log("bad answer");
-//     } else {
-//       // feedback an error ocurred (no response found)
-//     }
-//   }
-// }
+async function checkAnswer() {
+  if (answer.value != "") {
+    const response = await api.getAnswer(riddle.value.riddleId, answer.value);
+
+    if (response.status == 200) {
+      // popup explanation + push next riddle
+      const response = await api.getExplanation(riddle.value.riddleId);
+      explanation.value = response.data.explanation;
+      showOverlay();
+    } else if (response.status == 204) {
+      // feedback bad anwser
+      console.log("bad answer");
+    } else {
+      // feedback an error ocurred (no response found)
+    }
+  }
+}
 
 function showOverlay() {
-  display.value = true;
+  displayOverlay.value = true;
 }
 
 function closeOverlay() {
-  display.value = false;
+  displayOverlay.value = false;
 }
 
 async function refresh() {
   closeOverlay();
-  const response = await api.post("?action=solve", {
-    riddleId: riddleId,
-  });
+  const response = await api.postSolved(riddle.value.riddleId);
   if (response.status == 200) {
-    await isLocked();
+    router.push(`/book/${bookId}/riddle/view/${riddlePos + 1}`);
   } else {
     console.log(response.status);
   }

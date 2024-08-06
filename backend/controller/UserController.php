@@ -3,6 +3,9 @@
 require_once('./model/UserModel.php');
 require_once('Controller.php');
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 class UserController extends Controller
 {
     // new UserModel()
@@ -53,6 +56,21 @@ class UserController extends Controller
     {
         if ($this->rulesData($email, $password)) {
             $response = $this->query->queryLogin($email, $password);
+        } else {
+            // Bad Request
+            http_response_code(400);
+        }
+        echo json_encode($response);
+    }
+
+    function solvedBy($riddleId, $token)
+    {
+        $key = $_ENV['JWT_KEY'];
+        $decoded = JWT::decode($token, new Key($key, 'HS256'));
+        $userId = $decoded->user_id;
+
+        if ($userId) {
+            $response = $this->query->querySolvedBy($riddleId, $userId);
         } else {
             // Bad Request
             http_response_code(400);

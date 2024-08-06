@@ -83,4 +83,23 @@ class UserModel extends DB
         ];
         return JWT::encode($payload, $key, 'HS256');
     }
+
+    function querySolvedBy($riddleId, $userId)
+    {
+        $con = $this->connectTo();
+        // query if already solved
+        $query = $con->prepare("INSERT INTO solve(user_id, riddle_id) VALUES (:userId, :riddleId)");
+        $query->bindParam(':userId', $userId);
+        $query->bindParam(':riddleId', $riddleId);
+        $query->execute();
+        $count = $query->rowCount();
+        if ($count == 1) {
+            http_response_code(200);
+        } else {
+            // Blocked
+            http_response_code(202);
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        }
+    }
 }

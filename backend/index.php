@@ -55,6 +55,19 @@ try {
             elseif ($iri == 'locked') {
                 $riddle->bookUnlocked($data['bookId'], $token);
             }
+            // check answer
+            elseif ($iri == 'checkAnswer') {
+                $riddle->checkAnswer($data['riddleId'], $data['answer']);
+            }
+            // get explanation
+            elseif ($iri == 'explanation') {
+                $riddle->getExplanation($data['riddleId']);
+            }
+            // post solved by
+            elseif ($iri == 'solve') {
+
+                $user->solvedBy($data['riddleId'], $token);
+            }
         } else {
             // Unauthorized
             http_response_code(401);
