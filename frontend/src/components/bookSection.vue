@@ -41,10 +41,12 @@ const props = defineProps({
 
 async function getLastRiddlePos(bookId) {
   const response = await api.getLast("last", bookId);
+  // console.log("🚀 ~ getLastRiddlePos ~ response:", response);
 
   if (response.status == 200) {
     // failed.value = false;
     let lastId = response.data.position;
+    // console.log("🚀 ~ getLastRiddlePos ~ lastId:", lastId);
     router.push(`/book/${bookId}/riddle/view/${lastId}`);
   } else {
     console.log(response.status);

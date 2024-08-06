@@ -107,7 +107,6 @@ async function isBookLocked() {
 
 async function getOneRiddle() {
   const response = await api.getOne("riddle", bookId, riddlePos);
-  console.log("🚀 ~ getOneRiddle ~ response:", response.data);
   if (response.status == 200) {
     title.value = response.data["title"];
     wording.value = response.data["wording"];

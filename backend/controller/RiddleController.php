@@ -43,8 +43,8 @@ class RiddleController extends Controller
                 $response = $this->query->queryOneRiddle($bookId, $riddlePos);
             } else {
                 // riddle unsolved → get last id
-                $response = $this->getLastRiddlePos($bookId, $token);
-                $newPos = $response['position'];
+                $lastPos = $this->query->queryGetLastRiddlePos($bookId, $userId);
+                $newPos = $lastPos['position'];
                 $response = $this->query->queryOneRiddle($bookId, $newPos);
             }
         }
@@ -80,7 +80,6 @@ class RiddleController extends Controller
             http_response_code(400);
         }
         echo json_encode($response);
-        return $response;
     }
 
     // function checkAnswer($riddleId, $answerToCheck)

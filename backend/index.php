@@ -37,8 +37,7 @@ try {
         // inscription
         elseif ($iri == 'inscription') {
             $user->inscription($data['email'], $data['password']);
-        }
-        if (isset($token)) {
+        } elseif (isset($token)) {
             $riddle = new RiddleController();
             // all riddles
             if ($iri == 'books') {
