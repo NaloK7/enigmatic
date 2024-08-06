@@ -1,5 +1,5 @@
 <template>
-  <section class="dark-glass border-y border-primaryGreen my-10">
+  <section class="dark-glass border-y border-primaryGreen mb-10">
     <!-- RIDDLE -->
     <div
       v-if="!blocked"
@@ -13,7 +13,11 @@
       <div
         class="mt-auto h-7 w-full grid"
         style="grid-template-columns: 1fr 2fr 1fr">
-        <div class="col-start-2 flex">
+        <div
+          :class="{
+            'animate-shake border border-red-500 rounded-lg': badAnswer,
+          }"
+          class="col-start-2 flex">
           <input
             type="text"
             v-model="answer"
@@ -81,6 +85,7 @@ const displayOverlay = ref(false);
 const explanation = ref("");
 
 const answer = ref("");
+const badAnswer = ref(false);
 
 async function isBookLocked() {
   const response = await api.isLocked(bookId);
@@ -118,12 +123,16 @@ async function checkAnswer() {
       explanation.value = response.data.explanation;
       showOverlay();
     } else if (response.status == 204) {
-      // feedback bad anwser
-      console.log("bad answer");
+      badAnswer.value = true;
     } else {
       // feedback an error ocurred (no response found)
     }
+  } else {
+    badAnswer.value = true;
   }
+  setTimeout(() => {
+    badAnswer.value = false;
+  }, 700);
 }
 
 function showOverlay() {
