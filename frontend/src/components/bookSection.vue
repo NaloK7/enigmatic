@@ -20,7 +20,7 @@
           <button
             v-else
             class="font-medium text-lg text-gray-400"
-            @click="getLastRiddlePos(element.section_id)">
+            @click="redirectToLast(element.section_id)">
             {{ element.title }}
           </button>
         </td>
@@ -39,14 +39,12 @@ const props = defineProps({
   bookData: Array,
 });
 
-async function getLastRiddlePos(bookId) {
+async function redirectToLast(bookId) {
   const response = await api.getLast(bookId);
-  // console.log("🚀 ~ getLastRiddlePos ~ response:", response);
 
   if (response.status == 200) {
     // failed.value = false;
     let lastId = response.data.position;
-    // console.log("🚀 ~ getLastRiddlePos ~ lastId:", lastId);
     router.push(`/book/${bookId}/riddle/view/${lastId}`);
   } else {
     console.log(response.status);

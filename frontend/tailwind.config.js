@@ -10,8 +10,9 @@ export default {
       },
       colors: {
         primaryGreen: "#17ae9f",
+        secondaryGreen: "#18544e",
         primaryPink: "#ff4281",
-        darkPink: "#C33363",
+        secondaryPink: "#C33363",
       },
     },
     boxShadow: {

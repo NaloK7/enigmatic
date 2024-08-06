@@ -22,7 +22,7 @@
       <span v-if="text && text != ''"><u>Explication:</u></span>
       <p v-html="text" class="px-4"></p>
       <button
-        class="font-audiowide mx-auto w-40 h-8 rounded-lg bg-darkPink border-2 border-primaryPink hover:border-darkPink hover:bg-primaryPink text-lg hover:text-black"
+        class="font-audiowide mx-auto w-40 h-8 rounded-lg bg-secondaryPink border-2 border-primaryPink hover:border-secondaryPink hover:bg-primaryPink text-lg hover:text-black"
         @click="emitNext()">
         <!-- emit next to reset page for query next riddle -->
         suivant

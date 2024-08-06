@@ -60,7 +60,7 @@
         <div class="flex items-center justify-between"></div>
         <!-- SUBMIT BUTTON -->
         <button
-          class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-darkPink hover:border-darkPink hover:bg-primaryPink hover:text-black active:text-white active:bg-darkPink rounded-lg"
+          class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-secondaryPink hover:border-secondaryPink hover:bg-primaryPink hover:text-black active:text-white active:bg-secondaryPink rounded-lg"
           id="login"
           name="login"
           type="submit"
