@@ -67,7 +67,7 @@ class RiddleController extends Controller
             // Bad Request
             http_response_code(400);
         }
-        return $response;
+        echo json_encode($response);
     }
 
     function getLastRiddlePos($bookId, $token)
@@ -92,7 +92,7 @@ class RiddleController extends Controller
             $answerToCheck = strtolower($this->sanitize($answerToCheck));
         }
 
-        $response = $this->query->getAnswer($riddleId);
+        $response = $this->query->queryGetAnswer($riddleId);
         $answer = $response['solution'];
         if ($answer == "") {
             // Bad Request
@@ -100,11 +100,18 @@ class RiddleController extends Controller
         } else {
             if ($answer == $answerToCheck) {
                 http_response_code(200);
+                echo json_encode($answer);
             } else {
                 // No Content
                 http_response_code(204);
             }
         }
+    }
+
+    function getAnswer($riddleId)
+    {
+        $response = $this->query->queryGetAnswer($riddleId);
+        echo json_encode($response);
     }
 
     function getExplanation($riddleId)

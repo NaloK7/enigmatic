@@ -51,6 +51,7 @@ class RiddleModel extends DB
 
     function queryIsUnlocked($bookId, $userId)
     {
+        echo 'vu';
         $con = $this->connectTo();
         $query = $con->prepare("SELECT expiration FROM blocked WHERE user_id = :userId AND section_id = :bookId ");
         $query->bindParam(':userId', $userId);
@@ -109,7 +110,7 @@ class RiddleModel extends DB
         }
     }
 
-    function getAnswer($riddleId)
+    function queryGetAnswer($riddleId)
     {
         $con = $this->connectTo();
         $query = $con->prepare("SELECT solution FROM solution AS s LEFT JOIN have_solution AS hs ON s.id = hs.riddle_id WHERE hs.riddle_id = :riddleId");

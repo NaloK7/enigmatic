@@ -75,6 +75,22 @@ class UserController extends Controller
             // Bad Request
             http_response_code(400);
         }
-        echo json_encode($response);
+    }
+    function lockBook($bookId, $token)
+    {
+        $key = $_ENV['JWT_KEY'];
+        $decoded = JWT::decode($token, new Key($key, 'HS256'));
+        $userId = $decoded->user_id;
+
+        $currentDate = new DateTime();
+        $expiration = $currentDate->modify('+1 month');
+
+
+        if ($userId) {
+            $this->query->queryLockBook($bookId, $userId, $expiration);
+        } else {
+            // Bad Request
+            http_response_code(400);
+        }
     }
 }
