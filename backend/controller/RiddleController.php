@@ -37,11 +37,18 @@ class RiddleController extends Controller
         $decoded = JWT::decode($token, new Key($key, 'HS256'));
         $userId = $decoded->user_id;
 
-        $locked = $this->bookUnlocked($bookId, $token);
-        // book UNLOCKED
-        if (!$locked) {
+        $currentTimestamp = time();
+        $currentDay = date('Y-m-d 00:00:00', $currentTimestamp);
+
+        $expDate = $this->query->queryIsUnlocked($bookId, $userId);
+
+        $expirationDay = $expDate['expiration'];
+        if ($currentDay >= $expirationDay) {
+
             $solved = $this->query->queryIsSolved($bookId, $riddlePos, $userId);
             if ($solved == 1) {
+                // DELETE blocked line corresponding
+                $this->query->updateLocked($bookId, $userId);
                 // riddle solved → get this riddle
                 $response = $this->query->queryOneRiddle($bookId, $riddlePos);
             } else {
@@ -52,22 +59,43 @@ class RiddleController extends Controller
             }
         }
 
+
         echo json_encode($response);
     }
 
     function bookUnlocked($bookId, $token)
     {
+        // get expiration date
         $key = $_ENV['JWT_KEY'];
         $decoded = JWT::decode($token, new Key($key, 'HS256'));
         $userId = $decoded->user_id;
 
         if ($userId) {
-            $response = $this->query->queryIsUnlocked($bookId, $userId);
+            $currentTimestamp = time();
+            $currentDay = date('Y-m-d 00:00:00', $currentTimestamp);
+
+            $expDate = $this->query->queryIsUnlocked($bookId, $userId);
+            // there is a expiration date
+            if ($expDate) {
+                $expirationDay = $expDate['expiration'];
+
+                // expiration date is passed
+                if ($currentDay >= $expirationDay) {
+                    $response = $currentDay;
+                    // remove line in db
+                } else {
+                    $response = $expirationDay;
+                }
+            }
+            // there is no expiration date
+            else {
+                $response = $currentDay;
+            }
         } else {
             // Bad Request
             http_response_code(400);
         }
-        return $response;
+        echo json_encode($response);
     }
 
     function getLastRiddlePos($bookId, $token)
@@ -92,7 +120,7 @@ class RiddleController extends Controller
             $answerToCheck = strtolower($this->sanitize($answerToCheck));
         }
 
-        $response = $this->query->getAnswer($riddleId);
+        $response = $this->query->queryGetAnswer($riddleId);
         $answer = $response['solution'];
         if ($answer == "") {
             // Bad Request
@@ -100,11 +128,18 @@ class RiddleController extends Controller
         } else {
             if ($answer == $answerToCheck) {
                 http_response_code(200);
+                echo json_encode($answer);
             } else {
                 // No Content
                 http_response_code(204);
             }
         }
+    }
+
+    function getAnswer($riddleId)
+    {
+        $response = $this->query->queryGetAnswer($riddleId);
+        echo json_encode($response);
     }
 
     function getExplanation($riddleId)

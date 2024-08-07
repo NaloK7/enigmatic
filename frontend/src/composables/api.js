@@ -42,11 +42,19 @@ const api = {
     return response;
   },
   async isLocked(bookId) {
-    const response = await apiEnigm.post("locked", { bookId });
+    const response = await apiEnigm.post("isLocked", { bookId });
+    return response;
+  },
+  async lockBook(bookId) {
+    const response = await apiEnigm.post("lockBook", { bookId });
+    return response;
+  },
+  async checkAnswer(riddleId, answer) {
+    const response = await apiEnigm.post("checkAnswer", { riddleId, answer });
     return response;
   },
   async getAnswer(riddleId, answer) {
-    const response = await apiEnigm.post("checkAnswer", { riddleId, answer });
+    const response = await apiEnigm.post("getAnswer", { riddleId });
     return response;
   },
   async getExplanation(riddleId) {

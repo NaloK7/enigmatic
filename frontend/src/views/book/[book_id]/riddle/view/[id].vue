@@ -33,7 +33,7 @@
         </div>
         <button
           class="col-start-3 ml-auto rounded-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
-          @click="test()">
+          @click="showOverlay('giveUp')">
           Passer
         </button>
       </div>
@@ -61,6 +61,12 @@
       :display="displayOverlay"
       @closeOverlay="closeOverlay()"
       @next="refresh()"></overlay>
+    <giveUpOverlay
+      :display="displayGiveUp"
+      :answer="answer"
+      :text="explanation"
+      @closeOverlay="closeOverlay()"
+      @giveUp="giveUp()"></giveUpOverlay>
   </section>
 </template>
 
@@ -70,6 +76,7 @@ import { useRoute, useRouter } from "vue-router";
 import api from "@/composables/api";
 import navBtn from "@/components/navBtn.vue";
 import overlay from "@/components/ExplanationOverlay.vue";
+import giveUpOverlay from "@/components/giveUpOverlay.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -87,15 +94,19 @@ const explanation = ref("");
 const answer = ref("");
 const badAnswer = ref(false);
 
+const displayGiveUp = ref(false);
+
 async function isBookLocked() {
   const response = await api.isLocked(bookId);
-  if (response.status == 200) {
-    getOneRiddle();
-  } else if (response.status == 202) {
-    blocked.value = true;
-    expirationDate.value = new Date(response.data["expiration"]);
-    const currentDate = new Date();
+  expirationDate.value = new Date(response.data);
 
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
+  if (currentDate >= expirationDate.value) {
+    getOneRiddle();
+  } else {
+    blocked.value = true;
     const timeDifference = expirationDate.value - currentDate;
     // Convert the time difference from milliseconds to days
     dayDifference.value = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
@@ -115,13 +126,13 @@ async function getOneRiddle() {
 
 async function checkAnswer() {
   if (answer.value != "") {
-    const response = await api.getAnswer(riddle.value.riddleId, answer.value);
+    const response = await api.checkAnswer(riddle.value.riddleId, answer.value);
 
     if (response.status == 200) {
       // popup explanation + push next riddle
       const response = await api.getExplanation(riddle.value.riddleId);
       explanation.value = response.data.explanation;
-      showOverlay();
+      showOverlay("next");
     } else if (response.status == 204) {
       badAnswer.value = true;
     } else {
@@ -135,18 +146,42 @@ async function checkAnswer() {
   }, 700);
 }
 
-function showOverlay() {
-  displayOverlay.value = true;
+function showOverlay(item) {
+  switch (item) {
+    case "next":
+      displayOverlay.value = true;
+      break;
+    case "giveUp":
+      displayGiveUp.value = true;
+      break;
+
+    default:
+      break;
+  }
 }
 
 function closeOverlay() {
   displayOverlay.value = false;
+  displayGiveUp.value = false;
+  isBookLocked();
 }
 
+async function giveUp() {
+  // give answer
+  const xhrSolution = await api.getAnswer(riddle.value.riddleId);
+  answer.value = xhrSolution.data.solution;
+  const xhrExplanation = await api.getExplanation(riddle.value.riddleId);
+  explanation.value = xhrExplanation.data.explanation;
+  // post solve
+  const xhrSolve = await api.postSolved(riddle.value.riddleId);
+  // post lock book
+  const xhrLockBook = await api.lockBook(bookId);
+}
 async function refresh() {
   closeOverlay();
   const response = await api.postSolved(riddle.value.riddleId);
   if (response.status == 200) {
+    // push to 31 instead of 3 + 1
     router.push(`/book/${bookId}/riddle/view/${riddlePos + 1}`);
   } else {
     console.log(response.status);

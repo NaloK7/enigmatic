@@ -22,6 +22,7 @@ $headers = getallheaders();
 
 if (isset($headers['Authorization'])) {
     $token = (str_replace('Bearer ', '', $headers['Authorization']));
+    // todo check token validity
 }
 
 
@@ -52,12 +53,16 @@ try {
                 $riddle->checkRiddle($data['bookId'], $data['riddlePos'], $token);
             }
             // isBlocked
-            elseif ($iri == 'locked') {
+            elseif ($iri == 'isLocked') {
                 $riddle->bookUnlocked($data['bookId'], $token);
             }
             // check answer
             elseif ($iri == 'checkAnswer') {
                 $riddle->checkAnswer($data['riddleId'], $data['answer']);
+            }
+            // get answer
+            elseif ($iri == 'getAnswer') {
+                $riddle->getAnswer($data['riddleId']);
             }
             // get explanation
             elseif ($iri == 'explanation') {
@@ -67,6 +72,10 @@ try {
             elseif ($iri == 'solve') {
 
                 $user->solvedBy($data['riddleId'], $token);
+            }
+            // post lock book
+            elseif ($iri == 'lockBook') {
+                $user->lockBook($data['bookId'], $token);
             }
         } else {
             // Unauthorized

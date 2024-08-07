@@ -70,11 +70,27 @@ class UserController extends Controller
         $userId = $decoded->user_id;
 
         if ($userId) {
-            $response = $this->query->querySolvedBy($riddleId, $userId);
+            $this->query->querySolvedBy($riddleId, $userId);
         } else {
             // Bad Request
             http_response_code(400);
         }
-        echo json_encode($response);
+    }
+    function lockBook($bookId, $token)
+    {
+        $key = $_ENV['JWT_KEY'];
+        $decoded = JWT::decode($token, new Key($key, 'HS256'));
+        $userId = $decoded->user_id;
+
+        $currentTimestamp = time();
+        $oneMonthLater = strtotime('+30 day', $currentTimestamp);
+        $expiration = date('Y-m-d 00:00:00', $oneMonthLater);
+
+        if ($userId) {
+            $this->query->queryLockBook($bookId, $userId, $expiration);
+        } else {
+            // Bad Request
+            http_response_code(400);
+        }
     }
 }

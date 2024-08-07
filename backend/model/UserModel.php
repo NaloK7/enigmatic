@@ -98,8 +98,24 @@ class UserModel extends DB
         } else {
             // Blocked
             http_response_code(202);
-            $data = $query->fetch(PDO::FETCH_ASSOC);
-            return $data;
+        }
+    }
+
+    function queryLockBook($bookId, $userId, $expiration)
+    {
+        $con = $this->connectTo();
+
+        $query = $con->prepare("INSERT INTO blocked(user_id, section_id, expiration) VALUES (:userId, :bookId, :expiration)");
+        $query->bindParam(':userId', $userId);
+        $query->bindParam(':bookId', $bookId);
+        $query->bindParam(':expiration', $expiration);
+        $query->execute();
+        $count = $query->rowCount();
+        if ($count == 1) {
+            http_response_code(200);
+        } else {
+            // Blocked
+            http_response_code(202);
         }
     }
 }
