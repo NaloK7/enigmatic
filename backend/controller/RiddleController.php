@@ -37,12 +37,18 @@ class RiddleController extends Controller
         $decoded = JWT::decode($token, new Key($key, 'HS256'));
         $userId = $decoded->user_id;
 
-        $locked = $this->query->queryIsUnlocked($bookId, $userId);
+        $currentTimestamp = time();
+        $currentDay = date('Y-m-d 00:00:00', $currentTimestamp);
 
-        // book UNLOCKED
-        if (!$locked) {
+        $expDate = $this->query->queryIsUnlocked($bookId, $userId);
+
+        $expirationDay = $expDate['expiration'];
+        if ($currentDay >= $expirationDay) {
+
             $solved = $this->query->queryIsSolved($bookId, $riddlePos, $userId);
             if ($solved == 1) {
+                // DELETE blocked line corresponding
+                $this->query->updateLocked($bookId, $userId);
                 // riddle solved → get this riddle
                 $response = $this->query->queryOneRiddle($bookId, $riddlePos);
             } else {
@@ -53,17 +59,38 @@ class RiddleController extends Controller
             }
         }
 
+
         echo json_encode($response);
     }
 
     function bookUnlocked($bookId, $token)
     {
+        // get expiration date
         $key = $_ENV['JWT_KEY'];
         $decoded = JWT::decode($token, new Key($key, 'HS256'));
         $userId = $decoded->user_id;
 
         if ($userId) {
-            $response = $this->query->queryIsUnlocked($bookId, $userId);
+            $currentTimestamp = time();
+            $currentDay = date('Y-m-d 00:00:00', $currentTimestamp);
+
+            $expDate = $this->query->queryIsUnlocked($bookId, $userId);
+            // there is a expiration date
+            if ($expDate) {
+                $expirationDay = $expDate['expiration'];
+
+                // expiration date is passed
+                if ($currentDay >= $expirationDay) {
+                    $response = $currentDay;
+                    // remove line in db
+                } else {
+                    $response = $expirationDay;
+                }
+            }
+            // there is no expiration date
+            else {
+                $response = $currentDay;
+            }
         } else {
             // Bad Request
             http_response_code(400);

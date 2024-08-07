@@ -101,11 +101,9 @@ class UserModel extends DB
         }
     }
 
-    function queryLockBook($bookId, $userId)
+    function queryLockBook($bookId, $userId, $expiration)
     {
         $con = $this->connectTo();
-
-
 
         $query = $con->prepare("INSERT INTO blocked(user_id, section_id, expiration) VALUES (:userId, :bookId, :expiration)");
         $query->bindParam(':userId', $userId);

@@ -57,14 +57,26 @@ class RiddleModel extends DB
         $query->bindParam(':bookId', $bookId);
         $query->execute();
         $count = $query->rowCount();
-        if ($count == 0) {
+        if ($count == 1) {
             http_response_code(200);
+            $date = $query->fetch(PDO::FETCH_ASSOC);
         } else {
             // Blocked
-            http_response_code(202);
+            http_response_code(200);
+            $currentTimestamp = time();
+            $currentDay = date('Y-m-d 00:00:00', $currentTimestamp);
+            $date = ["expiration" => $currentDay];
         }
-        $data = $query->fetch(PDO::FETCH_ASSOC);
-        return $data;
+        return $date;
+    }
+
+    function updateLocked($bookId, $userId)
+    {
+        $con = $this->connectTo();
+        $query = $con->prepare("DELETE FROM  blocked WHERE user_id = :userId AND section_id = :bookId ");
+        $query->bindParam(':userId', $userId);
+        $query->bindParam(':bookId', $bookId);
+        $query->execute();
     }
 
     function queryIsSolved($bookId, $riddlePos, $userId)

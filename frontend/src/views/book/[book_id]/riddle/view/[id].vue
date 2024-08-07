@@ -98,13 +98,15 @@ const displayGiveUp = ref(false);
 
 async function isBookLocked() {
   const response = await api.isLocked(bookId);
-  if (response.status == 200) {
-    getOneRiddle();
-  } else if (response.status == 202) {
-    blocked.value = true;
-    expirationDate.value = new Date(response.data["expiration"]);
-    const currentDate = new Date();
+  expirationDate.value = new Date(response.data);
 
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
+  if (currentDate >= expirationDate.value) {
+    getOneRiddle();
+  } else {
+    blocked.value = true;
     const timeDifference = expirationDate.value - currentDate;
     // Convert the time difference from milliseconds to days
     dayDifference.value = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));

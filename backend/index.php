@@ -75,7 +75,6 @@ try {
             }
             // post lock book
             elseif ($iri == 'lockBook') {
-
                 $user->lockBook($data['bookId'], $token);
             }
         } else {
