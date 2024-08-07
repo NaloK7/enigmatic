@@ -37,7 +37,8 @@ class RiddleController extends Controller
         $decoded = JWT::decode($token, new Key($key, 'HS256'));
         $userId = $decoded->user_id;
 
-        $locked = $this->bookUnlocked($bookId, $token);
+        $locked = $this->query->queryIsUnlocked($bookId, $userId);
+
         // book UNLOCKED
         if (!$locked) {
             $solved = $this->query->queryIsSolved($bookId, $riddlePos, $userId);

@@ -22,6 +22,7 @@ $headers = getallheaders();
 
 if (isset($headers['Authorization'])) {
     $token = (str_replace('Bearer ', '', $headers['Authorization']));
+    // todo check token validity
 }
 
 

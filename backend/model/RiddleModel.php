@@ -51,7 +51,6 @@ class RiddleModel extends DB
 
     function queryIsUnlocked($bookId, $userId)
     {
-        echo 'vu';
         $con = $this->connectTo();
         $query = $con->prepare("SELECT expiration FROM blocked WHERE user_id = :userId AND section_id = :bookId ");
         $query->bindParam(':userId', $userId);
