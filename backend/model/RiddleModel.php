@@ -124,7 +124,7 @@ class RiddleModel extends DB
     function queryGetAnswer($riddleId)
     {
         $con = $this->connectTo();
-        $query = $con->prepare("SELECT solution FROM solution AS s LEFT JOIN have_solution AS hs ON s.id = hs.riddle_id WHERE hs.riddle_id = :riddleId");
+        $query = $con->prepare("SELECT solution FROM solution AS s LEFT JOIN have_solution AS hs ON s.id = hs.solution_id WHERE hs.riddle_id = :riddleId");
         $query->bindParam(':riddleId', $riddleId);
         $query->execute();
         $count = $query->rowCount();

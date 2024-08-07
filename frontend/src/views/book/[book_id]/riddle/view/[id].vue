@@ -22,6 +22,7 @@
             type="text"
             v-model="answer"
             name="answer"
+            @keydown.enter="checkAnswer()"
             id="answer"
             placeholder="réponse"
             class="rounded-l-lg w-96 h-full pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
@@ -60,7 +61,7 @@
       :text="explanation"
       :display="displayOverlay"
       @closeOverlay="closeOverlay()"
-      @next="refresh()"></overlay>
+      @next="goNext()"></overlay>
     <giveUpOverlay
       :display="displayGiveUp"
       :answer="answer"
@@ -129,14 +130,13 @@ async function checkAnswer() {
     const response = await api.checkAnswer(riddle.value.riddleId, answer.value);
 
     if (response.status == 200) {
-      // popup explanation + push next riddle
+      solveRiddle();
+      // popup explanation
       const response = await api.getExplanation(riddle.value.riddleId);
       explanation.value = response.data.explanation;
       showOverlay("next");
-    } else if (response.status == 204) {
-      badAnswer.value = true;
     } else {
-      // feedback an error ocurred (no response found)
+      badAnswer.value = true;
     }
   } else {
     badAnswer.value = true;
@@ -167,25 +167,22 @@ function closeOverlay() {
 }
 
 async function giveUp() {
-  // give answer
+  // get answer
   const xhrSolution = await api.getAnswer(riddle.value.riddleId);
   answer.value = xhrSolution.data.solution;
   const xhrExplanation = await api.getExplanation(riddle.value.riddleId);
   explanation.value = xhrExplanation.data.explanation;
   // post solve
-  const xhrSolve = await api.postSolved(riddle.value.riddleId);
+  solveRiddle();
   // post lock book
-  const xhrLockBook = await api.lockBook(bookId);
+  await api.lockBook(bookId);
 }
-async function refresh() {
-  closeOverlay();
-  const response = await api.postSolved(riddle.value.riddleId);
-  if (response.status == 200) {
-    // push to 31 instead of 3 + 1
-    router.push(`/book/${bookId}/riddle/view/${riddlePos + 1}`);
-  } else {
-    console.log(response.status);
-  }
+async function solveRiddle() {
+  await api.postSolved(riddle.value.riddleId);
+}
+
+function goNext() {
+  router.push(`/book/${bookId}/riddle/view/${parseInt(riddlePos) + 1}`);
 }
 onMounted(() => {
   isBookLocked();
