@@ -40,15 +40,15 @@ try {
             $user->inscription($data['email'], $data['password']);
         } elseif (isset($token)) {
             $riddle = new RiddleController();
-            // all riddles
+            // GET all riddles
             if ($iri == 'books') {
                 $riddle->getAllRiddles($token);
             }
-            // last riddle ID
+            // GET last riddle ID
             elseif ($iri == 'last') {
                 $riddle->getLastRiddlePos($data['bookId'], $token);
             }
-            // get riddle
+            // GET riddle
             elseif ($iri == 'riddle') {
                 $riddle->checkRiddle($data['bookId'], $data['riddlePos'], $token);
             }
@@ -60,20 +60,20 @@ try {
             elseif ($iri == 'checkAnswer') {
                 $riddle->checkAnswer($data['riddleId'], $data['answer']);
             }
-            // get answer
+            // GET answer
             elseif ($iri == 'getAnswer') {
                 $riddle->getAnswer($data['riddleId']);
             }
-            // get explanation
+            // GET explanation
             elseif ($iri == 'explanation') {
                 $riddle->getExplanation($data['riddleId']);
             }
-            // post solved by
+            // POST solved by
             elseif ($iri == 'solve') {
 
                 $user->solvedBy($data['riddleId'], $token);
             }
-            // post lock book
+            // POST lock book
             elseif ($iri == 'lockBook') {
                 $user->lockBook($data['bookId'], $token);
             }
