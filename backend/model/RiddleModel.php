@@ -4,7 +4,15 @@ require_once("db.php");
 
 class RiddleModel extends DB
 {
-
+     /**
+     * Retrieve all riddles for a specific user.
+     *
+     * Fetches all riddles from the database for the given user across multiple books.
+     *
+     * @param int $userId The ID of the user.
+     *
+     * @return array The fetched riddles data.
+     */
     function queryAllRiddles($userId)
     {
         $con = $this->connectTo();
@@ -29,6 +37,15 @@ class RiddleModel extends DB
         return $datas;
     }
 
+     /**
+     * Retrieve the position of the first unsolved riddle in a specific book for the user.
+     *
+     * @param int $bookId.
+     * @param int $userId.
+     *
+     * @return array|null The position of the first unsolved riddle, or null if not found.
+     */
+    // todo rename first
     function queryGetLastRiddlePos($bookId, $userId)
     {
         $con = $this->connectTo();
@@ -49,6 +66,17 @@ class RiddleModel extends DB
         }
     }
 
+     /**
+     * Check if a book is unlocked for the user.
+     *
+     * If the book is locked retrieves the expiration date.
+     * Otherwise, return the current date.
+     * 
+     * @param int $bookId.
+     * @param int $userId.
+     *
+     * @return array The expiration date of the book OR the current date.
+     */
     function queryIsUnlocked($bookId, $userId)
     {
         $con = $this->connectTo();
@@ -70,6 +98,15 @@ class RiddleModel extends DB
         return $date;
     }
 
+     /**
+     * Deletes the entry in the blocked table that corresponds to the book_id and user_id.
+     *
+     * @param int $bookId.
+     * @param int $userId.
+     *
+     * @return void
+     */
+    // todo rename remove
     function updateLocked($bookId, $userId)
     {
         $con = $this->connectTo();
@@ -79,6 +116,15 @@ class RiddleModel extends DB
         $query->execute();
     }
 
+     /**
+     * Verifies if the user has solved a specific riddle in the given book.
+     *
+     * @param int $bookId.
+     * @param int $riddlePos The position of the riddle in the book.
+     * @param int $userId.
+     *
+     * @return bool True if the riddle is solved, otherwise false.
+     */
     function queryIsSolved($bookId, $riddlePos, $userId)
     {
         $con = $this->connectTo();
@@ -100,6 +146,14 @@ class RiddleModel extends DB
         return $solved;
     }
 
+     /**
+     * Retrieve the details of a specific riddle based on its position in the book.
+     *
+     * @param int $bookId The ID of the book.
+     * @param int $riddlePos The position of the riddle in the book.
+     *
+     * @return array|null The riddle data, or null if not found.
+     */
     function queryOneRiddle($bookId, $riddlePos)
     {
         $con = $this->connectTo();
@@ -121,6 +175,13 @@ class RiddleModel extends DB
         }
     }
 
+     /**
+     * Retrieve the correct answer to the specified riddle.
+     *
+     * @param int $riddleId.
+     *
+     * @return array|null The correct answer data, or null if not found.
+     */
     function queryGetAnswer($riddleId)
     {
         $con = $this->connectTo();
@@ -138,6 +199,13 @@ class RiddleModel extends DB
         }
     }
 
+     /**
+     * Retrieve the explanation for the solution to the specified riddle.
+     *
+     * @param int $riddleId.
+     *
+     * @return array|null The explanation data, or null if not found.
+     */
     function queryGetExplanation($riddleId)
     {
         $con = $this->connectTo();

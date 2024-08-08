@@ -1,53 +1,199 @@
 <template>
-  <span class="dark-glass rounded-md py-4">
-    <table class="w-full text-center">
-      <tr>
-        <td class="text-primaryPink text-shadow-pink font-semibold text-xl">
-          {{ bookTitle }}
-        </td>
-      </tr>
-      <div class="my-2 mx-auto w-3/5 border-b border-primaryGreen"></div>
-      <tr v-for="element in bookData" :key="element.id">
-        <td class="text-gray-200">
-          <!-- todo review style -->
-          <!-- if riddle solved → user_id != null  -->
-          <RouterLink
-            v-if="element.user_id != null"
-            class="block hover:text-primaryPink font-medium text-lg text-primaryGreen"
-            :to="`/book/${element.section_id}/riddle/view/${element.position}`">
-            {{ element.title }}
-          </RouterLink>
+  <section class="dark-glass border-y border-primaryGreen mb-10">
+    <!-- RIDDLE -->
+    <div
+      v-if="!blocked"
+      class="flex flex-col justify-start items-center w-1/2 px-10 py-6 space-y-4 mx-auto">
+      <h2 class="pb-4 font-audiowide text-xl text-primaryPink text-shadow-pink">
+        {{ riddle.section_id }}-{{ riddle.position }}. {{ riddle.title }}
+      </h2>
+      <p class="riddle-txt text-gray-200" v-html="riddle.wording"></p>
+      <!-- separator -->
+      <div></div>
+      <div
+        class="mt-auto h-7 w-full grid"
+        style="grid-template-columns: 1fr 2fr 1fr">
+        <div
+          :class="{
+            'animate-shake border border-red-500 rounded-lg': badAnswer,
+          }"
+          class="col-start-2 flex">
+          <input
+            type="text"
+            v-model="answer"
+            name="answer"
+            @keydown.enter="checkAnswer()"
+            id="answer"
+            placeholder="réponse"
+            class="rounded-l-lg w-96 h-full pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
           <button
-            v-else
-            class="font-medium text-lg text-gray-400"
-            @click="redirectToLast(element.section_id)">
-            {{ element.title }}
+            class="rounded-r-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+            @click="checkAnswer()">
+            Valider
           </button>
-        </td>
-      </tr>
-    </table>
-  </span>
+        </div>
+        <button
+          class="col-start-3 ml-auto rounded-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+          @click="showOverlay('giveUp')">
+          Passer
+        </button>
+      </div>
+    </div>
+
+    <!-- BLOCKED FEEDBACK -->
+    <div v-else class="mx-auto w-3/5 my-4 space-y-4">
+      <span class="block text-primaryPink text-shadow-pink text-center text-xl"
+        >Bloqué</span
+      >
+      <span class="block text-center text-lg text-gray-200"
+        >Ce livre est bloqué pendant encore <b>{{ dayDifference }}</b> jours
+        <br />Il sera debloqué le {{ expirationDate }}</span
+      >
+      <div
+        class="px-2 mx-auto w-2/3 flex items-center justify-evenly rounded-b-xl">
+        <navBtn section="1" text="Livre I"></navBtn>
+        <navBtn section="2" text="Livre II"></navBtn>
+        <navBtn section="3" text="Livre III"></navBtn>
+        <navBtn section="4" text="Livre IV"></navBtn>
+      </div>
+    </div>
+    <!-- todo @keydown.enter="goNext()" -->
+    <overlay
+      :text="explanation"
+      :display="displayOverlay"
+      @closeOverlay="closeOverlay()"
+      @next="goNext()"></overlay>
+    <giveUpOverlay
+      :display="displayGiveUp"
+      :answer="answer"
+      :text="explanation"
+      @closeOverlay="closeOverlay()"
+      @giveUp="giveUp()"></giveUpOverlay>
+  </section>
 </template>
 
 <script setup>
-import { RouterLink, useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import api from "@/composables/api";
+import navBtn from "@/components/navBtn.vue";
+import overlay from "@/components/ExplanationOverlay.vue";
+import giveUpOverlay from "@/components/giveUpOverlay.vue";
 
+const route = useRoute();
 const router = useRouter();
-const props = defineProps({
-  bookTitle: String,
-  bookData: Array,
-});
+const bookId = route.params.book_id;
+const riddlePos = route.params.id;
 
-async function redirectToLast(bookId) {
-  const response = await api.getLast(bookId);
+const blocked = ref(false);
+const expirationDate = ref();
+const dayDifference = ref();
+
+const riddle = ref({});
+const displayOverlay = ref(false);
+const explanation = ref("");
+
+const answer = ref("");
+const badAnswer = ref(false);
+
+const displayGiveUp = ref(false);
+
+async function isBookLocked() {
+  const response = await api.isLocked(bookId);
+  expirationDate.value = new Date(response.data);
+
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
+  if (currentDate >= expirationDate.value) {
+    getOneRiddle();
+  } else {
+    blocked.value = true;
+    const timeDifference = expirationDate.value - currentDate;
+    // Convert the time difference from milliseconds to days
+    dayDifference.value = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    expirationDate.value = expirationDate.value.toLocaleDateString("fr-FR");
+  }
+}
+
+async function getOneRiddle() {
+  const response = await api.getOne(bookId, riddlePos);
 
   if (response.status == 200) {
-    // failed.value = false;
-    let lastId = response.data.position;
-    router.push(`/book/${bookId}/riddle/view/${lastId}`);
+    riddle.value = response.data;
   } else {
     console.log(response.status);
   }
 }
+
+/**
+ * Asynchronously checks the user's answer to a riddle.
+ * If the answer is not empty, sends a request to the API to check the answer.
+ * If the response status is 200, solves the riddle, retrieves and sets the explanation,
+ * and shows an overlay for the next action. Otherwise, sets 'badAnswer' to true.
+ * Sets 'badAnswer' to true if the answer is empty.
+ * Resets 'badAnswer' to false after 700 milliseconds.
+ */
+async function checkAnswer() {
+  if (answer.value != "") {
+    const response = await api.checkAnswer(riddle.value.riddleId, answer.value);
+
+    if (response.status == 200) {
+      solveRiddle();
+      // popup explanation
+      const response = await api.getExplanation(riddle.value.riddleId);
+      explanation.value = response.data.explanation;
+      showOverlay("next");
+    } else {
+      badAnswer.value = true;
+    }
+  } else {
+    badAnswer.value = true;
+  }
+  setTimeout(() => {
+    badAnswer.value = false;
+  }, 700);
+}
+
+function showOverlay(item) {
+  switch (item) {
+    case "next":
+      displayOverlay.value = true;
+      break;
+    case "giveUp":
+      displayGiveUp.value = true;
+      break;
+
+    default:
+      break;
+  }
+}
+
+function closeOverlay() {
+  displayOverlay.value = false;
+  displayGiveUp.value = false;
+  isBookLocked();
+}
+
+async function giveUp() {
+  // get answer
+  const xhrSolution = await api.getAnswer(riddle.value.riddleId);
+  answer.value = xhrSolution.data.solution;
+  const xhrExplanation = await api.getExplanation(riddle.value.riddleId);
+  explanation.value = xhrExplanation.data.explanation;
+  // post solve
+  solveRiddle();
+  // post lock book
+  await api.lockBook(bookId);
+}
+async function solveRiddle() {
+  await api.postSolved(riddle.value.riddleId);
+}
+
+function goNext() {
+  router.push(`/book/${bookId}/riddle/view/${parseInt(riddlePos) + 1}`);
+}
+onMounted(() => {
+  isBookLocked();
+});
 </script>
