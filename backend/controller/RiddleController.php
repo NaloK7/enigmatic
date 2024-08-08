@@ -20,7 +20,7 @@ class RiddleController extends Controller
      *
      * Use JWT token to get riddles status for a user.
      *
-     * @param string $token JWT token
+     * @param string $token
      * 
      * @return void Outputs all riddle data in JSON format.
      */
@@ -45,9 +45,9 @@ class RiddleController extends Controller
      * If the riddle is unsolved, it retrieves the last unsolved riddle position 
      * for the user and fetches that riddle.
      * 
-     * @param int $bookId The ID of the book containing the riddle.
+     * @param int $bookId
      * @param int $riddlePos The position of the riddle in the book.
-     * @param string $token JWT token
+     * @param string $token
      *
      * @return  JSON riddle details.
      */
@@ -92,8 +92,8 @@ class RiddleController extends Controller
      * If the expiration date has passed, it returns the current day; 
      * otherwise, it returns the expiration day.
      *
-     * @param int $bookId.
-     * @param string $token JWT token.
+     * @param int $bookId
+     * @param string $token
      *
      * @return void Outputs the expiration day or current day in JSON format.
      */
@@ -135,8 +135,8 @@ class RiddleController extends Controller
      /**
      * Retrieves the position of the last unsolved riddle in the specified book for a User.
      *
-     * @param int $bookId.
-     * @param string $token JWT token.
+     * @param int $bookId
+     * @param string $token
      *
      * @return void Outputs the position of the last unsolved riddle in JSON format.
      */
@@ -158,7 +158,7 @@ class RiddleController extends Controller
      /**
      * Check if the provided answer is correct for the given riddle.
      *
-     * @param int $riddleId.
+     * @param int $riddleId
      * @param string $answerToCheck.
      *
      * @return void Outputs the correct answer in JSON format if it matches, otherwise sets appropriate HTTP status.
@@ -189,7 +189,7 @@ class RiddleController extends Controller
      /**
      * Retrieve the correct answer for a given riddle.
      *
-     * @param int $riddleId.
+     * @param int $riddleId
      *
      * @return void Outputs the riddle answer in JSON format.
      */
@@ -202,7 +202,7 @@ class RiddleController extends Controller
      /**
      * Retrieve the explanation for the solution to a given riddle.
      *
-     * @param int $riddleId.
+     * @param int $riddleId
      *
      * @return void Outputs the riddle explanation in JSON format.
      */

@@ -16,6 +16,15 @@ class UserController extends Controller
         $this->query = new UserModel();
     }
 
+     /**
+     * Handles user registration by validating input data, hashing the password,
+     * and calling the `queryInscription` method to create a new user.
+     *
+     * @param string $email The email address of the user.
+     * @param string $password The password for the user.
+     *
+     * @return void
+     */
     function inscription($email, $password)
     {
         if ($this->rulesData($email, $password)) {
@@ -30,9 +39,17 @@ class UserController extends Controller
         echo json_encode($response);
     }
 
+     /**
+     * Validates the email and password according to predefined rules.
+     *
+     * @param string $email The email address to validate.
+     * @param string $password The password to validate.
+     *
+     * @return bool True if the data is valid, otherwise false.
+     */
     function rulesData($email, $password)
     {
-        $valid =  true;
+        $valid = true;
 
         if (!empty($email)) {
             if (preg_match("/^[a-zA-Z]+[0-9a-zA-Z]*[.]*[0-9a-zA-Z]*(@)[a-z0-9A-Z.-]+[.]+([a-zA-Z]{2,})$/", $email)) {
@@ -52,6 +69,15 @@ class UserController extends Controller
         return $valid;
     }
 
+     /**
+     * Handles user login by validating input data and calling the `queryLogin`
+     * method to authenticate the user.
+     *
+     * @param string $email The email address of the user.
+     * @param string $password The password of the user.
+     *
+     * @return void
+     */
     function login($email, $password)
     {
         if ($this->rulesData($email, $password)) {
@@ -63,6 +89,17 @@ class UserController extends Controller
         echo json_encode($response);
     }
 
+     /**
+     * Marks a riddle as solved by the user.
+     *
+     * Decodes the JWT token to get the user ID and calls the `querySolvedBy` method to
+     * mark the riddle as solved.
+     *
+     * @param int $riddleId The ID of the riddle.
+     * @param string $token The JWT token of the user.
+     *
+     * @return void
+     */
     function solvedBy($riddleId, $token)
     {
         $key = $_ENV['JWT_KEY'];
@@ -76,6 +113,18 @@ class UserController extends Controller
             http_response_code(400);
         }
     }
+
+     /**
+     * Locks a book for a user by setting an expiration date.
+     *
+     * Decodes the JWT token to get the user ID and calls the `queryLockBook` method
+     * to lock the book with an expiration date.
+     *
+     * @param int $bookId The ID of the book to lock.
+     * @param string $token The JWT token of the user.
+     *
+     * @return void
+     */
     function lockBook($bookId, $token)
     {
         $key = $_ENV['JWT_KEY'];

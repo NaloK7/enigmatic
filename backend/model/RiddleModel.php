@@ -40,7 +40,7 @@ class RiddleModel extends DB
      /**
      * Retrieve the position of the first unsolved riddle in a specific book for the user.
      *
-     * @param int $bookId.
+     * @param int $bookId
      * @param int $userId.
      *
      * @return array|null The position of the first unsolved riddle, or null if not found.
@@ -72,7 +72,7 @@ class RiddleModel extends DB
      * If the book is locked retrieves the expiration date.
      * Otherwise, return the current date.
      * 
-     * @param int $bookId.
+     * @param int $bookId
      * @param int $userId.
      *
      * @return array The expiration date of the book OR the current date.
@@ -101,7 +101,7 @@ class RiddleModel extends DB
      /**
      * Deletes the entry in the blocked table that corresponds to the book_id and user_id.
      *
-     * @param int $bookId.
+     * @param int $bookId
      * @param int $userId.
      *
      * @return void
@@ -119,7 +119,7 @@ class RiddleModel extends DB
      /**
      * Verifies if the user has solved a specific riddle in the given book.
      *
-     * @param int $bookId.
+     * @param int $bookId
      * @param int $riddlePos The position of the riddle in the book.
      * @param int $userId.
      *
@@ -178,7 +178,7 @@ class RiddleModel extends DB
      /**
      * Retrieve the correct answer to the specified riddle.
      *
-     * @param int $riddleId.
+     * @param int $riddleId
      *
      * @return array|null The correct answer data, or null if not found.
      */
@@ -202,7 +202,7 @@ class RiddleModel extends DB
      /**
      * Retrieve the explanation for the solution to the specified riddle.
      *
-     * @param int $riddleId.
+     * @param int $riddleId
      *
      * @return array|null The explanation data, or null if not found.
      */

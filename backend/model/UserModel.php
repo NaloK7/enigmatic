@@ -7,6 +7,17 @@ use Firebase\JWT\Key;
 
 class UserModel extends DB
 {
+     /**
+     * Registers a new user in the database.
+     *
+     * Checks if the email is already registered. If not, inserts the user into the database
+     * and generates a JWT token for the new user.
+     *
+     * @param string $email The email address of the user.
+     * @param string $password The hashed password of the user.
+     *
+     * @return array|null The response containing the JWT token, or null if registration failed.
+     */
     function queryInscription($email, $password)
     {
         $con = $this->connectTo();
@@ -41,10 +52,19 @@ class UserModel extends DB
         return $response;
     }
 
-
+     /**
+     * Authenticates a user by checking their email and password.
+     *
+     * Verifies the user's email and password against the database. If the credentials
+     * are correct, generates and returns a JWT token.
+     *
+     * @param string $email The email address of the user.
+     * @param string $password The password of the user.
+     *
+     * @return array|null The response containing the JWT token, or null if authentication failed.
+     */
     function queryLogin($email, $password)
     {
-
         $con = $this->connectTo();
 
         $state = $con->prepare("SELECT id, password FROM user WHERE email = :email");
@@ -71,6 +91,16 @@ class UserModel extends DB
         return $response;
     }
 
+     /**
+     * Generates a JWT token for the authenticated user.
+     *
+     * Creates a JWT token using the user's ID and email, with a 24-hour expiration time.
+     *
+     * @param int $userId The ID of the user.
+     * @param string $email The email address of the user.
+     *
+     * @return string The generated JWT token.
+     */
     private function generateJWT($userId, $email)
     {
         $key = $_ENV['JWT_KEY'];
@@ -84,6 +114,17 @@ class UserModel extends DB
         return JWT::encode($payload, $key, 'HS256');
     }
 
+     /**
+     * Marks a riddle as solved by a user in the database.
+     *
+     * Inserts a record into the solve table indicating that the specified user has solved
+     * the specified riddle.
+     *
+     * @param int $riddleId The ID of the riddle.
+     * @param int $userId The ID of the user.
+     *
+     * @return void
+     */
     function querySolvedBy($riddleId, $userId)
     {
         $con = $this->connectTo();
@@ -101,6 +142,15 @@ class UserModel extends DB
         }
     }
 
+     /**
+     * Locks a book for a user by adding an entry to the blocked table with an expiration date.
+     *
+     * @param int $bookId The ID of the book to lock.
+     * @param int $userId The ID of the user.
+     * @param string $expiration The expiration date of the lock.
+     *
+     * @return void
+     */
     function queryLockBook($bookId, $userId, $expiration)
     {
         $con = $this->connectTo();
