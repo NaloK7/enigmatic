@@ -23,8 +23,10 @@
         <u>Explication:</u><br /><span v-html="text" class="px-4"></span>
       </p>
       <button
+        v-focus
         class="font-audiowide mx-auto w-40 h-8 rounded-lg bg-secondaryPink border-2 border-primaryPink hover:border-secondaryPink hover:bg-primaryPink text-lg hover:text-black"
-        @click="emitNext()">
+        @click="emitNext()"
+        @keydown.enter="emitNext()">
         <!-- emit next to reset page for query next riddle -->
         suivant
       </button>
@@ -52,4 +54,8 @@ function emitCloseEvent() {
 function emitNext() {
   emit("next");
 }
+
+const vFocus = {
+  mounted: (el) => el.focus(),
+};
 </script>

@@ -8,7 +8,9 @@
         <span class="text-center col-start-2 text-lg">!! Attention !!</span>
         <!-- emit display = false -->
         <button
+          v-focus
           @click="emitCloseEvent()"
+          @keydown.enter="emitCloseEvent()"
           class="w-min ml-auto -mt-2 -mr-2 text-primaryGreen hover:text-primaryPink active:text-primaryGreen">
           <svg-icon
             width="30"
@@ -73,4 +75,8 @@ function emitCloseEvent() {
 function emitGiveUp() {
   emit("giveUp");
 }
+
+const vFocus = {
+  mounted: (el) => el.focus(),
+};
 </script>
