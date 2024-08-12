@@ -8,14 +8,15 @@
           <img src="/logo-img.svg" alt="logo" />
         </RouterLink>
       </div>
-      <div class="w-1/5 h-px bg-primaryGreen"></div>
+
+      <div class="w-1/5 h-px bg-primaryGreen hidden md:block"></div>
       <RouterLink
         to="/"
-        class="text-center text-gray-200 font-audiowide font-bold text-2xl px-4 min-w-80">
+        class="text-center text-gray-200 font-audiowide font-bold text-2xl px-4 min-w-80 hidden sm:block">
         Enigmatic Journey
       </RouterLink>
 
-      <div class="w-1/5 h-px bg-primaryGreen"></div>
+      <div class="w-1/5 h-px bg-primaryGreen hidden md:block"></div>
 
       <div class="w-1/5 flex justify-end space-x-2">
         <!-- BOOKS -->
