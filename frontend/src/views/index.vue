@@ -1,8 +1,9 @@
 <template>
   <div class="dark-glass glass-border w-full py-6">
-    <section class="w-2/5 mx-auto space-y-4 text-gray-200">
-      <h1 class="text-center underline font-audiowide mb-8">
-        Bienvenue sur Enigmatic Journey
+    <section
+      class="px-6 w-11/12 sm:w-3/5 md:px-0 md:w-2/5 mx-auto space-y-4 text-gray-200">
+      <h1 class="text-center underline font-audiowide mb-8 text-lg md:text-2xl">
+        Bienvenue sur Enigmatic&nbspJourney
       </h1>
       <div>
         <span><li class="font-bold">Comment ça fonctionne ?</li></span>
