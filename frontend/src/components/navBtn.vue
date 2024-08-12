@@ -1,6 +1,6 @@
 <template>
   <button
-    class="block m-5 h-7 w-24 border-2 border-primaryGreen rounded-md bg-secondaryGreen text-white font-audiowide hover:text-black hover:bg-primaryGreen hover:border-secondaryGreen"
+    class="block w-full h-8 md:m-5 md:h-7 md:w-24 border md:border-2 border-primaryGreen md:rounded-md bg-secondaryGreen text-white font-audiowide hover:text-black hover:bg-primaryGreen hover:border-secondaryGreen"
     @click="redirectToLast(section)">
     {{ text }}
   </button>

@@ -1,11 +1,11 @@
 <template>
   <header>
     <div
-      class="flex justify-between items-center dark-glass py-6 px-10 border-b border-primaryGreen relative z-10 [&>*]:w-1/5"
+      class="flex justify-between items-center dark-glass py-4 md:py-6 px-10 border-b border-primaryGreen relative z-10 [&>*]:w-1/5"
       id="top-header">
       <div class="w-1/5">
-        <RouterLink to="/" class="logo-img">
-          <img src="/logo-img.svg" alt="logo" />
+        <RouterLink to="/">
+          <img src="/logo-img.svg" alt="logo" class="h-10 md:h-14" />
         </RouterLink>
       </div>
 
@@ -57,13 +57,13 @@
         </ul>
       </div>
     </div>
-    <div class="nav-toggle relative">
+    <div class="nav-toggle md:relative">
       <nav
-        class="dark-glass border-b border-primaryGreen px-2 mx-auto w-1/2 flex items-center justify-evenly rounded-b-xl">
-        <navBtn section="1" text="Livre I"></navBtn>
-        <navBtn section="2" text="Livre II"></navBtn>
-        <navBtn section="3" text="Livre III"></navBtn>
-        <navBtn section="4" text="Livre IV"></navBtn>
+        class="dark-glass border-b border-primaryGreen md:px-2 mx-auto w-full flex items-center justify-evenly md:w-2/3 lg:w-1/2 md:rounded-b-xl">
+        <navBtn section="1" :text="navBtnText.section1"></navBtn>
+        <navBtn section="2" :text="navBtnText.section2"></navBtn>
+        <navBtn section="3" :text="navBtnText.section3"></navBtn>
+        <navBtn section="4" :text="navBtnText.section4"></navBtn>
       </nav>
       <div class="h-4"></div>
     </div>
@@ -83,6 +83,37 @@ const router = useRouter();
 const accountIco = ref(mdiAccount);
 const booksIco = ref(mdiBookshelf);
 const visible = ref(false);
+
+const navBtnText = ref({
+  section1: "Livre I",
+  section2: "Livre II",
+  section3: "Livre III",
+  section4: "Livre IV",
+});
+
+const updateNavBtnText = () => {
+  if (window.innerWidth < 450) {
+    navBtnText.value = {
+      section1: "I",
+      section2: "II",
+      section3: "III",
+      section4: "IV",
+    };
+  } else {
+    navBtnText.value = {
+      section1: "Livre I",
+      section2: "Livre II",
+      section3: "Livre III",
+      section4: "Livre IV",
+    };
+  }
+};
+
+// Initial call to set text values based on initial screen size
+updateNavBtnText();
+
+// Update text values when the window is resized
+window.addEventListener("resize", updateNavBtnText);
 
 function toogleDropDown() {
   visible.value = !visible.value;
