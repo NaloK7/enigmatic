@@ -1,0 +1,30 @@
+services:
+  php:
+    image: dunglas/frankenphp
+    # décommentez la ligne suivante si vous souhaitez utiliser un Dockerfile personnalisé
+    #build: .
+    # décommentez la ligne suivante si vous souhaitez exécuter ceci dans un environnement de production
+    # restart: always
+    environment:
+       CADDY_GLOBAL_OPTIONS: debug
+    ports:
+      - "80:80" # HTTP
+      - "443:443" # HTTPS
+      - "443:443/udp" # HTTP/3
+    volumes:
+      - .:/app
+      - caddy_data:/data
+      - caddy_config:/config
+    # commentez la ligne suivante en production, elle permet d'avoir de beaux logs lisibles en dev
+    tty: true
+  
+  nodejs: 
+    #build:
+    #  context: .
+    #  dockerfile: ./docker/Dockerfile
+    image: node:18-alpine
+
+# Volumes nécessaires pour les certificats et la configuration de Caddy
+volumes:
+  caddy_data:
+  caddy_config:
