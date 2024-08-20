@@ -106,7 +106,7 @@ async function inscription() {
         failed.value = false;
         setToken(response.data["token"]);
         router.push({ name: "home" });
-      } else if (response["status"] >= 400) {
+      } else if (response["status"] == 202) {
         failed.value = true;
       }
     } catch (error) {

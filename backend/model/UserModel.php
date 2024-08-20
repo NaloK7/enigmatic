@@ -46,7 +46,7 @@ class UserModel extends DB
             }
         } else {
             // Unauthorized
-            http_response_code(401);
+            http_response_code(202);
         }
         $con = null;
         return $response;
