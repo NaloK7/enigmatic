@@ -45,9 +45,9 @@ WORKDIR /frontend
 COPY ./frontend /frontend
 # Installer les modules node
 RUN npm install
+RUN npm i -g serve
 # Compiler le projet pour la production 
 RUN npm run build
-
 EXPOSE 3000
 # Définir la commande d'exécution du lancement 
-CMD ["npm", "run", "start"]
+CMD [ "serve", "-s", "dist" ]
