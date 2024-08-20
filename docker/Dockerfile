@@ -38,13 +38,16 @@
 #################	PRATIQUE	#################
 #################################################
 #Définir l'image de base pour le front 
-
+FROM node:18
 # Définir le répertoire principal de travail (généralement pour node /app)("/" en début de chemin représente la racine)
-
+WORKDIR /frontend
 # Copier tous les fichiers nécessaires dans l'image 
-
+COPY ./frontend /frontend
 # Installer les modules node
-
+RUN npm install
 # Compiler le projet pour la production 
+RUN npm run build
 
-# Définir la commande d'exécution uu lancement 
+EXPOSE 3000
+# Définir la commande d'exécution du lancement 
+CMD ["npm", "run", "start"]
