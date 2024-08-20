@@ -11,7 +11,7 @@ services:
       - "80:80" # HTTP
       - "443:443" # HTTPS
       - "443:443/udp" # HTTP/3
-      - "3000:3000"
+
     volumes:
       - .:/app
       - caddy_data:/data
@@ -23,6 +23,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
+    ports:
+      - "3000:3000"
     # image: node:18-alpine
 
 # Volumes nécessaires pour les certificats et la configuration de Caddy
