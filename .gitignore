@@ -4,3 +4,4 @@ node_modules
 /backend/vendor
 /backend/.env
 /frontend/.env
+/.idea

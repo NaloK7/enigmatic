@@ -1,8 +1,8 @@
 FROM dunglas/frankenphp
 
-WORKDIR /backend
+WORKDIR /app
 
-COPY ./backend /backend
+COPY ./backend /app/public
 
 RUN apt-get update && apt-get install -y \
     unzip \
@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
-RUN composer install
+RUN composer install --working-dir=/app/public
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
