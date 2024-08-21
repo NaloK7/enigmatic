@@ -1,4 +1,6 @@
 {
+  "peacock.color": "#61dafb",
+  "git.ignoreLimitWarning": true,
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#93e6fc",
     "activityBar.background": "#93e6fc",
@@ -17,7 +19,5 @@
     "titleBar.activeForeground": "#15202b",
     "titleBar.inactiveBackground": "#61dafb99",
     "titleBar.inactiveForeground": "#15202b99"
-  },
-  "peacock.color": "#61dafb",
-  "git.ignoreLimitWarning": true
+  }
 }
