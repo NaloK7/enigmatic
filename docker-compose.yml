@@ -2,7 +2,9 @@ services:
   php:
     image: dunglas/frankenphp
     # décommentez la ligne suivante si vous souhaitez utiliser un Dockerfile personnalisé
-    #build: .
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-php
     # décommentez la ligne suivante si vous souhaitez exécuter ceci dans un environnement de production
     # restart: always
     environment:
