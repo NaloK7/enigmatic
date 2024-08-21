@@ -1,0 +1,6 @@
+services:
+  php:
+    image: dunglas/frankenphp
+    volumes:
+      - ./backend:/app/public
+    tty: true
