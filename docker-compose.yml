@@ -20,6 +20,13 @@ services:
     # commentez la ligne suivante en production, elle permet d'avoir de beaux logs lisibles en dev
     tty: true
 
+  nodejs:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "3000:3000"
+    # image: node:18-alpine
 
 # Volumes nécessaires pour les certificats et la configuration de Caddy
 volumes:
