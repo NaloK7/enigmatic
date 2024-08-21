@@ -29,8 +29,8 @@
         >
         <span>OU</span>
         <span
-          >- vous <b>pouvez passer</b> une énigme au prix d’une chose precieuse
-          que l’on ne prend plus le temps d’apprecier à sa juste valeur.</span
+          >- vous <b>pouvez passer</b> une énigme au prix d'une chose precieuse
+          que l'on ne prend plus le temps d'apprecier à sa juste valeur.</span
         >
       </div>
       <span class="font-bold text-lg text-center">C'est parti ?</span>

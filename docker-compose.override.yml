@@ -4,3 +4,17 @@ services:
     volumes:
       - ./backend:/app/public
     tty: true
+  database:
+    image: mysql:8.4.2
+    init: true
+    environment:
+      - MYSQL_DATABASE=enigmatic
+      - MYSQL_USER=enigmatic
+      - MYSQL_PASSWORD=enigmatic
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - db_mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+volumes:
+  db_mysql:
