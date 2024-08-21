@@ -17,10 +17,15 @@ class DB
 
     protected function connectTo()
     {
+        try {
         return new PDO(
-            "mysql:host={$this->servername};dbname={$this->dbname}",
+                "mysql:host={$this->servername};dbname={$this->dbname}",
             $this->username,
             $this->password
         );
+        }
+            catch (\PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+        }
     }
 }

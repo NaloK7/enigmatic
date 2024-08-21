@@ -10,6 +10,23 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+RUN install-php-extensions \
+ pdo_mysql \
+ pdo_pgsql \
+ gd \
+ intl \
+ zip \
+ opcache \
+ xdebug
+
+RUN install-php-extensions \
+    apcu \
+    exif \
+    ftp \
+    mysqli \
+    soap \
+    gmp
+
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
