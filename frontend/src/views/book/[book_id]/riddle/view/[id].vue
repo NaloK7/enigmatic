@@ -3,7 +3,7 @@
     <!-- RIDDLE -->
     <div
       v-if="!blocked"
-      class="flex flex-col justify-start items-center w-1/2 px-10 py-6 space-y-4 mx-auto">
+      class="flex flex-col justify-start items-center w-11/12 sm:w-4/5 lg:w-1/2 lg:px-10 py-6 space-y-4 mx-auto">
       <h2 class="pb-4 font-audiowide text-xl text-primaryPink text-shadow-pink">
         {{ riddle.section_id }}-{{ riddle.position }}. {{ riddle.title }}
       </h2>
