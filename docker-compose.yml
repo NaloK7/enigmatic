@@ -1,11 +1,11 @@
 services:
   php:
     image: dunglas/frankenphp
-    # décommentez la ligne suivante si vous souhaitez utiliser un Dockerfile personnalisé
+    # todo Uncomment the following line if you want to use a custom Dockerfile
     build:
       context: .
       dockerfile: ./docker/Dockerfile-php
-    # décommentez la ligne suivante si vous souhaitez exécuter ceci dans un environnement de production
+    # todo Uncomment the following line if you want to run this in a production environment
     # restart: always
     environment:
       CADDY_GLOBAL_OPTIONS: debug
@@ -17,7 +17,7 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
-    # commentez la ligne suivante en production, elle permet d'avoir de beaux logs lisibles en dev
+    # todo Comment the following line in production, it allows for more readable logs in development
     tty: true
 
   nodejs:
@@ -26,9 +26,10 @@ services:
       dockerfile: ./docker/Dockerfile
     ports:
       - "3000:3000"
+    # todo Uncomment the following line to use a pre-built Node.js 18 Alpine image instead of building from a Dockerfile
     # image: node:18-alpine
 
-# Volumes nécessaires pour les certificats et la configuration de Caddy
+# Volumes needed for Caddy's certificates and configuration
 volumes:
   caddy_data:
   caddy_config:

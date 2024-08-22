@@ -1,15 +1,20 @@
+# Use the `dunglas/frankenphp` image as the base image
 FROM dunglas/frankenphp
 
+# Set the working directory inside the container to `/app`
 WORKDIR /app
 
+# Copy the contents of the `backend` directory on the host machine to the `/app/public` directory inside the container
 COPY ./backend /app/public
 
+# Update the package list and install the following packages in a single command
 RUN apt-get update && apt-get install -y \
     unzip \
     zip \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+# Run the `install-php-extensions` script to install PHP extensions
 RUN install-php-extensions \
  pdo_mysql \
  pdo_pgsql \
@@ -19,6 +24,7 @@ RUN install-php-extensions \
  opcache \
  xdebug
 
+ # Run the `install-php-extensions` script again to install more PHP extensions
 RUN install-php-extensions \
     apcu \
     exif \
@@ -27,12 +33,14 @@ RUN install-php-extensions \
     soap \
     gmp
 
+# Set an environment variable `COMPOSER_ALLOW_SUPERUSER` to `1`
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
+# Download and install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# RUN php bin/composer
-
+# Run `composer install` command in the `/app/public` directory
 RUN composer install --working-dir=/app/public
 
+# Rename the `php.ini-production` file to `php.ini`
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
