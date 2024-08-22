@@ -8,16 +8,13 @@
         {{ riddle.section_id }}-{{ riddle.position }}. {{ riddle.title }}
       </h2>
       <p class="riddle-txt text-gray-200" v-html="riddle.wording"></p>
-      <!-- separator -->
-      <div></div>
-      <div
-        class="mt-auto h-7 w-full grid"
-        style="grid-template-columns: 1fr 2fr 1fr">
+
+      <div class="mt-auto h-7 grid" style="grid-template-columns: 1fr 2fr 1fr">
         <div
           :class="{
             'animate-shake border border-red-500 rounded-lg': badAnswer,
           }"
-          class="col-start-2 flex">
+          class="col-start-2 flex h-7">
           <input
             type="text"
             v-model="answer"
@@ -25,15 +22,15 @@
             @keydown.enter="checkAnswer()"
             id="answer"
             placeholder="réponse"
-            class="rounded-l-lg w-96 h-full pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
+            class="rounded-l-lg w-96 pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
           <button
-            class="rounded-r-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+            class="rounded-r-lg w-16 font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
             @click="checkAnswer()">
             Valider
           </button>
         </div>
         <button
-          class="col-start-3 ml-auto rounded-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+          class="col-start-3 ml-4 rounded-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
           @click="showOverlay('giveUp')">
           Passer
         </button>
