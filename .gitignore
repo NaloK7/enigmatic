@@ -5,3 +5,4 @@ node_modules
 /backend/.env
 /frontend/.env
 /.idea
+.vscode/launch.json
