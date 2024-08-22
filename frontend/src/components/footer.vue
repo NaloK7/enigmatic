@@ -1,6 +1,5 @@
 <template>
-  <div class="min-h-0 h-max"></div>
   <div class="dark-glass glass-border p-4">
-    <span>CGU</span>
+    <span class="block text-center">CGU</span>
   </div>
 </template>

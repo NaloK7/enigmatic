@@ -1,5 +1,5 @@
 <template>
-  <section class="dark-glass border-y border-primaryGreen mb-10">
+  <section class="dark-glass border-y border-primaryGreen">
     <!-- RIDDLE -->
     <div
       v-if="!blocked"
