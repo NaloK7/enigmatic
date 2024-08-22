@@ -3,7 +3,7 @@
     class="dark-glass border-y border-primaryPink text-center text-gray-200 mb-6 py-4">
     Progression
   </h1>
-  <div class="grid grid-cols-4 gap-4 text-center">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
     <bookSection :bookTitle="'Livre I'" :bookData="books[0]" />
     <bookSection :bookTitle="'Livre II'" :bookData="books[1]" />
     <bookSection :bookTitle="'Livre III'" :bookData="books[2]" />

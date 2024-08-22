@@ -59,11 +59,11 @@
     </div>
     <div class="nav-toggle md:relative">
       <nav
-        class="dark-glass border-b border-primaryGreen md:px-2 mx-auto w-full flex items-center justify-evenly md:w-2/3 lg:w-1/2 md:rounded-b-xl">
-        <navBtn section="1" :text="navBtnText.section1"></navBtn>
-        <navBtn section="2" :text="navBtnText.section2"></navBtn>
-        <navBtn section="3" :text="navBtnText.section3"></navBtn>
-        <navBtn section="4" :text="navBtnText.section4"></navBtn>
+        class="dark-glass border-b border-primaryGreen mx-auto w-full flex items-center justify-evenly md:w-2/3 md:px-2 md:rounded-b-xl lg:w-1/2">
+        <navBtn section="1" text="I"></navBtn>
+        <navBtn section="2" text="II"></navBtn>
+        <navBtn section="3" text="III"></navBtn>
+        <navBtn section="4" text="IV"></navBtn>
       </nav>
       <div class="h-4"></div>
     </div>

@@ -41,20 +41,20 @@
     </div>
 
     <!-- BLOCKED FEEDBACK -->
-    <div v-else class="mx-auto w-3/5 my-4 space-y-4">
+    <div v-else class="mx-auto w-4/5 md:w-3/5 my-4 space-y-4">
       <span class="block text-primaryPink text-shadow-pink text-center text-xl"
         >Bloqué</span
       >
       <span class="block text-center text-lg text-gray-200"
-        >Ce livre est bloqué pendant encore <b>{{ dayDifference }}</b> jours
-        <br />Il sera debloqué le {{ expirationDate }}</span
+        >Ce livre est bloqué pendant: <b>{{ dayDifference }}</b> jours <br />Il
+        sera debloqué le {{ expirationDate }}</span
       >
       <div
-        class="px-2 mx-auto w-2/3 flex items-center justify-evenly rounded-b-xl">
-        <navBtn section="1" text="Livre I"></navBtn>
-        <navBtn section="2" text="Livre II"></navBtn>
-        <navBtn section="3" text="Livre III"></navBtn>
-        <navBtn section="4" text="Livre IV"></navBtn>
+        class="px-2 mx-auto hidden md:flex items-center justify-evenly rounded-b-xl">
+        <navBtn section="1" text="I"></navBtn>
+        <navBtn section="2" text="II"></navBtn>
+        <navBtn section="3" text="III"></navBtn>
+        <navBtn section="4" text="IV"></navBtn>
       </div>
     </div>
     <overlay
