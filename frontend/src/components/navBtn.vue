@@ -11,7 +11,7 @@
 import api from "@/composables/api";
 
 import { useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 const router = useRouter();
 const props = defineProps({
   text: String,
@@ -23,12 +23,10 @@ const finished = ref(false);
 async function redirectToLast(bookId) {
   const response = await api.getLast(bookId);
 
-  if (response.status == 200) {
-    // failed.value = false;
-    let lastId = response.data.position;
+  if (response.status == 200 || response.status == 204) {
+    let lastId = response.data.position ? response.data.position : "finished";
+
     router.push(`/book/${bookId}/riddle/view/${lastId}`);
-  } else if (response.status == 204) {
-    router.push(`/book/${bookId}/riddle/view/finish`);
   } else {
     console.log(response.status);
   }

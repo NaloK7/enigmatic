@@ -1,70 +1,75 @@
 <template>
-  <section class="dark-glass border-y border-primaryGreen">
-    <div v-if="finished">
-      <span class="block p-4 text-center text-gray-200"
-        >Bravo!!<br />Vous avez résolut toutes les énigmes de ce livre.</span
-      >
+  <section v-if="finished" class="dark-glass border-y border-primaryGreen mb-4">
+    <span class="block p-4 text-center text-gray-200"
+      >Bravo!!<br />Vous avez résolut toutes les énigmes de ce livre.</span
+    >
+    <div
+      class="px-2 mx-auto hidden items-center justify-evenly rounded-b-xl md:flex lg:w-1/2">
+      <navBtn section="1" text="I"></navBtn>
+      <navBtn section="2" text="II"></navBtn>
+      <navBtn section="3" text="III"></navBtn>
+      <navBtn section="4" text="IV"></navBtn>
     </div>
-    <div v-else>
-      <!-- RIDDLE -->
-      <div
-        v-if="!blocked"
-        class="flex flex-col justify-start items-center w-11/12 sm:w-4/5 lg:w-1/2 lg:px-10 py-6 space-y-4 mx-auto">
-        <h2
-          class="pb-4 font-audiowide text-xl text-primaryPink text-shadow-pink">
-          {{ riddle.section_id }}-{{ riddle.position }}. {{ riddle.title }}
-        </h2>
-        <p class="text-gray-200" v-html="riddle.wording"></p>
+  </section>
 
+  <section
+    v-if="riddlePos != 'finished'"
+    class="dark-glass border-y border-primaryGreen">
+    <!-- RIDDLE -->
+    <div
+      v-if="!blocked"
+      class="flex flex-col justify-start items-center w-11/12 sm:w-4/5 lg:w-1/2 lg:px-10 py-6 space-y-4 mx-auto">
+      <h2 class="pb-4 font-audiowide text-xl text-primaryPink text-shadow-pink">
+        {{ riddle.section_id }}-{{ riddle.position }}. {{ riddle.title }}
+      </h2>
+      <p class="text-gray-200" v-html="riddle.wording"></p>
+
+      <div class="mt-auto h-7 grid" style="grid-template-columns: 1fr 2fr 1fr">
         <div
-          class="mt-auto h-7 grid"
-          style="grid-template-columns: 1fr 2fr 1fr">
-          <div
-            :class="{
-              'animate-shake border border-red-500 rounded-lg': badAnswer,
-            }"
-            class="col-start-2 flex h-7">
-            <input
-              type="text"
-              v-model="answer"
-              name="answer"
-              @keydown.enter="checkAnswer()"
-              id="answer"
-              placeholder="réponse"
-              class="rounded-l-lg w-96 pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
-            <button
-              class="rounded-r-lg w-16 font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
-              @click="checkAnswer()">
-              Valider
-            </button>
-          </div>
+          :class="{
+            'animate-shake border border-red-500 rounded-lg': badAnswer,
+          }"
+          class="col-start-2 flex h-7">
+          <input
+            type="text"
+            v-model="answer"
+            name="answer"
+            @keydown.enter="checkAnswer()"
+            id="answer"
+            placeholder="réponse"
+            class="rounded-l-lg w-96 pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
           <button
-            class="col-start-3 ml-4 rounded-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
-            @click="showOverlay('giveUp')">
-            Passer
+            class="rounded-r-lg w-16 font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+            @click="checkAnswer()">
+            Valider
           </button>
         </div>
-      </div>
-
-      <!-- BLOCKED FEEDBACK -->
-      <div v-else class="mx-auto w-4/5 md:w-3/5 my-4 space-y-4">
-        <span
-          class="block text-primaryPink text-shadow-pink text-center text-xl"
-          >Bloqué</span
-        >
-        <span class="block text-center text-lg text-gray-200"
-          >Ce livre est bloqué pendant: <b>{{ dayDifference }}</b> jours
-          <br />Il sera debloqué le {{ expirationDate }}</span
-        >
-        <div
-          class="px-2 mx-auto hidden md:flex items-center justify-evenly rounded-b-xl">
-          <navBtn section="1" text="I"></navBtn>
-          <navBtn section="2" text="II"></navBtn>
-          <navBtn section="3" text="III"></navBtn>
-          <navBtn section="4" text="IV"></navBtn>
-        </div>
+        <button
+          class="col-start-3 ml-4 rounded-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+          @click="showOverlay('giveUp')">
+          Passer
+        </button>
       </div>
     </div>
+
+    <!-- BLOCKED FEEDBACK -->
+    <div v-else class="mx-auto w-4/5 md:w-3/5 my-4 space-y-4">
+      <span class="block text-primaryPink text-shadow-pink text-center text-xl"
+        >Bloqué</span
+      >
+      <span class="block text-center text-lg text-gray-200"
+        >Ce livre est bloqué pendant: <b>{{ dayDifference }}</b> jours <br />Il
+        sera debloqué le {{ expirationDate }}</span
+      >
+      <div
+        class="px-2 mx-auto hidden md:flex items-center justify-evenly rounded-b-xl">
+        <navBtn section="1" text="I"></navBtn>
+        <navBtn section="2" text="II"></navBtn>
+        <navBtn section="3" text="III"></navBtn>
+        <navBtn section="4" text="IV"></navBtn>
+      </div>
+    </div>
+
     <overlay
       :text="explanation"
       :display="displayOverlay"
@@ -111,22 +116,21 @@ async function isBookLocked() {
   const xhrFinish = await api.isFinished(bookId);
   if (xhrFinish.data) {
     finished.value = true;
+  }
+  const response = await api.isLocked(bookId);
+  expirationDate.value = new Date(response.data);
+
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
+  if (currentDate >= expirationDate.value) {
+    getOneRiddle();
   } else {
-    const response = await api.isLocked(bookId);
-    expirationDate.value = new Date(response.data);
-
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-
-    if (currentDate >= expirationDate.value) {
-      getOneRiddle();
-    } else {
-      blocked.value = true;
-      const timeDifference = expirationDate.value - currentDate;
-      // Convert the time difference from milliseconds to days
-      dayDifference.value = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-      expirationDate.value = expirationDate.value.toLocaleDateString("fr-FR");
-    }
+    blocked.value = true;
+    const timeDifference = expirationDate.value - currentDate;
+    // Convert the time difference from milliseconds to days
+    dayDifference.value = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    expirationDate.value = expirationDate.value.toLocaleDateString("fr-FR");
   }
 }
 
@@ -197,15 +201,16 @@ async function solveRiddle() {
 }
 
 async function goNext() {
-  router.push(`/book/${bookId}/riddle/view/${parseInt(riddlePos) + 1}`);
+  const xhrFinish = await api.isFinished(bookId);
+  if (xhrFinish.data) {
+    finished.value = true;
+    router.push(`/book/${bookId}/riddle/view/finished`);
+    // update the header
+  } else {
+    router.push(`/book/${bookId}/riddle/view/${parseInt(riddlePos) + 1}`);
+  }
 }
 onMounted(async () => {
-  if (route.params.id == "finish") {
-    finished.value = true;
-  } else {
-    console.log("mounted else");
-
-    isBookLocked();
-  }
+  isBookLocked();
 });
 </script>

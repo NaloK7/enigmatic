@@ -59,7 +59,7 @@
     </div>
     <div class="nav-toggle static md:relative">
       <nav
-        class="fixed bottom-0 z-50 dark-glass border-b border-primaryGreen mx-auto w-full flex items-center justify-evenly md:static md:w-2/3 md:px-2 md:rounded-b-xl lg:w-1/2">
+        class="fixed bottom-0 z-50 dark-glass md:border-b md:border-primaryGreen mx-auto w-full flex items-center justify-evenly md:static md:w-2/3 md:px-2 md:rounded-b-xl lg:w-1/2">
         <navBtn section="1" text="I"></navBtn>
         <navBtn section="2" text="II"></navBtn>
         <navBtn section="3" text="III"></navBtn>
@@ -74,7 +74,7 @@
 import navBtn from "@/components/navBtn.vue";
 import banner from "@/components/loginBanner.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { mdiAccount, mdiBookshelf } from "@mdi/js";
 import { useRouter } from "vue-router";
 import { token, clearToken } from "@/stores/tokenStore";
@@ -83,39 +83,6 @@ const router = useRouter();
 const accountIco = ref(mdiAccount);
 const booksIco = ref(mdiBookshelf);
 const visible = ref(false);
-
-const topHeaderElement = ref(null);
-
-const navBtnText = ref({
-  section1: "Livre I",
-  section2: "Livre II",
-  section3: "Livre III",
-  section4: "Livre IV",
-});
-
-const updateNavBtnText = () => {
-  if (window.innerWidth < 450) {
-    navBtnText.value = {
-      section1: "I",
-      section2: "II",
-      section3: "III",
-      section4: "IV",
-    };
-  } else {
-    navBtnText.value = {
-      section1: "Livre I",
-      section2: "Livre II",
-      section3: "Livre III",
-      section4: "Livre IV",
-    };
-  }
-};
-
-// Initial call to set text values based on initial screen size
-updateNavBtnText();
-
-// Update text values when the window is resized
-window.addEventListener("resize", updateNavBtnText);
 
 function toogleDropDown() {
   visible.value = !visible.value;
