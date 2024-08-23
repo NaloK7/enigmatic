@@ -4,7 +4,7 @@ require_once("db.php");
 
 class RiddleModel extends DB
 {
-     /**
+    /**
      * Retrieve all riddles for a specific user.
      *
      * Fetches all riddles from the database for the given user across multiple books.
@@ -37,7 +37,39 @@ class RiddleModel extends DB
         return $datas;
     }
 
-     /**
+    /**
+     * Check if a user has finished all riddles in a specific section.
+     * 
+     * @param int $bookId The ID of the section to check.
+     * @param int $userId The ID of the user to check.
+     * @return bool Returns true if the user has finished all riddles in the section, false otherwise.
+     */
+    function queryisFinished($bookId, $userId)
+    {
+        $con = $this->connectTo();
+        $finish = false;
+
+        $queryTotal = $con->prepare("SELECT total_riddle FROM section WHERE id = :bookId");
+        $queryTotal->bindParam(":bookId", $bookId);
+        $queryTotal->execute();
+        $total = $queryTotal->fetch(PDO::FETCH_ASSOC);
+
+        $query = $con->prepare("SELECT s.user_id FROM solve AS s LEFT JOIN riddle AS r ON r.id = s.riddle_id WHERE s.user_id = :userId AND r.section_id = :bookId");
+        $query->bindParam(":bookId", $bookId);
+        $query->bindParam(":userId", $userId);
+        $query->execute();
+        $count = $query->rowCount();
+        if ($count > 0) {
+            http_response_code(200);
+            $totalSolved = $query->fetchAll(PDO::FETCH_ASSOC);
+            $finish = count($totalSolved) >= $total['total_riddle'];
+        } else {
+            // No Content
+            http_response_code(204);
+        }
+        return $finish;
+    }
+    /**
      * Retrieve the position of the first unsolved riddle in a specific book for the user.
      *
      * @param int $bookId
@@ -66,7 +98,7 @@ class RiddleModel extends DB
         }
     }
 
-     /**
+    /**
      * Check if a book is unlocked for the user.
      *
      * If the book is locked retrieves the expiration date.
@@ -98,7 +130,7 @@ class RiddleModel extends DB
         return $date;
     }
 
-     /**
+    /**
      * Deletes the entry in the blocked table that corresponds to the book_id and user_id.
      *
      * @param int $bookId
@@ -116,7 +148,7 @@ class RiddleModel extends DB
         $query->execute();
     }
 
-     /**
+    /**
      * Verifies if the user has solved a specific riddle in the given book.
      *
      * @param int $bookId
@@ -146,7 +178,7 @@ class RiddleModel extends DB
         return $solved;
     }
 
-     /**
+    /**
      * Retrieve the details of a specific riddle based on its position in the book.
      *
      * @param int $bookId The ID of the book.
@@ -175,7 +207,7 @@ class RiddleModel extends DB
         }
     }
 
-     /**
+    /**
      * Retrieve the correct answer to the specified riddle.
      *
      * @param int $riddleId
@@ -199,7 +231,7 @@ class RiddleModel extends DB
         }
     }
 
-     /**
+    /**
      * Retrieve the explanation for the solution to the specified riddle.
      *
      * @param int $riddleId

@@ -24,6 +24,8 @@ async function redirectToLast(bookId) {
     // failed.value = false;
     let lastId = response.data.position;
     router.push(`/book/${bookId}/riddle/view/${lastId}`);
+  } else if (response.status == 204) {
+    router.push(`/book/${bookId}/riddle/view/finish`);
   } else {
     console.log(response.status);
   }

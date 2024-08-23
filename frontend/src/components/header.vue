@@ -43,7 +43,7 @@
 
         <ul
           v-if="visible"
-          class="absolute top-[102px] right-0 w-32 dark-glass rounded-b-md border border-primaryGreen text-center text-gray-200 font-audiowide">
+          class="absolute top-[72px] md:top-[104px] right-3 w-32 dark-glass rounded-b-md border border-primaryGreen text-center text-gray-200 font-audiowide">
           <li>
             <button class="h-8 w-full hover:text-primaryPink">Profile</button>
           </li>
@@ -57,9 +57,9 @@
         </ul>
       </div>
     </div>
-    <div class="nav-toggle md:relative">
+    <div class="nav-toggle static md:relative">
       <nav
-        class="dark-glass border-b border-primaryGreen mx-auto w-full flex items-center justify-evenly md:w-2/3 md:px-2 md:rounded-b-xl lg:w-1/2">
+        class="fixed bottom-0 z-50 dark-glass border-b border-primaryGreen mx-auto w-full flex items-center justify-evenly md:static md:w-2/3 md:px-2 md:rounded-b-xl lg:w-1/2">
         <navBtn section="1" text="I"></navBtn>
         <navBtn section="2" text="II"></navBtn>
         <navBtn section="3" text="III"></navBtn>
@@ -74,7 +74,7 @@
 import navBtn from "@/components/navBtn.vue";
 import banner from "@/components/loginBanner.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { mdiAccount, mdiBookshelf } from "@mdi/js";
 import { useRouter } from "vue-router";
 import { token, clearToken } from "@/stores/tokenStore";
@@ -83,6 +83,8 @@ const router = useRouter();
 const accountIco = ref(mdiAccount);
 const booksIco = ref(mdiBookshelf);
 const visible = ref(false);
+
+const topHeaderElement = ref(null);
 
 const navBtnText = ref({
   section1: "Livre I",
