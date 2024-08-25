@@ -57,15 +57,14 @@
         </ul>
       </div>
     </div>
-    <div class="nav-toggle static md:relative">
+    <div class="nav-toggle mx-auto md:relative w-full md:w-2/3 lg:w-1/2 pb-4">
       <nav
-        class="fixed bottom-0 z-50 dark-glass md:border-b md:border-primaryGreen mx-auto w-full flex items-center justify-evenly md:static md:w-2/3 md:px-2 md:rounded-b-xl lg:w-1/2">
+        class="fixed bottom-0 z-50 dark-glass w-full md:border-b md:border-primaryGreen flex items-center justify-evenly md:static md:px-2 md:rounded-b-xl">
         <navBtn section="1" text="I"></navBtn>
         <navBtn section="2" text="II"></navBtn>
         <navBtn section="3" text="III"></navBtn>
         <navBtn section="4" text="IV"></navBtn>
       </nav>
-      <div class="h-4"></div>
     </div>
     <banner v-if="!tokenAvailable"></banner>
   </header>
