@@ -1,18 +1,18 @@
 <template>
-  <div class="container">
-    <h1>Conditions Générales d'Utilisation</h1>
+  <div class="p-4 dark-glass glass-border">
+    <h1 class="text-center">Conditions Générales d'Utilisation</h1>
     <p>
-      Bienvenue sur notre site. En utilisant notre site, vous acceptez les
-      présentes Conditions Générales d'Utilisation (CGU).
+      Bienvenue sur Enigmatic Journey. En utilisant notre site, vous acceptez
+      les présentes Conditions Générales d'Utilisation (CGU).
     </p>
 
-    <h2>1. Objet</h2>
+    <span :class="subTitle">1. Objet</span>
     <p>
       Les présentes CGU ont pour objet de définir les conditions d'utilisation
       de notre site et des services proposés.
     </p>
 
-    <h2>2. Accès au site</h2>
+    <span :class="subTitle">2. Accès au site</span>
     <p>
       Notre site est accessible gratuitement à tout utilisateur disposant d'un
       accès à Internet. Tous les coûts relatifs à l'accès au site, que ce soit
@@ -20,14 +20,14 @@
       la charge de l'utilisateur.
     </p>
 
-    <h2>3. Collecte des données</h2>
+    <span :class="subTitle">3. Collecte des données</span>
     <p>
       Nous collectons des données personnelles conformément à la réglementation
       en vigueur, notamment le RGPD. Les données collectées sont nécessaires
       pour le bon fonctionnement de nos services.
     </p>
 
-    <h2>4. Utilisation des données</h2>
+    <span :class="subTitle">4. Utilisation des données</span>
     <p>Les données collectées sont utilisées pour :</p>
     <ul>
       <li>Fournir et améliorer nos services</li>
@@ -35,7 +35,7 @@
       <li>Envoyer des informations et des notifications importantes</li>
     </ul>
 
-    <h2>5. Droits des utilisateurs</h2>
+    <span :class="subTitle">5. Droits des utilisateurs</span>
     <p>Conformément au RGPD, vous disposez des droits suivants :</p>
     <ul>
       <li>
@@ -64,27 +64,27 @@
       </li>
     </ul>
 
-    <h2>6. Sécurité des données</h2>
+    <span :class="subTitle">6. Sécurité des données</span>
     <p>
       Nous mettons en œuvre toutes les mesures techniques et organisationnelles
       nécessaires pour protéger vos données personnelles contre toute
       destruction, perte, altération, divulgation ou accès non autorisé.
     </p>
 
-    <h2>7. Cookies</h2>
+    <span :class="subTitle">7. Cookies</span>
     <p>
       Notre site utilise des cookies pour améliorer l'expérience utilisateur.
       Vous pouvez configurer votre navigateur pour refuser les cookies ou être
       informé lorsqu'un cookie est envoyé.
     </p>
 
-    <h2>8. Modification des CGU</h2>
+    <span :class="subTitle">8. Modification des CGU</span>
     <p>
       Nous nous réservons le droit de modifier les présentes CGU à tout moment.
       Les modifications prendront effet dès leur publication sur le site.
     </p>
 
-    <h2>9. Contact</h2>
+    <span :class="subTitle">9. Contact</span>
     <p>
       Pour toute question concernant les présentes CGU ou vos données
       personnelles, vous pouvez nous contacter à l'adresse suivante : [votre
@@ -92,3 +92,6 @@
     </p>
   </div>
 </template>
+<script setup>
+const subTitle = "block text-2xl font-bold mt-4";
+</script>

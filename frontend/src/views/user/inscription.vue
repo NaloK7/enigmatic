@@ -57,7 +57,17 @@
             name="confirmPass"
             type="password" />
         </div>
-        <div class="flex items-center justify-between"></div>
+        <!-- CGU -->
+        <div v-if="!isCheckedValid" class="text-red-500 text-center">
+          Vous devez acceptez les conditions générales d'utilisations
+        </div>
+        <input type="checkbox" v-model="isChecked" />
+        <label class="ml-2"
+          >acceptez les conditions générales d'utilisation
+          <RouterLink to="/cgu" class="text-blue-500 hover:underline"
+            >CGU</RouterLink
+          ></label
+        >
         <!-- SUBMIT BUTTON -->
         <button
           class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-secondaryPink hover:border-secondaryPink hover:bg-primaryPink hover:text-black active:text-white active:bg-secondaryPink rounded-lg"
@@ -81,7 +91,7 @@
 import { ref } from "vue";
 import { useEmailRule, usePasswordRule } from "../../composables/rules.js";
 import { setToken } from "@/stores/tokenStore";
-import { useRouter } from "vue-router";
+import { useRouter, RouterLink } from "vue-router";
 import api from "@/composables/api";
 const router = useRouter();
 
@@ -93,7 +103,8 @@ const passwordValid = ref(true);
 
 const confirmPass = ref("");
 const confirmPassValid = ref(true);
-
+const isChecked = ref(false);
+const isCheckedValid = ref(true);
 const failed = ref(false);
 
 async function inscription() {
@@ -119,6 +130,12 @@ function formRules() {
   emailValid.value = useEmailRule(email.value);
   passwordValid.value = usePasswordRule(password.value);
   confirmPassValid.value = password.value == confirmPass.value;
-  return emailValid.value && passwordValid.value && confirmPassValid.value;
+  isCheckedValid.value = isChecked.value;
+  return (
+    emailValid.value &&
+    passwordValid.value &&
+    confirmPassValid.value &&
+    isCheckedValid.value
+  );
 }
 </script>

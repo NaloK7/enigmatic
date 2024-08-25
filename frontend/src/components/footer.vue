@@ -5,5 +5,5 @@
   </div>
 </template>
 <script setup>
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 </script>
