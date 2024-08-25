@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import authMiddleware from "./authMiddleware";
 import Home from "@/views/index.vue";
-import Book from "@/views/book/[book_id]/view/[id].vue";
 import Riddle from "@/views/book/[book_id]/riddle/view/[id].vue";
 import Login from "@/views/user/login.vue";
 import Inscription from "@/views/user/inscription.vue";
 import Books from "@/views/book/[id].vue";
+import Cgu from "@/views/legal/cgu.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,11 +21,6 @@ const router = createRouter({
       component: Books,
     },
     {
-      path: "/book/:book_id/view/:id",
-      name: "book",
-      component: Book,
-    },
-    {
       path: "/book/:book_id/riddle/view/:id",
       name: "riddle",
       component: Riddle,
@@ -39,6 +34,11 @@ const router = createRouter({
       path: "/inscription",
       name: "inscription",
       component: Inscription,
+    },
+    {
+      path: "/cgu",
+      name: "cgu",
+      component: Cgu,
     },
   ],
 });

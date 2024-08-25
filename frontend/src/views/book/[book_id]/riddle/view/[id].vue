@@ -4,9 +4,11 @@
     <div
       v-if="!blocked"
       class="flex flex-col justify-start items-center w-11/12 sm:w-4/5 lg:w-1/2 lg:px-10 py-6 space-y-4 mx-auto">
-      <h2 class="pb-4 font-audiowide text-xl text-primaryPink text-shadow-pink">
-        {{ riddle.section_id }}-{{ riddle.position }}. {{ riddle.title }}
-      </h2>
+      <span
+        class="pb-4 font-audiowide text-2xl text-primaryPink text-shadow-pink inline-block">
+        {{ riddle.section_id }}-{{ riddle.position }}.
+        <h1 class="inline-block text-2xl">{{ riddle.title }}</h1>
+      </span>
       <p class="riddle-txt text-gray-200" v-html="riddle.wording"></p>
 
       <div class="mt-auto h-7 grid" style="grid-template-columns: 1fr 2fr 1fr">
