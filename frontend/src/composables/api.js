@@ -65,6 +65,10 @@ const api = {
     const response = await apiEnigm.post("solve", { riddleId });
     return response;
   },
+  async isFinished(bookId) {
+    const response = await apiEnigm.post("finish", { bookId });
+    return response;
+  },
 };
 
 export default api;

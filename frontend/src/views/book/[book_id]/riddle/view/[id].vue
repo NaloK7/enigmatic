@@ -1,5 +1,20 @@
 <template>
-  <section class="dark-glass border-y border-primaryGreen">
+  <section v-if="finished" class="dark-glass border-y border-primaryGreen mb-4">
+    <span class="block p-4 text-center text-gray-200"
+      >Bravo!!<br />Vous avez résolut toutes les énigmes de ce livre.</span
+    >
+    <div
+      class="px-2 mx-auto hidden items-center justify-evenly rounded-b-xl md:flex lg:w-1/2">
+      <navBtn section="1" text="I"></navBtn>
+      <navBtn section="2" text="II"></navBtn>
+      <navBtn section="3" text="III"></navBtn>
+      <navBtn section="4" text="IV"></navBtn>
+    </div>
+  </section>
+
+  <section
+    v-if="riddlePos != 'finished'"
+    class="dark-glass border-y border-primaryGreen">
     <!-- RIDDLE -->
     <div
       v-if="!blocked"
@@ -56,6 +71,7 @@
         <navBtn section="4" text="IV"></navBtn>
       </div>
     </div>
+
     <overlay
       :text="explanation"
       :display="displayOverlay"
@@ -83,6 +99,8 @@ const router = useRouter();
 const bookId = route.params.book_id;
 const riddlePos = route.params.id;
 
+const finished = ref(false);
+
 const blocked = ref(false);
 const expirationDate = ref();
 const dayDifference = ref();
@@ -97,6 +115,10 @@ const badAnswer = ref(false);
 const displayGiveUp = ref(false);
 
 async function isBookLocked() {
+  const xhrFinish = await api.isFinished(bookId);
+  if (xhrFinish.data) {
+    finished.value = true;
+  }
   const response = await api.isLocked(bookId);
   expirationDate.value = new Date(response.data);
 
@@ -180,10 +202,17 @@ async function solveRiddle() {
   await api.postSolved(riddle.value.riddleId);
 }
 
-function goNext() {
-  router.push(`/book/${bookId}/riddle/view/${parseInt(riddlePos) + 1}`);
+async function goNext() {
+  const xhrFinish = await api.isFinished(bookId);
+  if (xhrFinish.data) {
+    finished.value = true;
+    router.push(`/book/${bookId}/riddle/view/finished`);
+    // update the header
+  } else {
+    router.push(`/book/${bookId}/riddle/view/${parseInt(riddlePos) + 1}`);
+  }
 }
-onMounted(() => {
+onMounted(async () => {
   isBookLocked();
 });
 </script>

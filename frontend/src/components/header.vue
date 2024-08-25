@@ -43,7 +43,7 @@
 
         <ul
           v-if="visible"
-          class="absolute top-[102px] right-0 w-32 dark-glass rounded-b-md border border-primaryGreen text-center text-gray-200 font-audiowide">
+          class="absolute top-[72px] md:top-[104px] right-3 w-32 dark-glass rounded-b-md border border-primaryGreen text-center text-gray-200 font-audiowide">
           <li>
             <button class="h-8 w-full hover:text-primaryPink">Profile</button>
           </li>
@@ -57,9 +57,9 @@
         </ul>
       </div>
     </div>
-    <div class="nav-toggle md:relative">
+    <div class="nav-toggle static md:relative">
       <nav
-        class="dark-glass border-b border-primaryGreen mx-auto w-full flex items-center justify-evenly md:w-2/3 md:px-2 md:rounded-b-xl lg:w-1/2">
+        class="fixed bottom-0 z-50 dark-glass md:border-b md:border-primaryGreen mx-auto w-full flex items-center justify-evenly md:static md:w-2/3 md:px-2 md:rounded-b-xl lg:w-1/2">
         <navBtn section="1" text="I"></navBtn>
         <navBtn section="2" text="II"></navBtn>
         <navBtn section="3" text="III"></navBtn>
@@ -83,37 +83,6 @@ const router = useRouter();
 const accountIco = ref(mdiAccount);
 const booksIco = ref(mdiBookshelf);
 const visible = ref(false);
-
-const navBtnText = ref({
-  section1: "Livre I",
-  section2: "Livre II",
-  section3: "Livre III",
-  section4: "Livre IV",
-});
-
-const updateNavBtnText = () => {
-  if (window.innerWidth < 450) {
-    navBtnText.value = {
-      section1: "I",
-      section2: "II",
-      section3: "III",
-      section4: "IV",
-    };
-  } else {
-    navBtnText.value = {
-      section1: "Livre I",
-      section2: "Livre II",
-      section3: "Livre III",
-      section4: "Livre IV",
-    };
-  }
-};
-
-// Initial call to set text values based on initial screen size
-updateNavBtnText();
-
-// Update text values when the window is resized
-window.addEventListener("resize", updateNavBtnText);
 
 function toogleDropDown() {
   visible.value = !visible.value;

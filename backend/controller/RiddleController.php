@@ -15,7 +15,7 @@ class RiddleController extends Controller
         $this->query = new RiddleModel();
     }
 
-     /**
+    /**
      * Retrieve all riddles.
      *
      * Use JWT token to get riddles status for a user.
@@ -38,7 +38,15 @@ class RiddleController extends Controller
         echo json_encode($response);
     }
 
-     /**
+    function isFinished($bookId, $token)
+    {
+        $key = $_ENV['JWT_KEY'];
+        $decoded = JWT::decode($token, new Key($key, 'HS256'));
+        $userId = $decoded->user_id;
+        $finish = $this->query->queryisFinished($bookId, $userId);
+        echo json_encode($finish);
+    }
+    /**
      * Check and retrieve a riddle.
      *
      * If the riddle is solved, it updates the book's locked status and fetches the riddle.
@@ -85,7 +93,7 @@ class RiddleController extends Controller
         echo json_encode($response);
     }
 
-     /**
+    /**
      * Check if the book is unlocked for the user.
      *
      * Verifies the expiration date for unlocking the book.
@@ -132,7 +140,7 @@ class RiddleController extends Controller
         echo json_encode($response);
     }
 
-     /**
+    /**
      * Retrieves the position of the last unsolved riddle in the specified book for a User.
      *
      * @param int $bookId
@@ -155,7 +163,7 @@ class RiddleController extends Controller
         echo json_encode($response);
     }
 
-     /**
+    /**
      * Check if the provided answer is correct for the given riddle.
      *
      * @param int $riddleId
@@ -186,7 +194,7 @@ class RiddleController extends Controller
         }
     }
 
-     /**
+    /**
      * Retrieve the correct answer for a given riddle.
      *
      * @param int $riddleId
@@ -199,7 +207,7 @@ class RiddleController extends Controller
         echo json_encode($response);
     }
 
-     /**
+    /**
      * Retrieve the explanation for the solution to a given riddle.
      *
      * @param int $riddleId

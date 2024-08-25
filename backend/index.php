@@ -43,6 +43,8 @@ try {
             // GET all riddles
             if ($iri == 'books') {
                 $riddle->getAllRiddles($token);
+            } elseif ($iri == "finish") {
+                $riddle->isFinished($data['bookId'], $token);
             }
             // GET last riddle ID
             elseif ($iri == 'last') {
