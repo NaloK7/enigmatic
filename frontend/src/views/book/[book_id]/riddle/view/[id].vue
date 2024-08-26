@@ -64,6 +64,7 @@
         sera debloqué le {{ expirationDate }}</span
       >
       <div
+        v-if="!finished"
         class="px-2 mx-auto hidden md:flex items-center justify-evenly rounded-b-xl">
         <navBtn section="1" text="I"></navBtn>
         <navBtn section="2" text="II"></navBtn>
@@ -100,8 +101,8 @@ const bookId = route.params.book_id;
 const riddlePos = route.params.id;
 
 const finished = ref(false);
-
 const blocked = ref(false);
+
 const expirationDate = ref();
 const dayDifference = ref();
 
@@ -118,12 +119,11 @@ async function isBookLocked() {
   const xhrFinish = await api.getOne("finish", { bookId });
   if (xhrFinish.data) {
     finished.value = true;
-    expirationDate.value = new Date();
-    expirationDate.value.setHours(0, 0, 0, 0);
-  } else {
-    const response = await api.getOne("isLocked", { bookId });
-    expirationDate.value = new Date(response.data);
   }
+
+  const response = await api.getOne("isLocked", { bookId });
+  expirationDate.value = new Date(response.data);
+
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
 
@@ -143,7 +143,6 @@ async function getOneRiddle() {
 
   if (response.status == 200) {
     riddle.value = response.data;
-    console.log("🚀 ~ getOneRiddle ~ riddle.value:", riddle.value);
   } else {
     console.log(response.status);
   }
