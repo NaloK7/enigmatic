@@ -1,9 +1,7 @@
 <template>
-  <div class="flex flex-col dark-glass glass-border">
-    <div class="mx-auto w-1/3 p-6 relative">
-      <div class="mx-auto flex flex-col justify-center items-center space-y-2">
-        <h1 class="text-2xl font-medium text-gray-200">connexion</h1>
-      </div>
+  <section class="dark-glass glass-border">
+    <div class="mx-auto w-full px-4 sm:w-3/4 md:w-1/2 xl:w-1/3 p-6">
+      <h1 class="text-center text-2xl font-medium text-gray-200">connexion</h1>
       <form class="w-full mt-6 space-y-6">
         <div>
           <input
@@ -45,7 +43,7 @@
         </div>
       </form>
     </div>
-  </div>
+  </section>
 </template>
 <script setup>
 import { ref } from "vue";

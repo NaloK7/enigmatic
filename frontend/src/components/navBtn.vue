@@ -33,8 +33,10 @@ async function redirectToLast(bookId) {
 }
 
 onMounted(async () => {
-  const criteria = { bookId: props.section };
-  const xhrFinish = await api.getOne("finish", criteria);
-  finished.value = xhrFinish.data;
+  if (localStorage.getItem("token")) {
+    const criteria = { bookId: props.section };
+    const xhrFinish = await api.getOne("finish", criteria);
+    finished.value = xhrFinish.data;
+  }
 });
 </script>
