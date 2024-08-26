@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and run app
+        run: |
+          docker compose -f docker-compose.yml up -d
+          docker compose ps
+
+      - name: Wait for service
+        run: |
+          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{else if .State.Status}}{{print .State.Status}}{{end}}" "$(docker compose ps -q php)")"; do
+            case $status in
+              starting) sleep 1;;
+              healthy) exit 0;;
+              running) exit 0;;
+              unhealthy)
+                docker compose ps
+                docker compose logs php
+                exit 1
+              ;;
+            esac
+          done
+          exit 1
+
+      - name: Check App
+        run: |
+          echo "127.0.0.1 localhost" | sudo tee -a /etc/hosts
+          HTTP_CODE=$(curl -ik -X GET 'https://localhost/health-check' -o /dev/null -w '%{http_code}\n' -s)
+          if [ "$HTTP_CODE" = "200" ]; then
+              exit 0
+          fi
+          docker compose logs nginx
+          exit 1

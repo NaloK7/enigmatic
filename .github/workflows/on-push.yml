@@ -1,0 +1,167 @@
+name: build test and push images
+
+on:
+  push:
+    branches:
+      - release
+      - master
+
+env:
+  REGISTRY: ghcr.io
+  REGISTRY_ENV: preprod
+  PACKAGE_NAME: enigmatic
+  REGISTRY_PATH: ghcr.io/${{ github.repository }}
+  STACK_ID: 1 # Stack id on portainer side #
+  PROD_STACK_ID: 2 # Stack id on portainer side #
+  ENTRY_POINT_ID: 1 # entry-point id on portainer side #
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sets env vars
+        run: |
+          echo "REGISTRY_ENV=prod" >> $GITHUB_ENV
+        if: ${{ github.ref == 'refs/heads/master'}}
+
+      - name: Docker build images
+        run: docker compose -f docker-compose.yml build
+
+      - name: Run App
+        run: |
+          docker compose -f docker-compose.yml up  -d
+          docker compose ps
+
+      - name: Wait for service
+        run: |
+          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
+            case $status in
+              starting) sleep 1;;
+              healthy) exit 0;;
+              unhealthy)
+                docker compose ps
+                docker compose logs php
+                exit 1
+              ;;
+            esac
+          done
+          exit 1
+
+      - name: Check App
+        run: |
+          echo "127.0.0.1 localhost" | sudo tee -a /etc/hosts
+          HTTP_CODE=$(curl -ik -X GET 'https://localhost/health-check' -o /dev/null -w '%{http_code}\n' -s)
+          echo $HTTP_CODE
+          if [ "$HTTP_CODE" = "200" ]; then
+              exit 0
+          fi
+          exit 1
+
+      - name: Login to ghcr.io
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker tag/push php
+        env:
+          IMAGE_NAME: php
+          REGISTRY_PATH_ENV: ${{ env.REGISTRY_PATH }}/${{ env.REGISTRY_ENV }}/php
+        run: |
+          docker tag ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }} ${{ env.REGISTRY_PATH_ENV }}:latest
+          docker tag ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }} ${{ env.REGISTRY_PATH_ENV }}:${{ github.sha }}
+          docker push ${{ env.REGISTRY_PATH_ENV }}:${{ github.sha }}
+          docker push ${{ env.REGISTRY_PATH_ENV }}:latest
+
+      - name: Docker tag/push nodejs
+        env:
+          IMAGE_NAME: nodejs
+          REGISTRY_PATH_ENV: ${{ env.REGISTRY_PATH }}/${{ env.REGISTRY_ENV }}/nodejs
+        run: |
+          docker tag ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }} ${{ env.REGISTRY_PATH_ENV }}:latest
+          docker tag ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }} ${{ env.REGISTRY_PATH_ENV }}:${{ github.sha }}
+          docker push ${{ env.REGISTRY_PATH_ENV }}:${{ github.sha }}
+          docker push ${{ env.REGISTRY_PATH_ENV }}:latest
+
+  Deploy:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sets env vars
+        run: |
+          echo "STACK_ID=${{ env.PROD_STACK_ID }}" >> $GITHUB_ENV;
+          echo "REGISTRY_ENV=prod" >> $GITHUB_ENV;
+        if: ${{ github.ref == 'refs/heads/master'}}
+
+      - name: Login to portainer
+        run: |
+          JWT=$(curl -s -X POST '${{ secrets.PORTAINTER_API }}/auth' \
+          --proxy ${{ secrets.PROXY_SERVER }} \
+          --data-raw '{
+              "username": "${{ secrets.PORTAINER_LOGIN }}",
+              "password": "${{ secrets.PORTAINER_PASSWORD }}"
+          }' | jq -r '.jwt')
+          echo "TOKEN=$JWT" >> $GITHUB_ENV
+
+      - name: Stop portainer stack
+        run: |
+          curl -X POST '${{ secrets.PORTAINTER_API }}/stacks/${{ env.STACK_ID }}/stop' \
+          --header 'Authorization: Bearer ${{ env.TOKEN }}' \
+          --proxy ${{ secrets.PROXY_SERVER }} -s
+
+      - name: Update portainer nodejs image
+        env:
+          REGISTRY_PATH_ENV: ${{ env.REGISTRY_PATH }}/${{ env.REGISTRY_ENV }}/nodejs:latest
+        run: |
+          HTTP_CODE=$(curl -i -X POST '${{ secrets.PORTAINTER_API }}/endpoints/${{ env.ENTRY_POINT_ID }}/docker/images/create?fromImage=${{ env.REGISTRY_PATH_ENV }}' \
+          --header 'Authorization: Bearer ${{ env.TOKEN }}' \
+          --header 'X-Registry-Auth: ${{ secrets.PORTAINTER_DPS_REGISTRY_KEY }}' \
+          --proxy ${{ secrets.PROXY_SERVER }} -o /dev/null -w '%{http_code}\n' -s)
+          if [ "$HTTP_CODE" = "200" ]; then
+              exit 0
+          fi
+          exit 1
+
+      - name: Update portainer php image
+        env:
+          REGISTRY_PATH_ENV: ${{ env.REGISTRY_PATH }}/${{ env.REGISTRY_ENV }}/php:latest
+        run: |
+          HTTP_CODE=$(curl -i -X POST '${{ secrets.PORTAINTER_API }}/endpoints/${{ env.ENTRY_POINT_ID }}/docker/images/create?fromImage=${{ env.REGISTRY_PATH_ENV }}' \
+          --header 'Authorization: Bearer ${{ env.TOKEN }}' \
+          --header 'X-Registry-Auth: ${{ secrets.PORTAINTER_DPS_REGISTRY_KEY }}' \
+          --proxy ${{ secrets.PROXY_SERVER }} -o /dev/null -w '%{http_code}\n' -s)
+          if [ "$HTTP_CODE" = "200" ]; then
+              exit 0
+          fi
+          exit 1
+
+      - name: Start portainer stack
+        run: |
+          HTTP_CODE=$(curl -i -X POST '${{ secrets.PORTAINTER_API }}/stacks/${{ env.STACK_ID }}/start' \
+          --header 'Authorization: Bearer ${{ env.TOKEN }}' \
+          --proxy ${{ secrets.PROXY_SERVER }} -o /dev/null -w '%{http_code}\n' -s)
+          if [ "$HTTP_CODE" = "200" ]; then
+              exit 0
+          fi
+          exit 1
+
+  Clean:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove old packages
+        uses: smartsquaregmbh/delete-old-packages@v0.5.0
+        env:
+          PACKAGE_PATH: ${{ env.PACKAGE_NAME }}/${{ env.REGISTRY_ENV }}
+        with:
+          token: ${{ secrets.PACKAGE_TOKEN }}
+          organization: syneido
+          keep: 3
+          type: container
+          names: |
+            ${{ env.PACKAGE_PATH }}/php
+            ${{ env.PACKAGE_PATH }}/nodejs
