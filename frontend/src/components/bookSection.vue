@@ -37,7 +37,7 @@ const props = defineProps({
   bookData: Array,
 });
 async function redirectToLast(bookId) {
-  const response = await api.getLast(bookId);
+  const response = await api.getOne("last", { bookId });
   if (response.status == 200) {
     // failed.value = false;
     let lastId = response.data.position;

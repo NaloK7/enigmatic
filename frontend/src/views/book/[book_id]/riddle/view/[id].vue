@@ -17,7 +17,7 @@
     class="dark-glass border-y border-primaryGreen">
     <!-- RIDDLE -->
     <div
-      v-if="!blocked"
+      v-if="!blocked && riddle"
       class="flex flex-col justify-start items-center w-11/12 sm:w-4/5 lg:w-1/2 lg:px-10 py-6 space-y-4 mx-auto">
       <span
         class="pb-4 font-audiowide text-2xl text-primaryPink text-shadow-pink inline-block">
@@ -55,7 +55,7 @@
     </div>
 
     <!-- BLOCKED FEEDBACK -->
-    <div v-else class="mx-auto w-4/5 md:w-3/5 my-4 space-y-4">
+    <div v-else-if="blocked" class="mx-auto w-4/5 md:w-3/5 my-4 space-y-4">
       <span class="block text-primaryPink text-shadow-pink text-center text-xl"
         >Bloqué</span
       >
@@ -115,13 +115,15 @@ const badAnswer = ref(false);
 const displayGiveUp = ref(false);
 
 async function isBookLocked() {
-  const xhrFinish = await api.isFinished(bookId);
+  const xhrFinish = await api.getOne("finish", { bookId });
   if (xhrFinish.data) {
     finished.value = true;
+    expirationDate.value = new Date();
+    expirationDate.value.setHours(0, 0, 0, 0);
+  } else {
+    const response = await api.getOne("isLocked", { bookId });
+    expirationDate.value = new Date(response.data);
   }
-  const response = await api.isLocked(bookId);
-  expirationDate.value = new Date(response.data);
-
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
 
@@ -137,10 +139,11 @@ async function isBookLocked() {
 }
 
 async function getOneRiddle() {
-  const response = await api.getOne(bookId, riddlePos);
+  const response = await api.getOne("riddle", { bookId, riddlePos });
 
   if (response.status == 200) {
     riddle.value = response.data;
+    console.log("🚀 ~ getOneRiddle ~ riddle.value:", riddle.value);
   } else {
     console.log(response.status);
   }
@@ -148,12 +151,17 @@ async function getOneRiddle() {
 
 async function checkAnswer() {
   if (answer.value != "") {
-    const response = await api.checkAnswer(riddle.value.riddleId, answer.value);
+    const criteria = {
+      riddleId: riddle.value.riddleId,
+      answer: answer.value,
+    };
+    const response = await api.getOne("checkAnswer", criteria);
 
     if (response.status == 200) {
       solveRiddle();
       // popup explanation
-      const response = await api.getExplanation(riddle.value.riddleId);
+      const criteria = { riddleId: riddle.value.riddleId };
+      const response = await api.getOne("explanation", criteria);
       explanation.value = response.data.explanation;
       showOverlay("next");
     } else {
@@ -189,21 +197,25 @@ function closeOverlay() {
 
 async function giveUp() {
   // get answer
-  const xhrSolution = await api.getAnswer(riddle.value.riddleId);
+  const criteria = { riddleId: riddle.value.riddleId };
+  const xhrSolution = await api.getOne("getAnswer", criteria);
   answer.value = xhrSolution.data.solution;
-  const xhrExplanation = await api.getExplanation(riddle.value.riddleId);
+  // get explanation
+  const xhrExplanation = await api.getOne("explanation", criteria);
   explanation.value = xhrExplanation.data.explanation;
   // post solve
   solveRiddle();
   // post lock book
-  await api.lockBook(bookId);
+  await api.postOne("lockBook", { bookId });
 }
+
 async function solveRiddle() {
-  await api.postSolved(riddle.value.riddleId);
+  const criteria = { riddleId: riddle.value.riddleId };
+  await api.postOne("solve", criteria);
 }
 
 async function goNext() {
-  const xhrFinish = await api.isFinished(bookId);
+  const xhrFinish = await api.getOne("finish", { bookId });
   if (xhrFinish.data) {
     finished.value = true;
     router.push(`/book/${bookId}/riddle/view/finished`);

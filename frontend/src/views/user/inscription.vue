@@ -110,7 +110,8 @@ const failed = ref(false);
 async function inscription() {
   if (formRules()) {
     try {
-      const xhr = await api.postUser(email.value, password.value);
+      const criteria = { email: email.value, password: password.value };
+      const xhr = await api.postOne(`login`, criteria);
 
       const response = await xhr;
       if (response["status"] == 200) {

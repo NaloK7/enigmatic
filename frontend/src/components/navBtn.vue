@@ -21,7 +21,7 @@ const props = defineProps({
 const finished = ref(false);
 
 async function redirectToLast(bookId) {
-  const response = await api.getLast(bookId);
+  const response = await api.getOne("last", { bookId });
 
   if (response.status == 200 || response.status == 204) {
     let lastId = response.data.position ? response.data.position : "finished";
@@ -33,7 +33,8 @@ async function redirectToLast(bookId) {
 }
 
 onMounted(async () => {
-  const xhrFinish = await api.isFinished(props.section);
+  const criteria = { bookId: props.section };
+  const xhrFinish = await api.getOne("finish", criteria);
   finished.value = xhrFinish.data;
 });
 </script>

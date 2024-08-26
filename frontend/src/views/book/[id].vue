@@ -19,7 +19,7 @@ import bookSection from "@/components/bookSection.vue";
 const books = ref([]);
 
 async function getAllRiddles() {
-  const response = await api.getAll();
+  const response = await api.getAll("books");
   if (response.status == 200) {
     books.value = response.data;
   } else {

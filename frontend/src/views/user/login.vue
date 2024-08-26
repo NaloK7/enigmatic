@@ -39,9 +39,9 @@
             </RouterLink>
           </div>
           <!-- todo see how forgotten password works -->
-          <RouterLink class="text-blue-500 font-medium hover:underline" to="#"
+          <!-- <RouterLink class="text-blue-500 font-medium hover:underline" to="#"
             >mot de passe oublié ?</RouterLink
-          >
+          > -->
         </div>
       </form>
     </div>
@@ -59,7 +59,8 @@ const password = ref("");
 
 async function connect() {
   try {
-    const xhr = await api.getUser(email.value, password.value);
+    const criteria = { email: email.value, password: password.value };
+    const xhr = await api.getOne(`login`, criteria);
 
     const response = await xhr;
 
