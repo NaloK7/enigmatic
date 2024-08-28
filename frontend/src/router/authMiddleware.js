@@ -29,7 +29,8 @@ const authMiddleware = (to, from, next) => {
     if (
       to.name !== "login" &&
       to.name !== "inscription" &&
-      to.name !== "home"
+      to.name !== "home" &&
+      to.name !== "forget"
     ) {
       clearToken();
       next({ name: "home" });

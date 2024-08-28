@@ -6,6 +6,7 @@ import Login from "@/views/user/login.vue";
 import Inscription from "@/views/user/inscription.vue";
 import Books from "@/views/book/[id].vue";
 import Cgu from "@/views/legal/cgu.vue";
+import Forget from "@/views/user/forgetPassword.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,11 @@ const router = createRouter({
       path: "/cgu",
       name: "cgu",
       component: Cgu,
+    },
+    {
+      path: "/forget",
+      name: "forget",
+      component: Forget,
     },
   ],
 });
