@@ -36,7 +36,6 @@
               >inscription
             </RouterLink>
           </div>
-          <!-- todo see how forgotten password works -->
           <RouterLink
             class="text-blue-500 font-medium hover:underline"
             to="/forget"

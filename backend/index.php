@@ -27,6 +27,7 @@ if (isset($headers['Authorization'])) {
 
 
 try {
+    // phpinfo();
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = new UserController();
         $data = json_decode(file_get_contents('php://input'), true);
@@ -38,7 +39,13 @@ try {
         // inscription
         elseif ($iri == 'inscription') {
             $user->inscription($data['email'], $data['password']);
-        } elseif (isset($token)) {
+        }
+        // SEND MAIL
+        else if ($iri == "forget") {
+            $user->forget($data['email']);
+        }
+        // IF CONNECTED
+        elseif (isset($token)) {
             $riddle = new RiddleController();
             // GET all riddles
             if ($iri == 'books') {

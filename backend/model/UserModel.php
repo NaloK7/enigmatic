@@ -7,7 +7,7 @@ use Firebase\JWT\Key;
 
 class UserModel extends DB
 {
-     /**
+    /**
      * Registers a new user in the database.
      *
      * Checks if the email is already registered. If not, inserts the user into the database
@@ -52,7 +52,7 @@ class UserModel extends DB
         return $response;
     }
 
-     /**
+    /**
      * Authenticates a user by checking their email and password.
      *
      * Verifies the user's email and password against the database. If the credentials
@@ -91,7 +91,30 @@ class UserModel extends DB
         return $response;
     }
 
-     /**
+    /**
+     * Check if a user with the given email is registered in the database.
+     *
+     * @param string $email The email address to check for registration.
+     * @return bool Returns true if the user is registered, false otherwise.
+     */
+    function queryIsRegister($email)
+    {
+        $con = $this->connectTo();
+
+        $state = $con->prepare("SELECT id FROM user WHERE email = :email");
+        $state->bindParam(':email', $email);
+        $state->execute();
+        $count = $state->rowCount();
+        if ($count > 0) {
+            http_response_code(200);
+        } else {
+            // No content
+            http_response_code(204);
+        }
+        return $count > 0;
+    }
+
+    /**
      * Generates a JWT token for the authenticated user.
      *
      * Creates a JWT token using the user's ID and email, with a 24-hour expiration time.
@@ -101,7 +124,7 @@ class UserModel extends DB
      *
      * @return string The generated JWT token.
      */
-    private function generateJWT($userId, $email)
+    function generateJWT($userId, $email)
     {
         $key = $_ENV['JWT_KEY'];
         $payload = [
@@ -114,7 +137,7 @@ class UserModel extends DB
         return JWT::encode($payload, $key, 'HS256');
     }
 
-     /**
+    /**
      * Marks a riddle as solved by a user in the database.
      *
      * Inserts a record into the solve table indicating that the specified user has solved
@@ -142,7 +165,7 @@ class UserModel extends DB
         }
     }
 
-     /**
+    /**
      * Locks a book for a user by adding an entry to the blocked table with an expiration date.
      *
      * @param int $bookId The ID of the book to lock.

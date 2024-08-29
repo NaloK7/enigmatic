@@ -1,5 +1,5 @@
 <template>
-  <div class="dark-glass glass-border w-full py-6">
+  <div class="dark-glass glass-border w-full py-4">
     <section
       class="px-6 w-11/12 sm:w-3/5 md:px-0 md:w-2/5 mx-auto space-y-4 text-gray-200">
       <h1 class="text-center underline font-audiowide mb-8 text-lg md:text-2xl">
@@ -34,7 +34,7 @@
         >
       </div>
       <span class="font-bold text-lg text-center">C'est parti ?</span>
-      <div class="flex justify-center">
+      <div class="flex justify-center h-14">
         <navBtn section="1" text="I"></navBtn>
       </div>
     </section>

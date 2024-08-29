@@ -45,6 +45,7 @@
 <script setup>
 import { ref } from "vue";
 import { useEmailRule } from "../../composables/rules.js";
+import api from "@/composables/api";
 
 const email = ref("");
 const emailValid = ref(true);
@@ -52,7 +53,10 @@ const failed = ref(false);
 
 async function sendMail() {
   if (formRules()) {
+    const criteria = { email: email.value };
     // fetch api to send mail with php
+    const xhr = await api.getOne("forget", criteria);
+    // display msg to tell "check your email"
   }
 }
 

@@ -78,10 +78,15 @@
           @click.prevent="inscription()">
           valider
         </button>
-        <div class="flex justify-center space-x-1">
-          <span class="text-slate-700"> déjà inscrit ? </span>
-          <RouterLink class="text-blue-500 hover:underline" to="/login"
-            >connexion
+        <div class="flex justify-between space-x-1">
+          <span class="text-slate-700">
+            déjà inscrit ?
+            <RouterLink class="text-blue-500 hover:underline" to="/login"
+              >connexion
+            </RouterLink></span
+          >
+          <RouterLink class="text-blue-500 hover:underline" to="/legalNotice"
+            >Mentions légales
           </RouterLink>
         </div>
       </form>
