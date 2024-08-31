@@ -1,9 +1,12 @@
 <template>
   <section class="dark-glass glass-border">
     <div class="mx-auto w-full px-4 sm:w-3/4 md:w-1/2 xl:w-1/3 p-6">
-      <h1 class="text-center text-2xl font-medium text-gray-200">
+      <h1 v-if="!sended" class="text-center text-2xl font-medium text-gray-200">
         Mot de passe oublié
       </h1>
+      <span v-else class="block text-center text-2xl font-medium text-gray-200"
+        >Vérifiez vos emails pour réinitialiser votre mot de passe</span
+      >
 
       <form class="w-full mt-6 space-y-6">
         <!-- feedback failed -->
@@ -49,14 +52,18 @@ import api from "@/composables/api";
 
 const email = ref("");
 const emailValid = ref(true);
+const sended = ref(false);
 const failed = ref(false);
 
 async function sendMail() {
   if (formRules()) {
     const criteria = { email: email.value };
-    // fetch api to send mail with php
     const xhr = await api.getOne("forget", criteria);
-    // display msg to tell "check your email"
+    const response = await xhr;
+    // console.log(response);
+
+    // display msg
+    sended.value = true;
   }
 }
 

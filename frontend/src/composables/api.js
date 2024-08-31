@@ -31,6 +31,11 @@ const api = {
     const response = await apiEnigm.post(url, { ...criteria });
     return response;
   },
+
+  async updateOne(url, criteria) {
+    const response = await apiEnigm.post(url, { ...criteria });
+    return response;
+  },
 };
 
 export default api;

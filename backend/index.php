@@ -51,6 +51,10 @@ try {
         else if ($iri == "forget") {
             $user->forget($data['email']);
         }
+        // update password
+        elseif ($iri == 'updateUser') {
+            $user->updateUser($data['userId'], $data['email'], $data['password'], $data['token']);
+        }
         // IF CONNECTED and TOKEN NOT EXPIRED
         elseif (isset($token) && $tokenIsNotExp) {
 

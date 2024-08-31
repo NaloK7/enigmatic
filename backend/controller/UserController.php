@@ -109,15 +109,34 @@ class UserController extends Controller
     function forget($email)
     {
         $email = $this->emailCheck($email);
-
         if ($email != "") {
-            if ($this->query->queryIsRegister($email)) {
-                // generate token 
+            // generate token if register
+            $data = $this->query->queryIsRegister($email);
+            if ($data) {
+                // var_dump($data);
+                //post token
+                $this->query->queryPostToken($data['userId'], $data['token']);
                 // send url with token
-                mail($email, "reset", "message");
+                mail($email, "reset", "http://localhost:5173/reset?token={$data['token']}");
             }
         } else {
             //Bad Request: invalid email format
+            http_response_code(400);
+        }
+    }
+
+    function updateUser($userId, $email, $password, $token)
+    {
+        $password = $this->passwordCheck($password);
+
+        if ($password != "") {
+            // password hash
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+            $this->query->queryUpdateUser($userId, $passwordHash, $token);
+            $this->login($email, $password);
+        } else {
+            // Bad Request
             http_response_code(400);
         }
     }

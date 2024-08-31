@@ -100,18 +100,54 @@ class UserModel extends DB
     function queryIsRegister($email)
     {
         $con = $this->connectTo();
-
+        $response = null;
         $state = $con->prepare("SELECT id FROM user WHERE email = :email");
         $state->bindParam(':email', $email);
         $state->execute();
         $count = $state->rowCount();
         if ($count > 0) {
             http_response_code(200);
+            $data = $state->fetch(PDO::FETCH_ASSOC);
+            $response = [
+                "userId" => $data['id'],
+                "token" => $this->generateJWT($data['id'], $email)
+            ];
         } else {
             // No content
             http_response_code(204);
         }
-        return $count > 0;
+        return $response;
+    }
+
+    function queryPostToken($userId, $token)
+    {
+        $con = $this->connectTo();
+        $state = $con->prepare("INSERT INTO confirm_user (id_user, token) VALUES (:userId, :token)");
+        $state->bindParam(':userId', $userId);
+        $state->bindParam(':token', $token);
+        $state->execute();
+    }
+
+    function queryUpdateUser($userId, $password, $token)
+    {
+        $con = $this->connectTo();
+
+        $state = $con->prepare("SELECT id_user, token FROM confirm_user WHERE id_user = :userId AND token = :token");
+        $state->bindParam(':userId', $userId);
+        $state->bindParam(':token', $token);
+        $state->execute();
+        $data = $state->fetchAll(PDO::FETCH_ASSOC);
+        if ($data) {
+
+            $update = $con->prepare("UPDATE user SET password=:password WHERE id = :userId");
+            $update->bindParam(':password', $password);
+            $update->bindParam(':userId', $userId);
+            $update->execute();
+
+            $delete = $con->prepare("DELETE FROM confirm_user WHERE id_user = :userId");
+            $delete->bindParam(':userId', $userId);
+            $delete->execute();
+        }
     }
 
     /**
