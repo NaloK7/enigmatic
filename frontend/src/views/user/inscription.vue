@@ -117,7 +117,7 @@ async function inscription() {
   if (formRules()) {
     try {
       const criteria = { email: email.value, password: password.value };
-      const xhr = await api.postOne(`login`, criteria);
+      const xhr = await api.postOne(`inscription`, criteria);
 
       const response = await xhr;
       if (response["status"] == 200) {

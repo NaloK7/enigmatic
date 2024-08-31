@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { token, clearToken } from "@/stores/tokenStore";
+import { clearToken } from "@/stores/tokenStore";
 
 // MIDDLEWARE
 const authMiddleware = (to, from, next) => {

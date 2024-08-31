@@ -35,6 +35,7 @@ class UserModel extends DB
             $query->execute();
             $countAdd = $query->rowCount();
             if ($countAdd > 0) {
+                // OK
                 http_response_code(200);
                 $userId = $con->lastInsertId();
                 $response = [
