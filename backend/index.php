@@ -7,6 +7,9 @@ require_once('./vendor/autoload.php');
 require_once('./controller/UserController.php');
 require_once('./controller/RiddleController.php');
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -22,7 +25,11 @@ $headers = getallheaders();
 
 if (isset($headers['Authorization'])) {
     $token = (str_replace('Bearer ', '', $headers['Authorization']));
-    // todo check token validity
+    $key = $_ENV['JWT_KEY'];
+    $decoded = JWT::decode($token, new Key($key, 'HS256'));
+    $date = time();
+    // is token expired
+    $tokenIsNotExp = $decoded->exp > $date;
 }
 
 
@@ -44,8 +51,9 @@ try {
         else if ($iri == "forget") {
             $user->forget($data['email']);
         }
-        // IF CONNECTED
-        elseif (isset($token)) {
+        // IF CONNECTED and TOKEN NOT EXPIRED
+        elseif (isset($token) && $tokenIsNotExp) {
+
             $riddle = new RiddleController();
             // GET all riddles
             if ($iri == 'books') {
