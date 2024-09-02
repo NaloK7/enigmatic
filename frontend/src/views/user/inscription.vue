@@ -1,11 +1,11 @@
 <template>
   <section class="dark-glass glass-border">
-    <div class="mx-auto w-full px-4 sm:w-3/4 md:w-1/2 xl:w-1/3 p-6">
+    <div class="mx-auto w-full px-4 sm:w-3/4 md:w-1/2 xl:w-1/3 p-5">
       <h1 class="text-center text-2xl font-medium text-gray-200">
         inscription
       </h1>
 
-      <form class="w-full mt-6 space-y-6">
+      <form class="w-full mt-3 space-y-6">
         <!-- feedback failed -->
         <span
           v-if="failed"

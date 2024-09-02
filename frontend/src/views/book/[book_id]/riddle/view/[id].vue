@@ -18,7 +18,7 @@
     <!-- RIDDLE -->
     <div
       v-if="!blocked && riddle"
-      class="flex flex-col justify-start items-center w-11/12 sm:w-4/5 lg:w-1/2 lg:px-10 py-6 space-y-4 mx-auto">
+      class="flex flex-col justify-start items-center w-11/12 sm:w-4/5 lg:w-2/3 lg:px-10 py-6 space-y-4 mx-auto">
       <span
         class="pb-4 font-audiowide text-2xl text-primaryPink text-shadow-pink inline-block">
         {{ riddle.section_id }}-{{ riddle.position }}.
