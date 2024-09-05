@@ -3,6 +3,12 @@
     <div class="mx-auto w-full px-4 sm:w-3/4 md:w-1/2 xl:w-1/3 p-6">
       <h1 class="text-center text-2xl font-medium text-gray-200">connexion</h1>
       <form class="w-full mt-6 space-y-6">
+        <!-- feedback failed -->
+        <span
+          v-if="failed"
+          class="block text-red-500 text-center text-xl font-semibold"
+          >! un problème est survenue veuillez réessayé !</span
+        >
         <div>
           <input
             class="outline-none border-2 rounded-lg px-2 py-1 text-slate-500 w-full focus:border-blue-300"
@@ -56,18 +62,19 @@ const router = useRouter();
 
 const email = ref("");
 const password = ref("");
+const failed = ref(false);
 
 async function connect() {
   try {
     const criteria = { email: email.value, password: password.value };
-    const xhr = await api.getOne(`login`, criteria);
-
-    const response = xhr;
+    const response = await api.getOne(`login`, criteria);
 
     if (response.status == 200) {
-      // failed.value = false;
+      failed.value = false;
       setToken(response.data["token"]);
       router.push({ name: "home" });
+    } else {
+      failed.value = true;
     }
   } catch (error) {
     console.log("An error as occurred:", error.response.status);
