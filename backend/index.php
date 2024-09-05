@@ -10,6 +10,9 @@ require_once('./controller/RiddleController.php');
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -19,8 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $url = explode("/", $_SERVER['REQUEST_URI']);
 $iri = end($url);
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+
 $headers = getallheaders();
 
 if (isset($headers['Authorization'])) {
@@ -32,8 +34,8 @@ if (isset($headers['Authorization'])) {
     $tokenIsNotExp = $decoded->exp > $date;
 }
 
+
 try {
-    // phpinfo();
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = new UserController();
         $data = json_decode(file_get_contents('php://input'), true);
@@ -103,5 +105,6 @@ try {
         }
     }
 } catch (\Throwable $th) {
-    //throw $th;
+    // Unauthorized
+    http_response_code(401);
 }
