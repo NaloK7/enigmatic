@@ -23,10 +23,11 @@
         </div>
 
         <button
-          class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-secondaryPink hover:border-secondaryPink hover:bg-primaryPink hover:text-black active:text-white active:bg-secondaryPink rounded-lg"
+          class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-secondaryPink md:hover:border-secondaryPink md:hover:bg-primaryPink md:hover:text-black active:text-white active:bg-secondaryPink rounded-lg"
           name="login"
           type="submit"
-          @click.prevent="connect()">
+          @click.prevent="connect()"
+          @touchend.prevent="connect()">
           valider
         </button>
         <div class="flex justify-between space-x-1">
@@ -61,7 +62,7 @@ async function connect() {
     const criteria = { email: email.value, password: password.value };
     const xhr = await api.getOne(`login`, criteria);
 
-    const response = await xhr;
+    const response = xhr;
 
     if (response.status == 200) {
       // failed.value = false;

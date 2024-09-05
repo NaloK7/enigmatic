@@ -32,7 +32,6 @@ if (isset($headers['Authorization'])) {
     $tokenIsNotExp = $decoded->exp > $date;
 }
 
-
 try {
     // phpinfo();
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

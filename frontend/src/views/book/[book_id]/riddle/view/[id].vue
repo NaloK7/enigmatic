@@ -26,12 +26,14 @@
       </span>
       <p class="riddle-txt text-gray-200" v-html="riddle.wording"></p>
 
-      <div class="mt-auto h-7 grid" style="grid-template-columns: 1fr 2fr 1fr">
+      <div
+        class="mt-auto block w-full md:grid"
+        style="grid-template-columns: 1fr 2fr 1fr">
         <div
           :class="{
             'animate-shake border border-red-500 rounded-lg': badAnswer,
           }"
-          class="col-start-2 flex h-7">
+          class="sm:col-start-2 flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:h-7">
           <input
             type="text"
             v-model="answer"
@@ -39,15 +41,15 @@
             @keydown.enter="checkAnswer()"
             id="answer"
             placeholder="réponse"
-            class="rounded-l-lg w-96 pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
+            class="rounded-lg w-full sm:w-96 pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
           <button
-            class="rounded-r-lg w-16 font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+            class="rounded-lg w-full sm:w-16 font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
             @click="checkAnswer()">
             Valider
           </button>
         </div>
         <button
-          class="col-start-3 ml-4 rounded-lg w-16 h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+          class="col-start-3 mt-2 sm:mt-0 sm:ml-4 rounded-lg w-full sm:w-16 sm:h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
           @click="showOverlay('giveUp')">
           Passer
         </button>
