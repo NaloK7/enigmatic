@@ -35,7 +35,10 @@
       </div>
       <span class="font-bold text-lg text-center">C'est parti ?</span>
       <div class="flex justify-center h-14">
-        <navBtn section="1" text="I"></navBtn>
+        <navBtn
+          section="1"
+          text="I"
+          class="rounded-md before:content-['Livre\00a0']"></navBtn>
       </div>
     </section>
   </div>

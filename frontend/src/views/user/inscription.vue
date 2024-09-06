@@ -117,9 +117,9 @@ async function inscription() {
   if (formRules()) {
     try {
       const criteria = { email: email.value, password: password.value };
-      const xhr = await api.postOne(`inscription`, criteria);
+      const response = await api.postOne(`inscription`, criteria);
 
-      const response = await xhr;
+      // const response = await xhr;
       if (response["status"] == 200) {
         failed.value = false;
         setToken(response.data["token"]);
@@ -128,9 +128,11 @@ async function inscription() {
         failed.value = true;
       }
     } catch (error) {
+      failed.value = true;
       console.log("inscription ~ error:", error);
     }
   }
+  failed.value = true;
 }
 
 function formRules() {

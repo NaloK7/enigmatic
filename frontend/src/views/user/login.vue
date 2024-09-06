@@ -7,7 +7,7 @@
         <span
           v-if="failed"
           class="block text-red-500 text-center text-xl font-semibold"
-          >! un problème est survenue veuillez réessayé !</span
+          >! un problème est survenue veuillez&nbspréessayé !</span
         >
         <div>
           <input
@@ -29,13 +29,12 @@
         </div>
 
         <button
-          class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-secondaryPink md:hover:border-secondaryPink md:hover:bg-primaryPink md:hover:text-black active:text-white active:bg-secondaryPink rounded-lg"
+          class="w-full justify-center font-audiowide text-white text-lg rounded-lg border-2 bg-secondaryPink border-primaryPink hover:border-secondaryPink hover:bg-primaryPink hover:text-black active:border-primaryPink active:bg-secondaryPink active:text-white"
           name="login"
-          type="submit"
-          @click.prevent="connect()"
-          @touchend.prevent="connect()">
+          @click.prevent="connect()">
           valider
         </button>
+
         <div class="flex justify-between space-x-1">
           <div>
             <span class="text-slate-700"> Pas de compte ? </span>
@@ -46,7 +45,7 @@
           <RouterLink
             class="text-blue-500 font-medium hover:underline"
             to="/forget"
-            >mot de passe oublié ?</RouterLink
+            >mot de passe oublié&nbsp?</RouterLink
           >
         </div>
       </form>
@@ -67,8 +66,8 @@ const failed = ref(false);
 async function connect() {
   try {
     const criteria = { email: email.value, password: password.value };
-    const response = await api.getOne(`login`, criteria);
-
+    const response = await api.postOne(`login`, criteria);
+    // const response = await xhr;
     if (response.status == 200) {
       failed.value = false;
       setToken(response.data["token"]);
@@ -77,6 +76,8 @@ async function connect() {
       failed.value = true;
     }
   } catch (error) {
+    failed.value = true;
+    alert(error);
     console.log("An error as occurred:", error.response.status);
   }
 }
