@@ -20,9 +20,9 @@
       v-if="!blocked && riddle"
       class="flex flex-col justify-start items-center w-11/12 sm:w-4/5 lg:w-2/3 lg:px-10 py-6 space-y-4 mx-auto">
       <span
-        class="pb-4 font-audiowide text-2xl text-primaryPink text-shadow-pink inline-block">
+        class="pb-4 font-audiowide text-xl md:text-2xl text-center text-primaryPink md:text-shadow-pink block md:inline-block">
         {{ riddle.section_id }}-{{ riddle.position }}.
-        <h1 class="inline-block text-2xl">{{ riddle.title }}</h1>
+        <h1 class="block md:inline-block text-2xl">{{ riddle.title }}</h1>
       </span>
       <p class="riddle-txt text-gray-200" v-html="riddle.wording"></p>
 
@@ -33,7 +33,7 @@
           :class="{
             'animate-shake border border-red-500 rounded-lg': badAnswer,
           }"
-          class="sm:col-start-2 flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:h-7">
+          class="flex flex-col space-y-2 sm:col-start-2 sm:space-y-0 sm:flex-row sm:h-7">
           <input
             type="text"
             v-model="answer"
@@ -41,15 +41,15 @@
             @keydown.enter="checkAnswer()"
             id="answer"
             placeholder="réponse"
-            class="rounded-lg w-full sm:w-96 pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
+            class="rounded-lg w-full h-8 sm:w-96 pl-2 border border-gray-500 bg-gray-200 text-gray-800 focus:outline-none" />
           <button
-            class="rounded-lg w-full sm:w-16 font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+            class="rounded-lg w-full h-8 sm:w-16 font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
             @click="checkAnswer()">
             Valider
           </button>
         </div>
         <button
-          class="col-start-3 mt-2 sm:mt-0 sm:ml-4 rounded-lg w-full sm:w-16 sm:h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+          class="col-start-3 mt-2 sm:mt-0 sm:ml-4 rounded-lg w-full h-8 sm:w-16 sm:h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
           @click="showOverlay('giveUp')">
           Passer
         </button>
