@@ -67,7 +67,6 @@ async function connect() {
   try {
     const criteria = { email: email.value, password: password.value };
     const response = await api.postOne(`login`, criteria);
-    // const response = await xhr;
     if (response.status == 200) {
       failed.value = false;
       setToken(response.data["token"]);

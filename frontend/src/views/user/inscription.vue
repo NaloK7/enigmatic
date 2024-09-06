@@ -119,7 +119,6 @@ async function inscription() {
       const criteria = { email: email.value, password: password.value };
       const response = await api.postOne(`inscription`, criteria);
 
-      // const response = await xhr;
       if (response["status"] == 200) {
         failed.value = false;
         setToken(response.data["token"]);
