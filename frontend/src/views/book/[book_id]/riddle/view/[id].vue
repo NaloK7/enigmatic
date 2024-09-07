@@ -27,13 +27,13 @@
       <p class="riddle-txt text-gray-200" v-html="riddle.wording"></p>
 
       <div
-        class="mt-auto block w-full md:grid"
+        class="mt-auto block sm:h-8 w-full md:grid"
         style="grid-template-columns: 1fr 2fr 1fr">
         <div
           :class="{
             'animate-shake border border-red-500 rounded-lg': badAnswer,
           }"
-          class="flex flex-col space-y-2 sm:col-start-2 sm:space-y-0 sm:flex-row sm:h-7">
+          class="flex flex-col md:h-8 space-y-2 sm:col-start-2 sm:space-y-0 sm:flex-row">
           <input
             type="text"
             v-model="answer"
@@ -49,7 +49,7 @@
           </button>
         </div>
         <button
-          class="col-start-3 mt-2 sm:mt-0 sm:ml-4 rounded-lg w-full h-8 sm:w-16 sm:h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
+          class="sm:col-start-3 mt-2 sm:mt-0 sm:ml-4 rounded-lg w-full h-8 sm:w-16 sm:h-full font-semibold border bg-gray-200 border-gray-500 text-gray-800 hover:bg-primaryGreen hover:text-white"
           @click="showOverlay('giveUp')">
           Passer
         </button>
