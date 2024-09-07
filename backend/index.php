@@ -36,7 +36,7 @@ if (isset($headers['Authorization'])) {
 
 
 try {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'GET') {
         $user = new UserController();
         $data = json_decode(file_get_contents('php://input'), true);
 

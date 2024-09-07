@@ -18,12 +18,12 @@ apiEnigm.interceptors.request.use((config) => {
 
 const api = {
   async getAll(url) {
-    const response = await apiEnigm.post(url);
+    const response = await apiEnigm.get(url);
     return response;
   },
 
   async getOne(url, criteria) {
-    const response = await apiEnigm.post(url, { ...criteria });
+    const response = await apiEnigm.get(url, {params:{ ...criteria }});
     return response;
   },
 
