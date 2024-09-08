@@ -6,31 +6,31 @@
         Bienvenue sur Enigmatic&nbspJourney
       </h1>
       <div>
-        <span><li class="font-bold">Comment ça fonctionne ?</li></span>
-        <span>- les énigmes sont rangés dans quatre livres.</span>
-        <span>- la difficulté augmente au fûr et a mesure.</span>
+        <span><li class="font-bold">Comment cela fonctionne ?</li></span>
+        <span>- les énigmes sont rangées dans quatre livres.</span>
+        <span>- la difficulté augmente au fur et à mesure.</span>
       </div>
 
       <div>
         <span
           ><li class="font-bold">Cette histoire de livre c’est quoi ?</li></span
         >
-        <span>- vous avez quatre livre à parcourir comme bon vous semble.</span>
-        <span>- ils n’ont aucune énigmes communne.</span>
+        <span>- vous avez quatre livres à parcourir comme bon vous semble.</span>
+        <span>- ils n’ont aucune énigmes en commun.</span>
       </div>
 
       <div>
         <span
-          ><li class="font-bold">Comment ce passe la progression ?</li></span
+          ><li class="font-bold">Comment se passe la progression ?</li></span
         >
         <span
-          >- vous <b>devez resoudre</b> une enigme pour passer à la
+          >- vous <b>devez résoudre</b> une énigme pour passer à la
           suivante.</span
         >
         <span>OU</span>
         <span
-          >- vous <b>pouvez passer</b> une énigme au prix d’une chose precieuse
-          que l’on ne prend plus le temps d’apprecier à sa juste valeur.</span
+          >- vous <b>pouvez passer</b> une énigme au prix d’une chose précieuse
+          que l’on ne prend plus le temps d’apprécier à sa juste valeur...</span
         >
       </div>
       <span class="font-bold text-lg text-center">C'est parti ?</span>
