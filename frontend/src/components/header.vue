@@ -44,9 +44,9 @@
         <ul
           v-if="visible"
           class="absolute top-[72px] md:top-[104px] right-3 w-32 dark-glass rounded-b-md border border-primaryGreen text-center text-gray-200 font-audiowide">
-          <li>
+          <!-- <li>
             <button class="h-8 w-full hover:text-primaryPink">Profile</button>
-          </li>
+          </li> -->
           <li class="border-t border-gray-500">
             <button
               class="h-8 w-full hover:text-primaryPink"
