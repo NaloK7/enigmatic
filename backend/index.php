@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $url = explode("/", $_SERVER['REQUEST_URI']);
 $iri = end($url);
 
-
 $headers = getallheaders();
 
 if (isset($headers['Authorization'])) {
@@ -39,7 +38,7 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'GET') {
         $user = new UserController();
         $data = json_decode(file_get_contents('php://input'), true);
-
+       
         // login
         if ($iri == 'login') {
             $user->login($data['email'], $data['password']);

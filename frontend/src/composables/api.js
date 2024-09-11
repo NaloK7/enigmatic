@@ -23,7 +23,7 @@ const api = {
   },
 
   async getOne(url, criteria) {
-    const response = await apiEnigm.get(url, {params:{ ...criteria }});
+    const response = await apiEnigm.post(url, { ...criteria });
     return response;
   },
 
