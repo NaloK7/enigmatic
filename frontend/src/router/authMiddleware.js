@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { token, clearToken } from "@/stores/tokenStore";
+import { clearToken } from "@/stores/tokenStore";
 
 // MIDDLEWARE
 const authMiddleware = (to, from, next) => {
@@ -29,7 +29,9 @@ const authMiddleware = (to, from, next) => {
     if (
       to.name !== "login" &&
       to.name !== "inscription" &&
-      to.name !== "home"
+      to.name !== "home" &&
+      to.name !== "forget" &&
+      to.name !== "reset"
     ) {
       clearToken();
       next({ name: "home" });

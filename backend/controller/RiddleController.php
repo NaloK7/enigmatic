@@ -61,7 +61,7 @@ class RiddleController extends Controller
      */
     function checkRiddle($bookId, $riddlePos, $token)
     {
-
+        $response = null;
         $key = $_ENV['JWT_KEY'];
 
         $decoded = JWT::decode($token, new Key($key, 'HS256'));

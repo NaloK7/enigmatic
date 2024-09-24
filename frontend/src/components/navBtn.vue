@@ -1,7 +1,7 @@
 <template>
   <button
     :class="{ 'border-primaryPink hover:border-secondaryPink': finished }"
-    class="block w-1/4 md:min-w-24 h-8 md:my-5 md:h-7 md:w-24 border md:border-2 border-primaryGreen sm:before:content-['Livre\00a0'] md:rounded-md bg-secondaryGreen text-white font-audiowide hover:text-black hover:bg-primaryGreen hover:border-secondaryGreen"
+    class="block w-1/4 h-10  md:min-w-24 md:h-7 md:my-5 md:w-24 border md:border-2 border-primaryGreen sm:before:content-['Livre\00a0'] md:rounded-md bg-secondaryGreen text-white font-audiowide hover:text-black hover:bg-primaryGreen hover:border-secondaryGreen"
     @click="redirectToLast(section)">
     {{ text }}
   </button>
@@ -21,7 +21,7 @@ const props = defineProps({
 const finished = ref(false);
 
 async function redirectToLast(bookId) {
-  const response = await api.getLast(bookId);
+  const response = await api.getOne("last", { bookId });
 
   if (response.status == 200 || response.status == 204) {
     let lastId = response.data.position ? response.data.position : "finished";
@@ -33,7 +33,10 @@ async function redirectToLast(bookId) {
 }
 
 onMounted(async () => {
-  const xhrFinish = await api.isFinished(props.section);
-  finished.value = xhrFinish.data;
+  if (localStorage.getItem("token")) {
+    const criteria = { bookId: props.section };
+    const xhrFinish = await api.getOne("finish", criteria);
+    finished.value = xhrFinish.data;
+  }
 });
 </script>

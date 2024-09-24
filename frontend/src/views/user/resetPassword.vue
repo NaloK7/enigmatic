@@ -1,11 +1,11 @@
 <template>
   <section class="dark-glass glass-border">
-    <div class="mx-auto w-full px-4 sm:w-3/4 md:w-1/2 xl:w-1/3 p-5">
+    <div class="mx-auto w-full px-4 sm:w-3/4 md:w-1/2 xl:w-1/3 p-6">
       <h1 class="text-center text-2xl font-medium text-gray-200">
-        inscription
+        nouveau mot de passe
       </h1>
 
-      <form class="w-full mt-3 space-y-6">
+      <form class="w-full mt-6 space-y-6">
         <!-- feedback failed -->
         <span
           v-if="failed"
@@ -58,24 +58,13 @@
             name="confirmPass"
             type="password" />
         </div>
-        <!-- CGU -->
-        <div v-if="!isCheckedValid" class="text-red-500 text-center">
-          Vous devez acceptez les conditions générales d'utilisations
-        </div>
-        <input type="checkbox" v-model="isChecked" />
-        <label class="ml-4"
-          >acceptez les
-          <RouterLink to="/cgu" class="text-blue-500 hover:underline"
-            >CGU</RouterLink
-          ></label
-        >
         <!-- SUBMIT BUTTON -->
         <button
           class="w-full justify-center text-white font-audiowide text-lg border-2 border-primaryPink bg-secondaryPink hover:border-secondaryPink hover:bg-primaryPink hover:text-black active:text-white active:bg-secondaryPink rounded-lg"
           id="login"
           name="login"
           type="submit"
-          @click.prevent="inscription()">
+          @click.prevent="newPassword()">
           valider
         </button>
         <div class="flex justify-between space-x-1">
@@ -97,9 +86,16 @@
 import { ref } from "vue";
 import { useEmailRule, usePasswordRule } from "../../composables/rules.js";
 import { setToken } from "@/stores/tokenStore";
-import { useRouter, RouterLink } from "vue-router";
+import { useRoute, useRouter, RouterLink } from "vue-router";
+import { jwtDecode } from "jwt-decode";
 import api from "@/composables/api";
+
 const router = useRouter();
+const route = useRoute();
+const token = route.query.token;
+const decoded = jwtDecode(token);
+const tokenId = decoded.user_id;
+const tokenEmail = decoded.email;
 
 const email = ref("");
 const emailValid = ref(true);
@@ -109,16 +105,20 @@ const passwordValid = ref(true);
 
 const confirmPass = ref("");
 const confirmPassValid = ref(true);
-const isChecked = ref(false);
-const isCheckedValid = ref(true);
 const failed = ref(false);
 
-async function inscription() {
+async function newPassword() {
   if (formRules()) {
     try {
-      const criteria = { email: email.value, password: password.value };
-      const response = await api.postOne(`inscription`, criteria);
+      const criteria = {
+        userId: tokenId,
+        email: tokenEmail,
+        password: password.value,
+        token: token,
+      };
+      const xhr = await api.updateOne(`updateUser`, criteria);
 
+      const response = await xhr;
       if (response["status"] == 200) {
         failed.value = false;
         setToken(response.data["token"]);
@@ -127,23 +127,15 @@ async function inscription() {
         failed.value = true;
       }
     } catch (error) {
-      failed.value = true;
       console.log("inscription ~ error:", error);
     }
   }
-  failed.value = true;
 }
 
 function formRules() {
   emailValid.value = useEmailRule(email.value);
   passwordValid.value = usePasswordRule(password.value);
   confirmPassValid.value = password.value == confirmPass.value;
-  isCheckedValid.value = isChecked.value;
-  return (
-    emailValid.value &&
-    passwordValid.value &&
-    confirmPassValid.value &&
-    isCheckedValid.value
-  );
+  return emailValid.value && passwordValid.value && confirmPassValid.value;
 }
 </script>

@@ -7,6 +7,12 @@ require_once('./vendor/autoload.php');
 require_once('./controller/UserController.php');
 require_once('./controller/RiddleController.php');
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -16,21 +22,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $url = explode("/", $_SERVER['REQUEST_URI']);
 $iri = end($url);
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
 $headers = getallheaders();
 
 if (isset($headers['Authorization'])) {
     $token = (str_replace('Bearer ', '', $headers['Authorization']));
-    // todo check token validity
+    $key = $_ENV['JWT_KEY'];
+    $decoded = JWT::decode($token, new Key($key, 'HS256'));
+    $date = time();
+    // is token expired
+    $tokenIsNotExp = $decoded->exp > $date;
 }
 
 
 try {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'GET') {
         $user = new UserController();
         $data = json_decode(file_get_contents('php://input'), true);
-
+       
         // login
         if ($iri == 'login') {
             $user->login($data['email'], $data['password']);
@@ -38,7 +46,18 @@ try {
         // inscription
         elseif ($iri == 'inscription') {
             $user->inscription($data['email'], $data['password']);
-        } elseif (isset($token)) {
+        }
+        // SEND MAIL
+        else if ($iri == "forget") {
+            $user->forget($data['email']);
+        }
+        // update password
+        elseif ($iri == 'updateUser') {
+            $user->updateUser($data['userId'], $data['email'], $data['password'], $data['token']);
+        }
+        // IF CONNECTED and TOKEN NOT EXPIRED
+        elseif (isset($token) && $tokenIsNotExp) {
+
             $riddle = new RiddleController();
             // GET all riddles
             if ($iri == 'books') {
@@ -85,5 +104,6 @@ try {
         }
     }
 } catch (\Throwable $th) {
-    //throw $th;
+    // Unauthorized
+    http_response_code(401);
 }

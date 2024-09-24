@@ -4,10 +4,10 @@
     Progression
   </h1>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
-    <bookSection :bookTitle="'I'" :bookData="books[0]" />
-    <bookSection :bookTitle="'II'" :bookData="books[1]" />
-    <bookSection :bookTitle="'III'" :bookData="books[2]" />
-    <bookSection :bookTitle="'IV'" :bookData="books[3]" />
+    <bookSection :bookTitle="'Livre I'" :bookData="books[0]" />
+    <bookSection :bookTitle="'Livre II'" :bookData="books[1]" />
+    <bookSection :bookTitle="'Livre III'" :bookData="books[2]" />
+    <bookSection :bookTitle="'Livre IV'" :bookData="books[3]" />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ import bookSection from "@/components/bookSection.vue";
 const books = ref([]);
 
 async function getAllRiddles() {
-  const response = await api.getAll();
+  const response = await api.getAll("books");
   if (response.status == 200) {
     books.value = response.data;
   } else {

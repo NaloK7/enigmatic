@@ -203,7 +203,7 @@ class RiddleModel extends DB
             return $data;
         } else {
             // No Content
-            http_response_code(200);
+            http_response_code(202);
         }
     }
 

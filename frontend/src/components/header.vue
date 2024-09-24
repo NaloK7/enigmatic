@@ -1,7 +1,7 @@
 <template>
   <header>
     <div
-      class="flex justify-between items-center dark-glass py-4 md:py-6 px-10 border-b border-primaryGreen relative z-10 [&>*]:w-1/5"
+      class="flex justify-between items-center dark-glass py-4 md:py-6 px-10 md:border-b border-primaryGreen relative z-10 [&>*]:w-1/5"
       id="top-header">
       <div class="w-1/5">
         <RouterLink to="/">
@@ -44,9 +44,9 @@
         <ul
           v-if="visible"
           class="absolute top-[72px] md:top-[104px] right-3 w-32 dark-glass rounded-b-md border border-primaryGreen text-center text-gray-200 font-audiowide">
-          <li>
+          <!-- <li>
             <button class="h-8 w-full hover:text-primaryPink">Profile</button>
-          </li>
+          </li> -->
           <li class="border-t border-gray-500">
             <button
               class="h-8 w-full hover:text-primaryPink"
@@ -57,9 +57,9 @@
         </ul>
       </div>
     </div>
-    <div class="nav-toggle mx-auto md:relative w-full md:w-2/3 lg:w-1/2 pb-4">
+    <div class="nav-toggle mx-auto w-full md:relative md:w-2/3 lg:w-1/2 pb-4">
       <nav
-        class="fixed bottom-0 z-50 dark-glass w-full md:border-b md:border-primaryGreen flex items-center justify-evenly md:static md:px-2 md:rounded-b-xl">
+        class=" dark-glass w-full md:border-b md:border-primaryGreen flex items-center justify-evenly md:static md:px-2 md:rounded-b-xl">
         <navBtn section="1" text="I"></navBtn>
         <navBtn section="2" text="II"></navBtn>
         <navBtn section="3" text="III"></navBtn>
